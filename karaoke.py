@@ -8,9 +8,11 @@ import subprocess
 import sys
 import threading
 import time
+import random
 from io import BytesIO
 from pathlib import Path
 from subprocess import check_output
+from pygame import mixer
 
 import pygame
 import qrcode
@@ -22,6 +24,7 @@ from lib.get_platform import get_platform
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
 
+pygame.mixer.init()
 
 class Karaoke:
 
@@ -36,6 +39,8 @@ class Karaoke:
     now_playing_user = None
     now_playing_transpose = 0
     is_paused = True
+    scored = True
+    score = [None, None]
     process = None
     qr_code_path = None
     base_path = os.path.dirname(__file__)
@@ -182,6 +187,8 @@ class Karaoke:
         if not self.hide_splash_screen:
             self.initialize_screen()
             self.render_splash_screen()
+            
+   
 
  
     # Other ip-getting methods are unreliable and sometimes return 127.0.0.1
@@ -334,7 +341,7 @@ class Karaoke:
         if not self.hide_splash_screen:
             logging.debug("Rendering splash screen")
 
-            self.screen.fill((0, 0, 0))
+            self.screen.fill((18, 0, 20))
 
             logo = pygame.image.load(self.logo_path)
             logo_rect = logo.get_rect(center=self.screen.get_rect().center)
@@ -389,6 +396,115 @@ class Karaoke:
                 self.screen.blit(text1, (10, 10))
                 self.screen.blit(text2, (10, 50))
                 self.screen.blit(text3, (10, 90))
+
+    def refresh_score_screen(self):
+      logging.debug("Atualizando Score screen")
+      self.screen.fill((255, 0, 255))
+      
+      text = self.font.render(
+         "Score...",
+         True,
+         (255, 255, 255),
+        )
+      self.screen.blit(text, (200, 200))
+      
+      if self.score[0] != None:
+        self.screen.blit(self.score[0], (500, 200))
+      if self.score[1] != None:
+        self.screen.blit(self.score[1], (520, 200))
+      
+      pygame.display.update()
+        
+      
+    def render_score(self):
+      # self.pygame_reset_screen()
+      logging.debug("Rendering score screen")
+      
+      self.refresh_score_screen()
+      
+      mixer.music.load('sound-effects/score.ogg')
+      mixer.music.set_volume(0.2)
+      mixer.music.play()
+
+      numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+      randomNum1 = str(random.choices(numbers, cum_weights=(1, 2, 3, 4, 5, 7, 7, 8, 8, 8), k=1)[0])
+      randomNum2 = str(random.randint(0, 9))
+      
+      if int(randomNum1) < 3:
+         sel_color = "red"
+         applause = mixer.Sound('sound-effects/applause-l.ogg')
+      elif int(randomNum1) >= 3 and int(randomNum1) < 6 :
+         sel_color = "yellow"
+         applause = mixer.Sound('sound-effects/applause-m.ogg')
+      else:
+         sel_color = "blue"
+         applause = mixer.Sound('sound-effects/applause-h.ogg')
+      
+      i = 0
+      while i < 50:
+        number = str(random.randint(0, 9))
+        self.score[0] = self.font.render(
+          number,
+          True,
+          (255,255,255),
+         )
+        self.refresh_score_screen()
+        pygame.time.wait(i*2)
+        i += 1
+        
+      self.score[0] = self.font.render(
+        randomNum1,
+        True,
+        sel_color,
+      )
+      self.refresh_score_screen()
+      
+      i = 0   
+      while i < 30:
+        number = str(random.randint(0, 9))
+        self.score[1] = self.font.render(
+          number,
+          True,
+          sel_color,
+         )
+        self.refresh_score_screen()
+        pygame.time.wait(i*3)
+        i += 1
+        
+      self.score[1] = self.font.render(
+        randomNum2,
+        True,
+        sel_color,
+      )
+      self.refresh_score_screen()
+      
+      applause.play()
+      
+      logging.debug("Finalizou o score, toca o som...")
+      pygame.time.wait(5000)   
+      # text = self.font.render(
+      #    str(randomNum1[0]) + str(randomNum2) ,
+      #    True,
+      #    sel_color,
+      #   )
+      
+      # pygame.time.Clock().tick(5)
+      
+      logging.debug("Score: " + randomNum1 + randomNum2)
+      
+      # while i < (self.splash_delay * 2000):
+      #     self.handle_run_loop()
+      #     i += self.loop_interval
+
+      # self.screen.blit(text, (10,10))
+      # i = 0
+      # while i < (self.splash_delay):
+      #     self.handle_run_loop()
+      #     i += self.loop_interval
+          
+      logging.debug("Voltando para a tela Splash")
+      self.score = [None, None]
+      self.render_splash_screen()
 
     def render_next_song_to_splash_screen(self):
         if not self.hide_splash_screen:
@@ -766,19 +882,28 @@ class Karaoke:
             try:
                 if not self.is_file_playing() and self.now_playing != None:
                     self.reset_now_playing()
+
                 if len(self.queue) > 0:
                     if not self.is_file_playing():
-                        self.reset_now_playing()
-                        if not pygame.display.get_active():
-                            self.pygame_reset_screen()
-                        self.render_next_song_to_splash_screen()
-                        i = 0
-                        while i < (self.splash_delay * 1000):
-                            self.handle_run_loop()
-                            i += self.loop_interval
-                        self.play_file(self.queue[0]["file"])
-                        self.now_playing_user=self.queue[0]["user"]
-                        self.queue.pop(0)
+                        if self.scored != True:
+                           self.render_score()
+                           self.scored = True
+                           self.queue.pop(0)
+                        else:
+                          self.reset_now_playing()
+                          if not pygame.display.get_active():
+                              self.pygame_reset_screen()
+                          
+                          self.render_next_song_to_splash_screen()
+                          i = 0
+                          while i < (self.splash_delay * 1000):
+                              self.handle_run_loop()
+                              i += self.loop_interval
+                          mixer.music.stop()
+                          self.play_file(self.queue[0]["file"])
+                          self.now_playing_user=self.queue[0]["user"]
+                          self.scored = False
+
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     self.pygame_reset_screen()
                 self.handle_run_loop()
