@@ -838,7 +838,8 @@ if __name__ == "__main__":
     ),
     parser.add_argument(
         "--rw-prefs",
-        help="Reset or write preferences to be allways used" % default_rw_prefs,
+        help="Reset or write preferences to be allways used (Default: %s)"
+        % default_rw_prefs,
         default=default_rw_prefs,
         required=False,
     ),
