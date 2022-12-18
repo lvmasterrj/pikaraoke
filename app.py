@@ -14,9 +14,18 @@ import cherrypy
 import psutil
 from flask_babel import Babel
 import flask_babel
-from flask import (Flask, flash, jsonify, make_response, redirect,
-                   render_template, request, send_file, send_from_directory,
-                   url_for)
+from flask import (
+    Flask,
+    flash,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    send_file,
+    send_from_directory,
+    url_for,
+)
 from flask_paginate import Pagination, get_page_parameter
 
 import karaoke
@@ -34,11 +43,12 @@ _ = flask_babel.gettext
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
-app.jinja_env.add_extension('jinja2.ext.i18n')
-app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+app.jinja_env.add_extension("jinja2.ext.i18n")
+app.config["BABEL_TRANSLATION_DIRECTORIES"] = "translations"
 babel = Babel(app)
 site_name = "PiKaraoke"
 admin_password = None
+
 
 def filename_from_path(file_path, remove_youtube_id=True):
     rc = os.path.basename(file_path)
@@ -57,18 +67,20 @@ def url_escape(filename):
 
 
 def is_admin():
-    if (admin_password == None):
+    if admin_password == None:
         return True
-    if ('admin' in request.cookies):
+    if "admin" in request.cookies:
         a = request.cookies.get("admin")
-        if (a == admin_password):
+        if a == admin_password:
             return True
     return False
+
 
 @babel.localeselector
 def get_locale():
     """Select the language to display the webpage in based on the Accept-Language header"""
     return request.accept_languages.best_match(LANGUAGES.keys())
+
 
 @app.route("/")
 def home():
@@ -78,40 +90,44 @@ def home():
         title="Home",
         show_transpose=k.use_vlc,
         transpose_value=k.now_playing_transpose,
-        admin=is_admin()
+        admin=is_admin(),
     )
+
 
 @app.route("/auth", methods=["POST"])
 def auth():
     d = request.form.to_dict()
     p = d["admin-password"]
-    if (p == admin_password):
-        resp = make_response(redirect('/'))
+    if p == admin_password:
+        resp = make_response(redirect("/"))
         expire_date = datetime.datetime.now()
         expire_date = expire_date + datetime.timedelta(days=90)
-        resp.set_cookie('admin', admin_password, expires=expire_date)
+        resp.set_cookie("admin", admin_password, expires=expire_date)
         # MSG: Message shown after logging in as admin successfully
         flash(_("Admin mode granted!"), "is-success")
     else:
-        resp = make_response(redirect(url_for('login')))
+        resp = make_response(redirect(url_for("login")))
         # MSG: Message shown after failing to login as admin
         flash(_("Incorrect admin password!"), "is-danger")
     return resp
+
 
 @app.route("/login")
 def login():
     return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
-    resp = make_response(redirect('/'))
-    resp.set_cookie('admin', '')
+    resp = make_response(redirect("/"))
+    resp.set_cookie("admin", "")
     flash("Logged out of admin mode!", "is-success")
     return resp
 
+
 @app.route("/nowplaying")
 def nowplaying():
-    try: 
+    try:
         if len(k.queue) >= 1:
             next_song = k.queue[0]["title"]
             next_user = k.queue[0]["user"]
@@ -128,15 +144,22 @@ def nowplaying():
         }
         return json.dumps(rc)
     except (Exception) as e:
-        logging.error("Problem loading /nowplaying, pikaraoke may still be starting up: " + str(e))
+        logging.error(
+            "Problem loading /nowplaying, pikaraoke may still be starting up: " + str(e)
+        )
         return ""
 
 
 @app.route("/queue")
 def queue():
     return render_template(
-        "queue.html", queue=k.queue, site_title=site_name, title="Queue", admin=is_admin()
+        "queue.html",
+        queue=k.queue,
+        site_title=site_name,
+        title="Queue",
+        admin=is_admin(),
     )
+
 
 @app.route("/get_queue")
 def get_queue():
@@ -144,6 +167,7 @@ def get_queue():
         return json.dumps(k.queue)
     else:
         return json.dumps([])
+
 
 @app.route("/queue/addrandom", methods=["GET"])
 def add_random():
@@ -205,8 +229,8 @@ def enqueue():
     #     flash("Song added to queue: " + song_title, "is-success")
     # else:
     #     flash("Song is already in queue: " + song_title, "is-danger")
-    #return redirect(url_for("home"))
-    return json.dumps({"song": song_title, "success": rc })
+    # return redirect(url_for("home"))
+    return json.dumps({"song": song_title, "success": rc})
 
 
 @app.route("/skip")
@@ -249,7 +273,7 @@ def vol_down():
 def search():
     if "search_string" in request.args:
         search_string = request.args["search_string"]
-        if ("non_karaoke" in request.args and request.args["non_karaoke"] == "true"):
+        if "non_karaoke" in request.args and request.args["non_karaoke"] == "true":
             search_results = k.get_search_results(search_string)
         else:
             search_results = k.get_karaoke_search_results(search_string)
@@ -265,42 +289,49 @@ def search():
         search_string=search_string,
     )
 
+
 @app.route("/autocomplete")
 def autocomplete():
-    q = request.args.get('q').lower()
+    q = request.args.get("q").lower()
     result = []
     for each in k.available_songs:
         if q in each.lower():
-            result.append({"path": each, "fileName": k.filename_from_path(each), "type": "autocomplete"})
+            result.append(
+                {
+                    "path": each,
+                    "fileName": k.filename_from_path(each),
+                    "type": "autocomplete",
+                }
+            )
     response = app.response_class(
-        response=json.dumps(result),
-        mimetype='application/json'
+        response=json.dumps(result), mimetype="application/json"
     )
     return response
+
 
 @app.route("/browse", methods=["GET"])
 def browse():
     search = False
-    q = request.args.get('q')
+    q = request.args.get("q")
     if q:
         search = True
     page = request.args.get(get_page_parameter(), type=int, default=1)
 
     available_songs = k.available_songs
 
-    letter = request.args.get('letter')
-   
-    if (letter):
+    letter = request.args.get("letter")
+
+    if letter:
         result = []
-        if (letter == "numeric"):
+        if letter == "numeric":
             for song in available_songs:
                 f = k.filename_from_path(song)[0]
-                if (f.isnumeric()):
+                if f.isnumeric():
                     result.append(song)
-        else: 
+        else:
             for song in available_songs:
                 f = k.filename_from_path(song).lower()
-                if (f.startswith(letter.lower())):
+                if f.startswith(letter.lower()):
                     result.append(song)
         available_songs = result
 
@@ -311,9 +342,16 @@ def browse():
     else:
         songs = available_songs
         sort_order = "Alphabetical"
-    
+
     results_per_page = 500
-    pagination = Pagination(css_framework='bulma', page=page, total=len(songs), search=search, record_name='songs', per_page=results_per_page)
+    pagination = Pagination(
+        css_framework="bulma",
+        page=page,
+        total=len(songs),
+        search=search,
+        record_name="songs",
+        per_page=results_per_page,
+    )
     start_index = (page - 1) * (results_per_page - 1)
     return render_template(
         "files.html",
@@ -323,8 +361,8 @@ def browse():
         letter=letter,
         # MSG: Title of the files page.
         title=_("Browse"),
-        songs=songs[start_index:start_index + results_per_page],
-        admin=is_admin()
+        songs=songs[start_index : start_index + results_per_page],
+        admin=is_admin(),
     )
 
 
@@ -361,9 +399,11 @@ def download():
 def qrcode():
     return send_file(k.qr_code_path, mimetype="image/png")
 
+
 @app.route("/logo")
 def logo():
     return send_file(k.logo_path, mimetype="image/png")
+
 
 @app.route("/files/delete", methods=["GET"])
 def delete_file():
@@ -428,13 +468,11 @@ def edit_file():
             flash("Error: No filename parameters were specified!", "is-danger")
         return redirect(url_for("browse"))
 
+
 @app.route("/splash")
 def splash():
-    return render_template(
-        "splash.html",
-        blank_page=True,
-        url="http://" + request.host
-    )
+    return render_template("splash.html", blank_page=True, url="http://" + request.host)
+
 
 @app.route("/info")
 def info():
@@ -474,6 +512,9 @@ def info():
     youtubedl_version = k.youtubedl_version
 
     is_pi = get_platform() == "raspberry_pi"
+    print(LANGUAGES)
+
+    languages = LANGUAGES
 
     return render_template(
         "info.html",
@@ -486,8 +527,9 @@ def info():
         youtubedl_version=youtubedl_version,
         is_pi=is_pi,
         pikaraoke_version=VERSION,
+        languages=languages,
         admin=is_admin(),
-        admin_enabled=admin_password != None
+        admin_enabled=admin_password != None,
     )
 
 
@@ -509,13 +551,15 @@ def delayed_halt(cmd):
         process.wait()
         os.system("reboot")
 
+
 def update_youtube_dl():
     time.sleep(3)
     k.upgrade_youtubedl()
 
+
 @app.route("/update_ytdl")
 def update_ytdl():
-    if (is_admin()):
+    if is_admin():
         flash(
             "Updating youtube-dl! Should take a minute or two... ",
             "is-warning",
@@ -526,17 +570,19 @@ def update_ytdl():
         flash("You don't have permission to update youtube-dl", "is-danger")
     return redirect(url_for("home"))
 
+
 @app.route("/refresh")
 def refresh():
-    if (is_admin()):
+    if is_admin():
         k.get_available_songs()
     else:
         flash("You don't have permission to shut down", "is-danger")
     return redirect(url_for("browse"))
 
+
 @app.route("/quit")
 def quit():
-    if (is_admin()):
+    if is_admin():
         flash("Quitting pikaraoke now!", "is-warning")
         th = threading.Thread(target=delayed_halt, args=[0])
         th.start()
@@ -547,7 +593,7 @@ def quit():
 
 @app.route("/shutdown")
 def shutdown():
-    if (is_admin()): 
+    if is_admin():
         flash("Shutting down system now!", "is-danger")
         th = threading.Thread(target=delayed_halt, args=[1])
         th.start()
@@ -558,7 +604,7 @@ def shutdown():
 
 @app.route("/reboot")
 def reboot():
-    if (is_admin()): 
+    if is_admin():
         flash("Rebooting system now!", "is-danger")
         th = threading.Thread(target=delayed_halt, args=[2])
         th.start()
@@ -566,13 +612,14 @@ def reboot():
         flash("You don't have permission to Reboot", "is-danger")
     return redirect(url_for("home"))
 
+
 @app.route("/expand_fs")
 def expand_fs():
-    if (is_admin() and platform == "raspberry_pi"): 
+    if is_admin() and platform == "raspberry_pi":
         flash("Expanding filesystem and rebooting system now!", "is-danger")
         th = threading.Thread(target=delayed_halt, args=[3])
         th.start()
-    elif (platform != "raspberry_pi"):
+    elif platform != "raspberry_pi":
         flash("Cannot expand fs on non-raspberry pi devices!", "is-danger")
     else:
         flash("You don't have permission to resize the filesystem", "is-danger")
@@ -581,6 +628,7 @@ def expand_fs():
 
 # Handle sigterm, apparently cherrypy won't shut down without explicit handling
 signal.signal(signal.SIGTERM, lambda signum, stack_frame: k.stop())
+
 
 def get_default_youtube_dl_path(platform):
     if platform == "windows":
@@ -595,12 +643,12 @@ def get_default_youtube_dl_path(platform):
     if platform == "osx":
         if os.path.isfile(default_ytdl_unix_path):
             return default_ytdl_unix_path
-        else: 
+        else:
             # just a guess based on the default python 3 install in OSX monterey
             return "/Library/Frameworks/Python.framework/Versions/3.10/bin/yt-dlp"
     else:
         return default_ytdl_unix_path
-        
+
 
 def get_default_dl_dir(platform):
     if platform == "raspberry_pi":
@@ -626,6 +674,7 @@ if __name__ == "__main__":
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
+    default_rw_prefs = 0
 
     default_dl_dir = get_default_dl_dir(platform)
     default_omxplayer_path = "/usr/bin/omxplayer"
@@ -775,9 +824,27 @@ if __name__ == "__main__":
         action="store_true",
         required=False,
     ),
+    parser.add_argument(
+        "--disable-score",
+        help="Disable the score after each song",
+        action="store_true",
+        required=False,
+    ),
+    parser.add_argument(
+        "--disable-bg-music",
+        help="Disable the background music on splash screen",
+        action="store_true",
+        required=False,
+    ),
+    parser.add_argument(
+        "--rw-prefs",
+        help="Reset or write preferences to be allways used" % default_rw_prefs,
+        default=default_rw_prefs,
+        required=False,
+    ),
     args = parser.parse_args()
 
-    if (args.admin_password):
+    if args.admin_password:
         admin_password = args.admin_password
 
     app.jinja_env.globals.update(filename_from_path=filename_from_path)
@@ -812,8 +879,10 @@ if __name__ == "__main__":
         print("Creating download path: " + dl_path)
         os.makedirs(dl_path)
 
-    if (args.developer_mode):
-        logging.warning("Splash screen is disabled in developer mode due to main thread conflicts")
+    if args.developer_mode:
+        logging.warning(
+            "Splash screen is disabled in developer mode due to main thread conflicts"
+        )
         args.hide_splash_screen = True
 
     # Configure karaoke process
@@ -837,10 +906,12 @@ if __name__ == "__main__":
         vlc_path=args.vlc_path,
         vlc_port=args.vlc_port,
         logo_path=args.logo_path,
-        show_overlay=args.show_overlay
+        show_overlay=args.show_overlay,
+        disable_score=args.disable_score,
+        disable_bg_music=args.disable_bg_music,
     )
 
-    if (args.developer_mode):
+    if args.developer_mode:
         th = threading.Thread(target=k.run)
         th.start()
         app.run(debug=True, port=args.port)

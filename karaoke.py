@@ -8,23 +8,34 @@ import subprocess
 import sys
 import threading
 import time
-import random
+import math
 from io import BytesIO
 from pathlib import Path
 from subprocess import check_output
-from pygame import mixer
-
 import pygame
 import qrcode
 from unidecode import unidecode
+import configparser
+import gettext
 
 from lib import omxclient, vlcclient
 from lib.get_platform import get_platform
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+user_lng = config.get("USERPREFERENCES", "language")
+
+lang = gettext.translation("messages", localedir="translations", languages=["pt_BR"])
+lang.install()
+_ = lang.gettext
 
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
 
 pygame.mixer.init()
+pygame.mixer.music.load("sound-effects/saloon-piano-music.ogg")
+pygame.mixer.music.set_volume(0.2)
+
 
 class Karaoke:
 
@@ -39,14 +50,15 @@ class Karaoke:
     now_playing_user = None
     now_playing_transpose = 0
     is_paused = True
-    scored = True
-    score = [None, None]
     process = None
     qr_code_path = None
     base_path = os.path.dirname(__file__)
     volume_offset = 0
     loop_interval = 500  # in milliseconds
     default_logo_path = os.path.join(base_path, "logo.png")
+    scored = True
+    score = None
+    critic = None
 
     def __init__(
         self,
@@ -68,7 +80,9 @@ class Karaoke:
         vlc_path=None,
         vlc_port=None,
         logo_path=None,
-        show_overlay=False
+        show_overlay=False,
+        disable_score=False,
+        disable_bg_music=False,
     ):
 
         # override with supplied constructor args if provided
@@ -90,6 +104,8 @@ class Karaoke:
         self.vlc_port = vlc_port
         self.logo_path = self.default_logo_path if logo_path == None else logo_path
         self.show_overlay = show_overlay
+        self.disable_score = disable_score
+        self.disable_bg_music = disable_bg_music
 
         # other initializations
         self.platform = get_platform()
@@ -143,7 +159,7 @@ class Karaoke:
                 self.vlc_path,
                 self.vlc_port,
                 log_level,
-                self.show_overlay
+                self.show_overlay,
             )
         )
 
@@ -177,20 +193,29 @@ class Karaoke:
 
         self.generate_qr_code()
         if self.use_vlc:
-            if (self.show_overlay):
-                self.vlcclient = vlcclient.VLCClient(port=self.vlc_port, path=self.vlc_path, qrcode=self.qr_code_path, url=self.url)
-            else: 
-                self.vlcclient = vlcclient.VLCClient(port=self.vlc_port, path=self.vlc_path)
+            if self.show_overlay:
+                self.vlcclient = vlcclient.VLCClient(
+                    port=self.vlc_port,
+                    path=self.vlc_path,
+                    qrcode=self.qr_code_path,
+                    url=self.url,
+                )
+            else:
+                self.vlcclient = vlcclient.VLCClient(
+                    port=self.vlc_port, path=self.vlc_path
+                )
         else:
-            self.omxclient = omxclient.OMXClient(path=self.omxplayer_path, adev=self.omxplayer_adev, dual_screen=self.dual_screen, volume_offset=self.volume_offset)
+            self.omxclient = omxclient.OMXClient(
+                path=self.omxplayer_path,
+                adev=self.omxplayer_adev,
+                dual_screen=self.dual_screen,
+                volume_offset=self.volume_offset,
+            )
 
         if not self.hide_splash_screen:
             self.initialize_screen()
             self.render_splash_screen()
-            
-   
 
- 
     # Other ip-getting methods are unreliable and sometimes return 127.0.0.1
     # https://stackoverflow.com/a/28950776
     def get_ip(self):
@@ -208,17 +233,17 @@ class Karaoke:
     def get_raspi_wifi_conf_vals(self):
         """Extract values from the RaspiWiFi configuration file."""
         f = open(self.raspi_wifi_conf_file, "r")
-        
+
         # Define default values.
         #
-        # References: 
+        # References:
         # - https://github.com/jasbur/RaspiWiFi/blob/master/initial_setup.py (see defaults in input prompts)
         # - https://github.com/jasbur/RaspiWiFi/blob/master/libs/reset_device/static_files/raspiwifi.conf
         #
         server_port = "80"
         ssid_prefix = "RaspiWiFi Setup"
         ssl_enabled = "0"
-        
+
         # Override the default values according to the configuration file.
         for line in f.readlines():
             if "server_port=" in line:
@@ -250,9 +275,9 @@ class Karaoke:
                 ).decode("utf8")
             except FileNotFoundError:
                 logging.info("Attempting youtube-dl upgrade via pip...")
-                output = check_output(
-                    ["pip", "install", "--upgrade", "yt-dlp"]
-                ).decode("utf8")
+                output = check_output(["pip", "install", "--upgrade", "yt-dlp"]).decode(
+                    "utf8"
+                )
             logging.info(output)
         self.get_youtubedl_version()
         logging.info("Done. New version: %s" % self.youtubedl_version)
@@ -341,6 +366,10 @@ class Karaoke:
         if not self.hide_splash_screen:
             logging.debug("Rendering splash screen")
 
+            if self.disable_bg_music != True:
+                if len(self.queue) == 0:
+                    pygame.mixer.music.play()
+
             self.screen.fill((18, 0, 20))
 
             logo = pygame.image.load(self.logo_path)
@@ -366,30 +395,36 @@ class Karaoke:
                     )
                     self.stop()
                 else:
-                    text = self.font.render(
-                        "Connect at: " + self.url, True, (255, 255, 255)
-                    )
+                    text = _("Connect at: ")
+                    text = self.font.render(text + self.url, True, (255, 255, 255))
                     self.screen.blit(text, (p_image.get_width() + 35, blitY))
 
             if not self.hide_raspiwifi_instructions and (
                 self.raspi_wifi_config_installed
                 and self.raspi_wifi_config_ip in self.url
             ):
-                (server_port, ssid_prefix, ssl_enabled) = self.get_raspi_wifi_conf_vals()
+                (
+                    server_port,
+                    ssid_prefix,
+                    ssl_enabled,
+                ) = self.get_raspi_wifi_conf_vals()
 
                 text1 = self.font.render(
                     "RaspiWifiConfig setup mode detected!", True, (255, 255, 255)
                 )
                 text2 = self.font.render(
-                    "Connect another device/smartphone to the Wifi AP: '%s'" % ssid_prefix,
+                    "Connect another device/smartphone to the Wifi AP: '%s'"
+                    % ssid_prefix,
                     True,
                     (255, 255, 255),
                 )
                 text3 = self.font.render(
                     "Then point its browser to: '%s://%s%s' and follow the instructions."
-                    % ("https" if ssl_enabled == "1" else "http", 
-                       self.raspi_wifi_config_ip, 
-                       ":%s" % server_port if server_port != "80" else ""),
+                    % (
+                        "https" if ssl_enabled == "1" else "http",
+                        self.raspi_wifi_config_ip,
+                        ":%s" % server_port if server_port != "80" else "",
+                    ),
                     True,
                     (255, 255, 255),
                 )
@@ -398,113 +433,76 @@ class Karaoke:
                 self.screen.blit(text3, (10, 90))
 
     def refresh_score_screen(self):
-      logging.debug("Atualizando Score screen")
-      self.screen.fill((255, 0, 255))
-      
-      text = self.font.render(
-         "Score...",
-         True,
-         (255, 255, 255),
+        self.screen.fill((18, 0, 20))
+
+        text = self.font.render(
+            "Score...",
+            True,
+            (255, 255, 255),
         )
-      self.screen.blit(text, (200, 200))
-      
-      if self.score[0] != None:
-        self.screen.blit(self.score[0], (500, 200))
-      if self.score[1] != None:
-        self.screen.blit(self.score[1], (520, 200))
-      
-      pygame.display.update()
-        
-      
-    def render_score(self):
-      # self.pygame_reset_screen()
-      logging.debug("Rendering score screen")
-      
-      self.refresh_score_screen()
-      
-      mixer.music.load('sound-effects/score.ogg')
-      mixer.music.set_volume(0.2)
-      mixer.music.play()
+        self.screen.blit(text, (200, 200))
 
-      numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-      randomNum1 = str(random.choices(numbers, cum_weights=(1, 2, 3, 4, 5, 7, 7, 8, 8, 8), k=1)[0])
-      randomNum2 = str(random.randint(0, 9))
-      
-      if int(randomNum1) < 3:
-         sel_color = "red"
-         applause = mixer.Sound('sound-effects/applause-l.ogg')
-      elif int(randomNum1) >= 3 and int(randomNum1) < 6 :
-         sel_color = "yellow"
-         applause = mixer.Sound('sound-effects/applause-m.ogg')
-      else:
-         sel_color = "blue"
-         applause = mixer.Sound('sound-effects/applause-h.ogg')
-      
-      i = 0
-      while i < 50:
-        number = str(random.randint(0, 9))
-        self.score[0] = self.font.render(
-          number,
-          True,
-          (255,255,255),
-         )
-        self.refresh_score_screen()
-        pygame.time.wait(i*2)
-        i += 1
-        
-      self.score[0] = self.font.render(
-        randomNum1,
-        True,
-        sel_color,
-      )
-      self.refresh_score_screen()
-      
-      i = 0   
-      while i < 30:
-        number = str(random.randint(0, 9))
-        self.score[1] = self.font.render(
-          number,
-          True,
-          sel_color,
-         )
-        self.refresh_score_screen()
-        pygame.time.wait(i*3)
-        i += 1
-        
-      self.score[1] = self.font.render(
-        randomNum2,
-        True,
-        sel_color,
-      )
-      self.refresh_score_screen()
-      
-      applause.play()
-      
-      logging.debug("Finalizou o score, toca o som...")
-      pygame.time.wait(5000)   
-      # text = self.font.render(
-      #    str(randomNum1[0]) + str(randomNum2) ,
-      #    True,
-      #    sel_color,
-      #   )
-      
-      # pygame.time.Clock().tick(5)
-      
-      logging.debug("Score: " + randomNum1 + randomNum2)
-      
-      # while i < (self.splash_delay * 2000):
-      #     self.handle_run_loop()
-      #     i += self.loop_interval
+        if self.score != None:
+            self.screen.blit(self.score, (500, 200))
+            if self.critic != None:
+                self.screen.blit(self.critic, (500, 500))
 
-      # self.screen.blit(text, (10,10))
-      # i = 0
-      # while i < (self.splash_delay):
-      #     self.handle_run_loop()
-      #     i += self.loop_interval
-          
-      logging.debug("Voltando para a tela Splash")
-      self.score = [None, None]
-      self.render_splash_screen()
+        pygame.display.update()
+
+    def render_score_screen(self):
+        if self.disable_score != True:
+            logging.debug("Rendering score screen")
+
+            self.refresh_score_screen()
+
+            score_sound = pygame.mixer.Sound("sound-effects/score.ogg")
+            score_sound.set_volume(0.2)
+            score_sound.play()
+
+            scoreNum = str(math.ceil(random.triangular(0, 100, 100))).zfill(2)
+
+            if int(scoreNum) < 30:
+                sel_color = "red"
+                applause = pygame.mixer.Sound("sound-effects/applause-l.ogg")
+                critic = "Never sing again... ever"
+            elif int(scoreNum) >= 30 and int(scoreNum) < 60:
+                sel_color = "yellow"
+                applause = pygame.mixer.Sound("sound-effects/applause-m.ogg")
+                critic = "I've seen better singers"
+            else:
+                sel_color = "blue"
+                applause = pygame.mixer.Sound("sound-effects/applause-h.ogg")
+                critic = "Congratulations! Couldn't be better"
+
+            i = 0
+            while i < 64:
+                scoreRnd = str(random.randint(0, 99)).zfill(2)
+                self.score = self.font.render(
+                    scoreRnd,
+                    True,
+                    (255, 255, 255),
+                )
+                self.refresh_score_screen()
+                pygame.time.wait(i * 2)
+                i += 1
+
+            self.score = self.font.render(
+                scoreNum,
+                True,
+                sel_color,
+            )
+
+            self.critic = self.font.render(critic, True, (255, 255, 255))
+            self.refresh_score_screen()
+
+            applause.play()
+
+            pygame.time.wait(5000)
+
+            self.score = None
+            self.critic = None
+
+        self.render_splash_screen()
 
     def render_next_song_to_splash_screen(self):
         if not self.hide_splash_screen:
@@ -513,21 +511,25 @@ class Karaoke:
                 logging.debug("Rendering next song to splash screen")
                 next_song = self.queue[0]["title"]
                 max_length = 60
-                if (len(next_song) > max_length):
+                if len(next_song) > max_length:
                     next_song = next_song[0:max_length] + "..."
                 next_user = self.queue[0]["user"]
                 font_next_song = pygame.font.SysFont(pygame.font.get_default_font(), 60)
                 text = font_next_song.render(
                     "Up next: %s" % (unidecode(next_song)), True, (0, 128, 0)
                 )
-                up_next = font_next_song.render("Up next:  " , True, (255, 255, 0))
+                up_next = font_next_song.render("Up next:  ", True, (255, 255, 0))
                 font_user_name = pygame.font.SysFont(pygame.font.get_default_font(), 50)
-                user_name = font_user_name.render("Added by: %s " % next_user, True, (255, 120, 0))
+                user_name = font_user_name.render(
+                    "Added by: %s " % next_user, True, (255, 120, 0)
+                )
                 x = self.width - text.get_width() - 10
                 y = 5
                 self.screen.blit(text, (x, y))
                 self.screen.blit(up_next, (x, y))
-                self.screen.blit(user_name, (self.width - user_name.get_width() - 10, y + 50))
+                self.screen.blit(
+                    user_name, (self.width - user_name.get_width() - 10, y + 50)
+                )
                 return True
             else:
                 logging.debug("Could not render next song to splash. No song in queue")
@@ -587,27 +589,29 @@ class Karaoke:
 
     def get_available_songs(self):
         logging.info("Fetching available songs in: " + self.download_path)
-        types = ['.mp4', '.mp3', '.zip', '.mkv', '.avi', '.webm', '.mov']
+        types = [".mp4", ".mp3", ".zip", ".mkv", ".avi", ".webm", ".mov"]
         files_grabbed = []
-        P=Path(self.download_path)
-        for file in P.rglob('*.*'):
+        P = Path(self.download_path)
+        for file in P.rglob("*.*"):
             base, ext = os.path.splitext(file.as_posix())
             if ext.lower() in types:
                 if os.path.isfile(file.as_posix()):
                     logging.debug("adding song: " + file.name)
                     files_grabbed.append(file.as_posix())
 
-        self.available_songs = sorted(files_grabbed, key=lambda f: str.lower(os.path.basename(f)))
+        self.available_songs = sorted(
+            files_grabbed, key=lambda f: str.lower(os.path.basename(f))
+        )
 
     def delete(self, song_path):
         logging.info("Deleting song: " + song_path)
         os.remove(song_path)
         ext = os.path.splitext(song_path)
         # if we have an associated cdg file, delete that too
-        cdg_file = song_path.replace(ext[1],".cdg")
-        if (os.path.exists(cdg_file)):
+        cdg_file = song_path.replace(ext[1], ".cdg")
+        if os.path.exists(cdg_file):
             os.remove(cdg_file)
-        
+
         self.get_available_songs()
 
     def rename(self, song_path, new_name):
@@ -617,8 +621,8 @@ class Karaoke:
             new_file_name = new_name + ext[1]
         os.rename(song_path, self.download_path + new_file_name)
         # if we have an associated cdg file, rename that too
-        cdg_file = song_path.replace(ext[1],".cdg")
-        if (os.path.exists(cdg_file)):
+        cdg_file = song_path.replace(ext[1], ".cdg")
+        if os.path.exists(cdg_file):
             os.rename(cdg_file, self.download_path + new_name + ".cdg")
         self.get_available_songs()
 
@@ -698,12 +702,18 @@ class Karaoke:
         return False
 
     def enqueue(self, song_path, user="Pikaraoke"):
-        if (self.is_song_in_queue(song_path)):
-            logging.warn("Song is already in queue, will not add: " + song_path)   
+        if self.is_song_in_queue(song_path):
+            logging.warn("Song is already in queue, will not add: " + song_path)
             return False
         else:
             logging.info("'%s' is adding song to queue: %s" % (user, song_path))
-            self.queue.append({"user": user, "file": song_path, "title": self.filename_from_path(song_path)})
+            self.queue.append(
+                {
+                    "user": user,
+                    "file": song_path,
+                    "title": self.filename_from_path(song_path),
+                }
+            )
             return True
 
     def queue_add_random(self, amount):
@@ -718,7 +728,13 @@ class Karaoke:
             if self.is_song_in_queue(songs[r]):
                 logging.warn("Song already in queue, trying another... " + songs[r])
             else:
-                self.queue.append({"user": "Randomizer", "file": songs[r], "title": self.filename_from_path(songs[r])})
+                self.queue.append(
+                    {
+                        "user": "Randomizer",
+                        "file": songs[r],
+                        "title": self.filename_from_path(songs[r]),
+                    }
+                )
                 i += 1
             songs.pop(r)
             if len(songs) == 0:
@@ -877,32 +893,30 @@ class Karaoke:
 
     def run(self):
         logging.info("Starting PiKaraoke!")
+        logging.debug(_("Testing..."))
         self.running = True
         while self.running:
             try:
-                if not self.is_file_playing() and self.now_playing != None:
-                    self.reset_now_playing()
-
                 if len(self.queue) > 0:
                     if not self.is_file_playing():
                         if self.scored != True:
-                           self.render_score()
-                           self.scored = True
-                           self.queue.pop(0)
+                            self.queue.pop(0)
+                            self.render_score_screen()
+                            self.scored = True
                         else:
-                          self.reset_now_playing()
-                          if not pygame.display.get_active():
-                              self.pygame_reset_screen()
-                          
-                          self.render_next_song_to_splash_screen()
-                          i = 0
-                          while i < (self.splash_delay * 1000):
-                              self.handle_run_loop()
-                              i += self.loop_interval
-                          mixer.music.stop()
-                          self.play_file(self.queue[0]["file"])
-                          self.now_playing_user=self.queue[0]["user"]
-                          self.scored = False
+                            self.reset_now_playing()
+                            if not pygame.display.get_active():
+                                self.pygame_reset_screen()
+
+                            self.render_next_song_to_splash_screen()
+                            i = 0
+                            while i < (self.splash_delay * 1000):
+                                self.handle_run_loop()
+                                i += self.loop_interval
+                            pygame.mixer.music.stop()
+                            self.play_file(self.queue[0]["file"])
+                            self.now_playing_user = self.queue[0]["user"]
+                            self.scored = False
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     self.pygame_reset_screen()

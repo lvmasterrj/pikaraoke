@@ -1,108 +1,89 @@
 {% extends 'base.html' %} {% block scripts %}
 <script>
-  $(function () {
-    $("#quit-link").click(function (e) {
-      e.preventDefault();
-      // {# MSG: Confirmation text whe the user selects quit. #}
-      if (window.confirm("{{ _('Are you sure you want to quit?') }}")) {
-        location.href = this.href;
-      }
-    });
+    $(function() {
+        $("#quit-link").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text whe the user selects quit. #}
+            if (window.confirm("{{ _('Are you sure you want to quit?') }}")) {
+                location.href = this.href;
+            }
+        });
 
-    $("#shutdown-link").click(function (e) {
-      e.preventDefault();
-      // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
-      if (window.confirm("{{ _('Are you sure you want to shut down?') }}")) {
-        location.href = this.href;
-      }
-    });
+        $("#shutdown-link").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
+            if (window.confirm("{{ _('Are you sure you want to shut down?') }}")) {
+                location.href = this.href;
+            }
+        });
 
-    $("#restart-link").click(function (e) {
-      e.preventDefault();
-      // {# MSG: Confirmation text whe the user starts to reboot the machine running Pikaraoke. #}
-      if (window.confirm("{{ _('Are you sure you want to reboot?') }}")) {
-        location.href = this.href;
-      }
-    });
+        $("#restart-link").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text whe the user starts to reboot the machine running Pikaraoke. #}
+            if (window.confirm("{{ _('Are you sure you want to reboot?') }}")) {
+                location.href = this.href;
+            }
+        });
 
-    $("#update-ytdl-link").click(function (e) {
-      e.preventDefault();
-      if (
-        window.confirm(
-          // {# MSG: Confirmation text whe the user asks to update the Youtube-dl tool. #}
-          "{{ _('Are you sure you want to update Youtube-dl right now? Current and pending downloads may fail.') }}"
-        )
-      ) {
-        location.href = this.href;
-      }
-    });
+        $("#update-ytdl-link").click(function(e) {
+            e.preventDefault();
+            if (
+                window.confirm(
+                    // {# MSG: Confirmation text whe the user asks to update the Youtube-dl tool. #}
+                    "{{ _('Are you sure you want to update Youtube-dl right now? Current and pending downloads may fail.') }}"
+                )
+            ) {
+                location.href = this.href;
+            }
+        });
 
-    $("#expand-link").click(function (e) {
-      e.preventDefault();
-      // {# MSG: Confirmation text when the user wants to expand the filesystem to take the entire SD card. #}
-      if (window.confirm("Are you sure you want to expand the filesystem? This will reboot your raspberry pi.")) {
-        location.href = this.href;
-      }
+        $("#expand-link").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text when the user wants to expand the filesystem to take the entire SD card. #}
+            if (window.confirm("Are you sure you want to expand the filesystem? This will reboot your raspberry pi.")) {
+                location.href = this.href;
+            }
+        });
     });
-  });
 </script>
-{% endblock %}
-
-{% block header %}
-  <h1>{% block title %}
-    {# MSG: Title of the information page. #}
-    {% trans %}Information{% endtrans %}
-  {% endblock %}</h1>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block header %}
+<h1>{% block title %} {# MSG: Title of the information page. #} {% trans %}Information{% endtrans %} {% endblock %}</h1>
+{% endblock %} {% block content %}
 <hr/>
 
-<div class="has-text-centered">  
-  <p>
-    {# MSG: Label which appears before a url which links to the current page. #}
-    {%- trans -%}
-      URL of {{site_title}}:
-    {%- endtrans -%}
-  </p>
-  <p class="is-size-4 has-text-warning has-text-centered">{{ url }}</p>
-  {# MSG: Label before a QR code which brings a frind (pal) to the main page if scanned, so they can also add songs. QR code follows this text. #}
-  <p>{% trans %}Handy URL QR code to share with a pal:{% endtrans %}</p>
-  <img id="qr-img" width="300px" src="{{ url_for('qrcode') }}" style="image-rendering: pixelated" />
+<div class="has-text-centered">
+    <p>
+        {# MSG: Label which appears before a url which links to the current page. #} {%- trans -%} URL of {{site_title}}: {%- endtrans -%}
+    </p>
+    <p class="is-size-4 has-text-warning has-text-centered">{{ url }}</p>
+    {# MSG: Label before a QR code which brings a frind (pal) to the main page if scanned, so they can also add songs. QR code follows this text. #}
+    <p>{% trans %}Handy URL QR code to share with a pal:{% endtrans %}</p>
+    <img id="qr-img" width="300px" src="{{ url_for('qrcode') }}" style="image-rendering: pixelated" /> {# MSG: Label before a link to the Splash screen. #}
+    <p><a href="{{ url_for('splash') }}">{% trans %}Open splash screen{% endtrans %}</a></p>
+</div>
 
-  {# MSG: Label before a link to the Splash screen. #}
-  <p><a href="{{ url_for('splash') }}">{% trans %}Open splash screen{% endtrans %}</a></p>
-  </div>
-
-<hr />
-
-{# MSG: Header of the information section about the computer running Pikaraoke. #}
+<hr /> {# MSG: Header of the information section about the computer running Pikaraoke. #}
 <h1>{% trans %}System Info{% endtrans %}</h1>
 <ul>
-  {# MSG: The CPU usage of the computer running Pikaraoke. #}
-  <li>{% trans %}CPU: {{ cpu }}{% endtrans %}</li>
-  {# MSG: The disk usage of the computer running Pikaraoke. Used by downloaded songs. #}
-  <li>{% trans %}Disk Usage: {{ disk }}{% endtrans %}</li>
-  {# MSG: The memory (RAM) usiage of the computer running Pikaraoke. #}
-  <li>{% trans %}Memory: {{ memory }}{% endtrans %}</li>
-  {# MSG: The version of the program "Youtube-dl". #}
-  <li>{% trans %}Youtube-dl (yt-dlp) version: {{ youtubedl_version }}{% endtrans %}</li>
-  {# MSG: The version of Pikaraoke running right now. #}
-  <li>{% trans %}Pikaraoke version: {{ pikaraoke_version }}{% endtrans %}</li>
+    {# MSG: The CPU usage of the computer running Pikaraoke. #}
+    <li>{% trans %}CPU: {{ cpu }}{% endtrans %}</li>
+    {# MSG: The disk usage of the computer running Pikaraoke. Used by downloaded songs. #}
+    <li>{% trans %}Disk Usage: {{ disk }}{% endtrans %}</li>
+    {# MSG: The memory (RAM) usiage of the computer running Pikaraoke. #}
+    <li>{% trans %}Memory: {{ memory }}{% endtrans %}</li>
+    {# MSG: The version of the program "Youtube-dl". #}
+    <li>{% trans %}Youtube-dl (yt-dlp) version: {{ youtubedl_version }}{% endtrans %}</li>
+    {# MSG: The version of Pikaraoke running right now. #}
+    <li>{% trans %}Pikaraoke version: {{ pikaraoke_version }}{% endtrans %}</li>
 </ul>
 
-<hr />
-
-{% if admin %}
-{# MSG: Title of the updates section. #}
+<hr /> {% if admin %} {# MSG: Title of the updates section. #}
 <h1>{% trans %}Updates{% endtrans %}</h1>
 {# MSG: Label before a link which forces Pikaraoke to rescan and pick up any new songs. #}
-<p>{% trans %}Refresh the song list:{% endtrans %}</p> 
+<p>{% trans %}Refresh the song list:{% endtrans %}</p>
 <ul>
-  <li>
-    <a href="/refresh"
-    {# MSG: Text on the link which forces Pikaraoke to rescan and pick up any new songs. #}
-      >{% trans %}Rescan song directory{% endtrans %}</a
+    <li>
+        <a href="/refresh" {# MSG: Text on the link which forces Pikaraoke to rescan and pick up any new songs. #}>{% trans %}Rescan song directory{% endtrans %}</a
     >
   </li>
 </ul>
@@ -130,54 +111,49 @@
   {%- endtrans %}
 </p>
 
-{# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
-<h1>{% trans %}Shutdown{% endtrans %}</h1>
+{# MSG: Title of the section for switching the system language #}
+<h1>{% trans %}Language{% endtrans %}</h1>
 <p>
-  {# MSG: Explainitory text which explains why to use the shutdown link. #}
+  {# MSG: Text to inform about language switching #}
   {% trans -%}
-    Don't just pull the plug! Always shut down your server properly to avoid data corruption.
+    Use the below box to switch between languages that are used by the system.
   {%- endtrans %}
 </p>
 <ul>
-  {# MSG: Text for button which turns off Pikaraoke for everyone using it at your house. #}
-  <li><a id="quit-link" href="{{ url_for('quit') }}">{% trans %}Quit Pikaraoke{% endtrans %}</a></li>
-  {% if is_pi %}
-    {# MSG: Text for button which reboots the machine running Pikaraoke. #}
-    <li><a id="restart-link" href="{{ url_for('reboot') }}">{% trans %}Reboot System{% endtrans %}</a></li>
-    <li>
-      {# MSG: Text for button which turn soff the machine running Pikaraoke. #}
-      <a id="shutdown-link" href="{{ url_for('shutdown') }}">{% trans %}Shutdown System{% endtrans %}</a>
-    </li>
-  {% endif %}
+  {% for key, language in languages | dictsort %}
+  <li><a href="aaaaaaaaa">{{ key }}: {{ language }}</a></li>
+  {% endfor %}
 </ul>
 
-{% if is_pi %}
-  {# MSG: Title for section containing a few other options on the Info page. #}
-  <h1>{% trans %}Other{% endtrans %}</h1>
-  <a id="expand-link" href="{{ url_for('expand_fs') }}">
+{# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
+<h1>{% trans %}Shutdown{% endtrans %}</h1>
+<p>
+    {# MSG: Explainitory text which explains why to use the shutdown link. #} {% trans -%} Don't just pull the plug! Always shut down your server properly to avoid data corruption. {%- endtrans %}
+</p>
+<ul>
+    {# MSG: Text for button which turns off Pikaraoke for everyone using it at your house. #}
+    <li><a id="quit-link" href="{{ url_for('quit') }}">{% trans %}Quit Pikaraoke{% endtrans %}</a></li>
+    {% if is_pi %} {# MSG: Text for button which reboots the machine running Pikaraoke. #}
+    <li><a id="restart-link" href="{{ url_for('reboot') }}">{% trans %}Reboot System{% endtrans %}</a></li>
+    <li>
+        {# MSG: Text for button which turn soff the machine running Pikaraoke. #}
+        <a id="shutdown-link" href="{{ url_for('shutdown') }}">{% trans %}Shutdown System{% endtrans %}</a>
+    </li>
+    {% endif %}
+</ul>
+
+{% if is_pi %} {# MSG: Title for section containing a few other options on the Info page. #}
+<h1>{% trans %}Other{% endtrans %}</h1>
+<a id="expand-link" href="{{ url_for('expand_fs') }}">
     {# MSG: Text for button#}
     {% trans %}Expand Raspberry Pi filesystem{% endtrans %}
   </a></li>
-  {# MSG: Explainitory text which explains why you might want to expand the filesystem. #}
-  <p class="help">{% trans -%}
-    If you just installed the pre-built pikaraoke pi image and your SD card is larger than 4GB,
-    you may want to expand the filesystem to utilize the remaining space. You only need to do this once.
-    This will reboot the system.
-  {%- endtrans %}</p>
+{# MSG: Explainitory text which explains why you might want to expand the filesystem. #}
+<p class="help">{% trans -%} If you just installed the pre-built pikaraoke pi image and your SD card is larger than 4GB, you may want to expand the filesystem to utilize the remaining space. You only need to do this once. This will reboot the system. {%- endtrans %}</p>
 {% endif %}
 
-<hr/>
-{% if admin_enabled %}
-  {# MSG: Link which will log out the user from admin mode. #}
-  <p>{% trans logout_url=url_for('logout') -%}
-    Disable admin mode: <a href="{{ logout_url }}">Log out</a>
-  {%- endtrans %}</p>
-{% endif %}
-{% else %} {# from if admin #}
-  {# MSG: Link which will let the user log into admin mode. #}
-  <p>{% trans login_url=url_for('login') %}
-    Enable admin mode: <a href="{{ login_url }}">Log in</a>
-  {% endtrans %}</p>
-{% endif %}
-
-{% endblock %}
+<hr/> {% if admin_enabled %} {# MSG: Link which will log out the user from admin mode. #}
+<p>{% trans logout_url=url_for('logout') -%} Disable admin mode: <a href="{{ logout_url }}">Log out</a> {%- endtrans %}</p>
+{% endif %} {% else %} {# from if admin #} {# MSG: Link which will let the user log into admin mode. #}
+<p>{% trans login_url=url_for('login') %} Enable admin mode: <a href="{{ login_url }}">Log in</a> {% endtrans %}</p>
+{% endif %} {% endblock %}

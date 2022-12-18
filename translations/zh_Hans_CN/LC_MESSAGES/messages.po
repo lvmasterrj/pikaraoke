@@ -5,19 +5,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.1.1\n"
+"Project-Id-Version:  1.1.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-28 10:09-0400\n"
+"POT-Creation-Date: 2022-12-16 16:48-0300\n"
 "PO-Revision-Date: 2022-04-28 10:09-0400\n"
 "Last-Translator: \n"
-"Language-Team: zh_Hans_CN <LL@li.org>\n"
 "Language: zh_CN\n"
+"Language-Team: zh_Hans_CN <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.9.1\n"
-"X-Generator: Poedit 3.0.1\n"
 
 #. Message shown after logging in as admin successfully
 #: app.py:94
@@ -36,15 +35,21 @@ msgstr "管理员密码错误"
 msgid "Browse"
 msgstr "浏览"
 
+#: karaoke.py:396
+msgid "Connect at: "
+msgstr ""
+
+#: karaoke.py:893
+msgid "Testing..."
+msgstr ""
+
 #. Prompt when changing the current profile name.
 #: templates/base.html:80
 #, python-format
 msgid ""
-"Do you want to change the name of the person using this device? This "
-"will show up on queued songs. Current: %(currentUser)s"
-msgstr ""
-"是否更改此设备上的用户名称？它将显示在歌曲列表中。当下用户: "
-"%(currentUser)s"
+"Do you want to change the name of the person using this device? This will"
+" show up on queued songs. Current: %(currentUser)s"
+msgstr "是否更改此设备上的用户名称？它将显示在歌曲列表中。当下用户: %(currentUser)s"
 
 #. Navigation link for the home page.
 #: templates/base.html:143
@@ -59,7 +64,7 @@ msgstr "列表"
 
 #. Navigation link for the search page add songs to the queue.
 #. Submit button on the search form for searching YouTube.
-#: templates/base.html:154 templates/search.html:295
+#: templates/base.html:154 templates/search.html:308
 msgid "Search"
 msgstr "搜索"
 
@@ -104,7 +109,7 @@ msgid "Delete this song"
 msgstr "删除此曲"
 
 #. Prompt which asks the user their name when they first navigate to the page.
-#: templates/files.html:26 templates/search.html:246
+#: templates/files.html:26 templates/search.html:259
 msgid ""
 "Please enter your name. This will show up next to the songs you queue up "
 "from this device."
@@ -157,64 +162,65 @@ msgstr "下一个歌手"
 #. Alternative text for the "Up next" section if no more songs are queued up.
 #. Message when the queue of songs is empty.  Shown instead of what the next
 #. song is.
-#: templates/home.html:42 templates/splash.html:17
+#: templates/home.html:41 templates/splash.html:17
 msgid "No song is queued."
 msgstr "没有下一首歌"
 
 #. Confirmation message when clicking a button to skip a track.
-#: templates/home.html:114
+#: templates/home.html:113
 msgid ""
 "Are you sure you want to skip this track? If you didn't add this song, "
 "ask permission first!"
 msgstr "你确定要跳过这首歌？"
 
 #. Header showing the currently playing song.
-#: templates/home.html:143
+#: templates/home.html:145
 msgid "Now Playing"
 msgstr "正在播放曲目"
 
 #. Title for the section displaying the next song to be played.
-#: templates/home.html:157
+#: templates/home.html:159
 msgid "Next Song"
 msgstr "下一首歌"
 
 #. Title of the box with controls such as pause and skip.
-#: templates/home.html:165
+#: templates/home.html:167
 msgid "Player Control"
 msgstr "播放器"
 
 #. Title attribute on the button to restart the current song.
-#: templates/home.html:168
+#: templates/home.html:170
 msgid "Restart Song"
 msgstr "重新开始"
 
-#. Title attribute on the button to play or pause the current song.
-#: templates/home.html:171
+#. Title attribute on the button to play or pause the     current song.
+#: templates/home.html:174
 msgid "Play/Pause"
 msgstr "播放/暂停"
 
-#. Title attribute on the button to skip to the next song.
-#: templates/home.html:174
+#. Title attribute on the button to skip to the next     song.
+#: templates/home.html:178
 msgid "Stop Current Song"
 msgstr "停止并跳到下一首歌"
 
 #. Title attribute on the button to adjust volume down.
-#: templates/home.html:178
+#: templates/home.html:183
 msgid "Volume Down"
 msgstr "音量-"
 
 #. Title attribute on the button to adjust volume up.
-#: templates/home.html:182
+#: templates/home.html:187
 msgid "Volume Up"
 msgstr "音量+"
 
 #. Title of a control to change the key/pitch of the playing song.
-#: templates/home.html:193
+#: templates/home.html:200
 msgid "Change Key"
 msgstr "升降调"
 
-#. Label on the button to confirm the change in key/pitch of the playing song.
-#: templates/home.html:219
+#. Label on the button to confirm the change in key/pitch of the
+#. playing song.
+#: templates/home.html:228
 msgid "Change"
 msgstr "确认更改声调"
 
@@ -238,8 +244,8 @@ msgstr "确定重启"
 #. Confirmation text whe the user asks to update the Youtube-dl tool.
 #: templates/info.html:33
 msgid ""
-"Are you sure you want to update Youtube-dl right now? Current and "
-"pending downloads may fail."
+"Are you sure you want to update Youtube-dl right now? Current and pending"
+" downloads may fail."
 msgstr "确定升级Youtube-dl？会终止正在下载的音乐"
 
 #. Title of the information page.
@@ -259,68 +265,71 @@ msgstr "%(site_title)s 的网址"
 msgid "Handy URL QR code to share with a pal:"
 msgstr "快捷QR码（用于分享给朋友）"
 
+#. Label before a link to the Splash screen.
+#: templates/info.html:74
+msgid "Open splash screen"
+msgstr ""
+
 #. Header of the information section about the computer running Pikaraoke.
-#: templates/info.html:77
+#: templates/info.html:80
 msgid "System Info"
 msgstr "系统信息"
 
 #. The CPU usage of the computer running Pikaraoke.
-#: templates/info.html:80
+#: templates/info.html:83
 #, python-format
 msgid "CPU: %(cpu)s"
 msgstr "CPU: %(cpu)s"
 
 #. The disk usage of the computer running Pikaraoke. Used by downloaded songs.
-#: templates/info.html:82
+#: templates/info.html:85
 #, python-format
 msgid "Disk Usage: %(disk)s"
 msgstr "磁盘使用：%(disk)s"
 
 #. The memory (RAM) usiage of the computer running Pikaraoke.
-#: templates/info.html:84
+#: templates/info.html:87
 #, python-format
 msgid "Memory: %(memory)s"
 msgstr "内存: %(memory)s"
 
 #. The version of the program "Youtube-dl".
-#: templates/info.html:86
+#: templates/info.html:89
 #, python-format
 msgid "Youtube-dl (yt-dlp) version: %(youtubedl_version)s"
 msgstr "Youtube-dl (yt-dlp) 版本: %(youtubedl_version)s"
 
 #. The version of Pikaraoke running right now.
-#: templates/info.html:88
+#: templates/info.html:91
 #, python-format
 msgid "Pikaraoke version: %(pikaraoke_version)s"
 msgstr "卡拉OK派 版本: %(pikaraoke_version)s"
 
 #. Title of the updates section.
-#: templates/info.html:95
+#: templates/info.html:98
 msgid "Updates"
 msgstr "更新"
 
 #. Label before a link which forces Pikaraoke to rescan and pick up any new
 #. songs.
-#: templates/info.html:97
+#: templates/info.html:100
 msgid "Refresh the song list:"
 msgstr "刷新歌曲列表"
 
 #. Text on the link which forces Pikaraoke to rescan and pick up any new songs.
-#: templates/info.html:102
+#: templates/info.html:105
 msgid "Rescan song directory"
 msgstr "重新扫描歌曲目录"
 
 #. Help text explaining the Rescan song directory link.
-#: templates/info.html:107
+#: templates/info.html:110
 msgid ""
 "You should only need to do this if you manually copied files to the "
 "download directory while pikaraoke was running."
-msgstr ""
-"只有当卡拉OK派在运行，而同时你又想手动添加歌曲到下载目录里的时候你才需要"
-"做这一步"
+msgstr "只有当卡拉OK派在运行，而同时你又想手动添加歌曲到下载目录里的时候你才需要做这一步"
 
 #. Text explaining why you might want to update youtube-dl.
-#: templates/info.html:112
+#: templates/info.html:115
 #, python-format
 msgid ""
 "If downloads or searches stopped working, updating youtube-dl will "
@@ -332,13 +341,13 @@ msgstr ""
 
 #. Text for the link which will try and update youtube-dl on the machine
 #. running Pikaraoke.
-#: templates/info.html:118
+#: templates/info.html:121
 msgid "Update youtube-dl"
 msgstr "更新 youtube-dl"
 
 #. Help text which explains why updating youtube-dl can fail.  The log is a
 #. file on the machine running Pikaraoke.
-#: templates/info.html:124
+#: templates/info.html:127
 msgid ""
 "This update link above may fail if you don't have proper file "
 "permissions.\n"
@@ -349,12 +358,12 @@ msgstr ""
 
 #. Title of the section on shutting down / turning off the machine running
 #. Pikaraoke.
-#: templates/info.html:131
+#: templates/info.html:134
 msgid "Shutdown"
 msgstr "关闭"
 
 #. Explainitory text which explains why to use the shutdown link.
-#: templates/info.html:134
+#: templates/info.html:137
 msgid ""
 "Don't just pull the plug! Always shut down your server properly to avoid "
 "data corruption."
@@ -362,38 +371,38 @@ msgstr ""
 
 #. Text for button which turns off Pikaraoke for everyone using it at your
 #. house.
-#: templates/info.html:140
+#: templates/info.html:143
 msgid "Quit Pikaraoke"
 msgstr "退出卡拉OK派"
 
 #. Text for button which reboots the machine running Pikaraoke.
-#: templates/info.html:143
+#: templates/info.html:146
 msgid "Reboot System"
 msgstr "重启系统"
 
 #. Text for button which turn soff the machine running Pikaraoke.
-#: templates/info.html:146
+#: templates/info.html:149
 msgid "Shutdown System"
 msgstr "关机"
 
 #. Title for section containing a few other options on the Info page.
-#: templates/info.html:153
+#: templates/info.html:156
 msgid "Other"
 msgstr "其他"
 
 #. Text for button
-#: templates/info.html:156
+#: templates/info.html:159
 msgid "Expand Raspberry Pi filesystem"
 msgstr "拓展Raspberry Pi文件系统"
 
 #. Explainitory text which explains why you might want to expand the
 #. filesystem.
-#: templates/info.html:159
+#: templates/info.html:162
 msgid ""
 "If you just installed the pre-built pikaraoke pi image and your SD card "
 "is larger than 4GB,\n"
-"    you may want to expand the filesystem to utilize the remaining "
-"space. You only need to do this once.\n"
+"    you may want to expand the filesystem to utilize the remaining space."
+" You only need to do this once.\n"
 "    This will reboot the system."
 msgstr ""
 "如果你刚刚安装预设卡拉OK派图片而且你的SD卡超过4GB,\n"
@@ -401,13 +410,13 @@ msgstr ""
 "    这会让你的电脑系统重启"
 
 #. Link which will log out the user from admin mode.
-#: templates/info.html:169
+#: templates/info.html:172
 #, python-format
 msgid "Disable admin mode: <a href=\"%(logout_url)s\">Log out</a>"
 msgstr "关闭管理员模式: <a href=\"%(logout_url)s\">登出</a>"
 
 #. Link which will let the user log into admin mode.
-#: templates/info.html:175
+#: templates/info.html:178
 #, python-format
 msgid ""
 "\n"
@@ -450,34 +459,39 @@ msgid "Available songs in local library"
 msgstr "本地曲库"
 
 #. Title for the search page.
-#: templates/search.html:278
+#: templates/search.html:291
 msgid "Search / Add New"
 msgstr "搜索 / 添加新歌"
 
-#: templates/search.html:290
+#: templates/search.html:303
 msgid "Available Songs"
 msgstr "已有歌曲"
 
 #. Submit button on the search form when selecting a locally downloaded song.
 #. The button adds it to the queue.
-#: templates/search.html:297
+#: templates/search.html:310
 msgid "Add to queue"
 msgstr "添加至播放列表"
 
+#. Link which clears the text from the search box.
+#: templates/search.html:317
+msgid "Clear"
+msgstr ""
+
 #. Checkbox label which enables more options when searching.
-#: templates/search.html:306
+#: templates/search.html:321
 msgid "Advanced"
 msgstr "高级设置"
 
 #. Help text below the search bar.
-#: templates/search.html:313
+#: templates/search.html:328
 msgid ""
 "Type a song (title/artist) to search the available songs and click 'Add "
 "to queue' to add it to the queue."
 msgstr "输入想唱的歌的名字，点击旁边的“添加至播放列表”按键以添加歌曲"
 
 #. Additonal help text below the search bar.
-#: templates/search.html:319
+#: templates/search.html:334
 msgid ""
 "If the song doesn't appear in the \"Available Songs\" dropdown, click "
 "'Search' to find it on Youtube"
@@ -485,51 +499,49 @@ msgstr "如果曲目不在“已有歌曲”列表中，点击”搜索“转跳
 
 #. Checkbox label which enables matching songs which are not karaoke versions
 #. (i.e. the songs still have a singer and are not just instrumentals.)
-#: templates/search.html:334
+#: templates/search.html:349
 msgid "Include non-karaoke matches"
 msgstr "搜索包含原唱版本（非伴奏）"
 
 #. Label for an input which takes a YouTube url directly instead of searching
 #. titles.
-#: templates/search.html:341
+#: templates/search.html:356
 msgid "Direct download YouTube url:"
 msgstr "通过YouTube url网址直接下载"
 
 #. Checkbox label which marks the song to be added to the queue after it
 #. finishes downloading.
-#: templates/search.html:350 templates/search.html:414
+#: templates/search.html:365 templates/search.html:429
 msgid "Add to queue once downloaded"
 msgstr "下载完毕后自动添加曲目到播放列表"
 
 #. Button label for the direct download form's submit button.
 #. Label on the button which starts the download of the selected song.
-#: templates/search.html:356 templates/search.html:420
+#: templates/search.html:371 templates/search.html:435
 msgid "Download"
 msgstr "下载"
 
 #. Html text which displays what was searched for, in quotes while the page is
 #. loading.
-#: templates/search.html:378
+#: templates/search.html:393
 #, python-format
 msgid "Searching YouTube for <small><i>'%(search_term)s'</i></small>"
 msgstr "在YouTube上搜索<small><i>'%(search_term)s'</i></small>"
 
 #. Html text which displays what was searched for, in quotes.
-#: templates/search.html:387
+#: templates/search.html:402
 #, python-format
 msgid "Search results for <small><i>'%(search_string)s'</i></small>"
-msgstr ""
-"搜索：<small><i>'%(search_string)s'</i></small> （点击下方查看全部搜索结"
-"果）"
+msgstr "搜索：<small><i>'%(search_string)s'</i></small> （点击下方查看全部搜索结果）"
 
 #. Help text which explains that the select box above can be operated to select
 #. different search results.
-#: templates/search.html:402
+#: templates/search.html:417
 msgid "Click dropdown to show more results"
 msgstr ""
 
 #. Label displayed before the YouTube url for the chosen search result.
-#: templates/search.html:407
+#: templates/search.html:422
 msgid "Link:"
 msgstr "YouTube歌曲链接"
 
@@ -543,3 +555,4 @@ msgstr "下一首歌："
 #: templates/splash.html:10
 msgid "Next singer:"
 msgstr "下一个歌手："
+
