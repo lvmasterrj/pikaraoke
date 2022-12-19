@@ -150,9 +150,10 @@ class VLCClient:
         else:
             return file_path
 
-    def play_file(self, file_path, additional_parameters=None):
+    def play_file(self, file_path, volume, params=[]):
         try:
             file_path = self.process_file(file_path)
+            self.is_transposing = True
             if self.is_playing() or self.is_paused():
                 logging.debug("VLC is currently playing, stopping track...")
                 self.stop()
@@ -160,10 +161,10 @@ class VLCClient:
                 time.sleep(0.2)
             if self.platform == "windows":
                 file_path = r"{}".format(file_path.replace("/", "\\"))
-            if additional_parameters == None:
-                command = self.cmd_base + [file_path]
-            else:
-                command = self.cmd_base + additional_parameters + [file_path]
+            # if additional_parameters == None:
+            #     command = self.cmd_base + [file_path]
+            # else:
+            command = self.cmd_base + params + [file_path]
             logging.debug("VLC Command: %s" % command)
             self.process = subprocess.Popen(
                 command, shell=(self.platform == "windows"), stdin=subprocess.PIPE
@@ -212,7 +213,7 @@ class VLCClient:
         self.is_transposing = False
         logging.debug("Transposing complete")
 
-    def command(self, command):
+    def command(self, command="", save_status=True):
         if self.is_running():
             url = self.http_command_endpoint + command
             request = requests.get(url, auth=("", self.http_password))
@@ -220,8 +221,8 @@ class VLCClient:
         else:
             logging.error("No active VLC process. Could not run command: " + command)
 
-    def pause(self):
-        return self.command("pl_pause")
+    def pause(self, save_status=True):
+        return self.command("pl_pause", save_status)
 
     def play(self):
         return self.command("pl_play")
@@ -236,6 +237,41 @@ class VLCClient:
                 % e
             )
             return
+
+    def get_val_xml(self, xml, key, end_key_str="<"):
+        posi = xml.find(f"<{key}>")
+        if posi < 0:
+            return None
+        s = xml[posi + len(key) + 2 :]
+        posi = s.find(end_key_str)
+        if posi < 0:
+            return None
+        return s[:posi]
+
+    def cast_float(self, num):
+        try:
+            return float(num)
+        except:
+            return num
+
+    def get_info_xml(self, xml=None):
+        try:
+            if xml is None:
+                xml = self.get_status()
+            return {
+                key: self.cast_float(self.get_val_xml(xml, key))
+                for key in [
+                    "position",
+                    "length",
+                    "volume",
+                    "time",
+                    "audiodelay",
+                    "state",
+                    "subtitledelay",
+                ]
+            }
+        except:
+            return {}
 
     def restart(self):
         logging.info(self.command("seek&val=0"))

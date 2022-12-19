@@ -74,7 +74,7 @@ class Karaoke:
         self.dual_screen = args.dual_screen
         self.high_quality = args.high_quality
         self.splash_delay = int(args.splash_delay)
-        self.volume_offset = args.volume
+        self.volume_offset = self.volume = args.volume
         self.youtubedl_path = args.youtubedl_path
         self.omxplayer_path = args.omxplayer_path
         self.use_omxplayer = args.use_omxplayer
@@ -639,16 +639,57 @@ class Karaoke:
             if self.omxclient != None:
                 self.omxclient.kill()
 
-    def play_file(self, file_path, semitones=0):
+    def play_file(self, file_path, extra_params=[]):
         self.now_playing = self.filename_from_path(file_path)
         self.now_playing_filename = file_path
 
         if self.use_vlc:
+            extra_params1 = []
             logging.info("Playing video in VLC: " + self.now_playing)
-            if semitones == 0:
-                self.vlcclient.play_file(file_path)
+            if self.platform != "osx":
+                extra_params1 += [
+                    "--drawable-hwnd"
+                    if self.platform == "windows"
+                    else "--drawable-xid",
+                    hex(pygame.display.get_wm_info()["window"]),
+                ]
+            # if self.audio_delay:
+            #   extra_params1 += [f'--audio-desync={self.audio_delay * 1000}']
+            self.now_playing = self.filename_from_path(file_path)
+            self.now_playing_filename = file_path
+            self.is_paused = "--start-paused" in extra_params1
+            # if self.normalize_vol and self.logical_volume is not None:
+            #    self.volume = self.logical_volume / self.compute_volume(file_path)
+            if self.now_playing_transpose == 0:
+                #  xml = self.vlcclient.play_file(
+                #      file_path, self.volume, extra_params + extra_params1
+                #  )
+                self.vlcclient.play_file(
+                    file_path, self.volume, extra_params + extra_params1
+                )
             else:
-                self.vlcclient.play_file_transpose(file_path, semitones)
+                #  xml = self.vlcclient.play_file_transpose(
+                #      file_path,
+                #      self.now_playing_transpose,
+                #      self.volume,
+                #      extra_params + extra_params1,
+                #  )
+                self.vlcclient.play_file_transpose(
+                    file_path,
+                    self.now_playing_transpose,
+                    self.volume,
+                    extra_params + extra_params1,
+                )
+            # self.has_subtitle = "<info name='Type'>Subtitle</info>" in xml
+            # self.has_video = "<info name='Type'>Video</info>" in xml
+            # self.volume = round(float(self.vlcclient.get_val_xml(xml, "volume")))
+            # if self.normalize_vol:
+            #    self.media_vol = self.compute_volume(self.now_playing_filename)
+            #    self.logical_volume = self.volume * self.media_vol
+            # if semitones == 0:
+            #     self.vlcclient.play_file(file_path)
+            # else:
+            #     self.vlcclient.play_file_transpose(file_path, semitones)
         else:
             logging.info("Playing video in omxplayer: " + self.now_playing)
             self.omxclient.play_file(file_path)
@@ -658,9 +699,23 @@ class Karaoke:
 
     def transpose_current(self, semitones):
         if self.use_vlc:
+            if self.now_playing_transpose == semitones:
+                return
             logging.info("Transposing song by %s semitones" % semitones)
-            self.now_playing_transpose = semitones
-            self.play_file(self.now_playing_filename, semitones)
+            # self.now_playing_transpose = semitones
+            # self.play_file(self.now_playing_filename, semitones)
+            status_xml = (
+                self.vlcclient.command().text
+                if self.is_paused
+                else self.vlcclient.pause(False).text
+            )
+            info = self.vlcclient.get_info_xml(status_xml)
+            posi = info["position"] * info["length"]
+            self.play_file(
+                self.now_playing_filename,
+                [f"--start-time={posi}"]
+                + (["--start-paused"] if self.is_paused else []),
+            )
         else:
             logging.error("Not using VLC. Can't transpose track.")
 
