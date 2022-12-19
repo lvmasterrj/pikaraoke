@@ -18,6 +18,8 @@ from unidecode import unidecode
 import configparser
 import gettext
 
+from collections import *
+
 from lib import omxclient, vlcclient
 from lib.get_platform import get_platform
 
@@ -60,63 +62,44 @@ class Karaoke:
     score = None
     critic = None
 
-    def __init__(
-        self,
-        port=5000,
-        download_path="/usr/lib/pikaraoke/songs",
-        hide_ip=False,
-        hide_raspiwifi_instructions=False,
-        hide_splash_screen=False,
-        omxplayer_adev="both",
-        dual_screen=False,
-        high_quality=False,
-        volume=0,
-        log_level=logging.DEBUG,
-        splash_delay=2,
-        youtubedl_path="/usr/local/bin/yt-dlp",
-        omxplayer_path=None,
-        use_omxplayer=False,
-        use_vlc=True,
-        vlc_path=None,
-        vlc_port=None,
-        logo_path=None,
-        show_overlay=False,
-        disable_score=False,
-        disable_bg_music=False,
-    ):
+    def __init__(self, args):
 
         # override with supplied constructor args if provided
-        self.port = port
-        self.hide_ip = hide_ip
-        self.hide_raspiwifi_instructions = hide_raspiwifi_instructions
-        self.hide_splash_screen = hide_splash_screen
-        self.omxplayer_adev = omxplayer_adev
-        self.download_path = download_path
-        self.dual_screen = dual_screen
-        self.high_quality = high_quality
-        self.splash_delay = int(splash_delay)
-        self.volume_offset = volume
-        self.youtubedl_path = youtubedl_path
-        self.omxplayer_path = omxplayer_path
-        self.use_omxplayer = use_omxplayer
-        self.use_vlc = use_vlc
-        self.vlc_path = vlc_path
-        self.vlc_port = vlc_port
-        self.logo_path = self.default_logo_path if logo_path == None else logo_path
-        self.show_overlay = show_overlay
-        self.disable_score = disable_score
-        self.disable_bg_music = disable_bg_music
+        self.port = args.port
+        self.hide_ip = args.hide_ip
+        self.hide_raspiwifi_instructions = args.hide_raspiwifi_instructions
+        self.hide_splash_screen = args.hide_splash_screen
+        self.omxplayer_adev = args.omxplayer_adev
+        self.download_path = args.download_path
+        self.dual_screen = args.dual_screen
+        self.high_quality = args.high_quality
+        self.splash_delay = int(args.splash_delay)
+        self.volume_offset = args.volume
+        self.youtubedl_path = args.youtubedl_path
+        self.omxplayer_path = args.omxplayer_path
+        self.use_omxplayer = args.use_omxplayer
+        self.use_vlc = args.use_vlc
+        self.vlc_path = args.vlc_path
+        self.vlc_port = args.vlc_port
+        self.logo_path = (
+            self.default_logo_path if args.logo_path == None else args.logo_path
+        )
+        self.show_overlay = args.show_overlay
+        self.disable_score = args.disable_score
+        self.disable_bg_music = args.disable_bg_music
+        self.log_level = int(args.log_level)
 
         # other initializations
         self.platform = get_platform()
         self.vlcclient = None
         self.omxclient = None
         self.screen = None
+        self.player_state = {}
 
         logging.basicConfig(
             format="[%(asctime)s] %(levelname)s: %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
-            level=int(log_level),
+            level=int(self.log_level),
         )
 
         logging.debug(
@@ -158,7 +141,7 @@ class Karaoke:
                 self.use_vlc,
                 self.vlc_path,
                 self.vlc_port,
-                log_level,
+                self.log_level,
                 self.show_overlay,
             )
         )
@@ -840,6 +823,23 @@ class Karaoke:
         else:
             logging.warning("Tried to volume down, but no file is playing!")
             return False
+
+    def get_state(self):
+        if self.use_vlc and self.vlcclient.is_transposing:
+            return defaultdict(lambda: None, self.player_state)
+        if not self.is_file_playing():
+            self.player_state["now_playing"] = None
+            return defaultdict(lambda: None, self.player_state)
+        new_state = (
+            self.vlcclient.get_info_xml()
+            if self.use_vlc
+            else {
+                "volume": self.omxclient.volume_offset,
+                "state": ("paused" if self.omxclient.paused else "playing"),
+            }
+        )
+        self.player_state.update(new_state)
+        return defaultdict(lambda: None, self.player_state)
 
     def restart(self):
         if self.is_file_playing():

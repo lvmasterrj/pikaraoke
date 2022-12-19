@@ -84,6 +84,7 @@ def get_locale():
 
 @app.route("/")
 def home():
+    s = k.get_state()
     return render_template(
         "home.html",
         site_title=site_name,
@@ -91,6 +92,11 @@ def home():
         show_transpose=k.use_vlc,
         transpose_value=k.now_playing_transpose,
         admin=is_admin(),
+        volume=s["volume"],
+        seektrack_value=s["time"],
+        seektrack_max=s["length"],
+        audio_delay=s["audiodelay"],
+        #   vocal_info=k.get_vocal_info(),
     )
 
 
@@ -652,10 +658,11 @@ def get_default_youtube_dl_path(platform):
 
 def get_default_dl_dir(platform):
     if platform == "raspberry_pi":
-        teste = "teste1"
         return "/usr/lib/pikaraoke/songs"
     elif platform == "windows":
-        legacy_directory = os.path.expanduser("~\pikaraoke\songs")
+        umaCagada = "popoo"
+        legacy_directory = os.path.expanduser("~\pikaraoke-songs")
+        print(legacy_directory)
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
@@ -672,14 +679,14 @@ if __name__ == "__main__":
 
     platform = get_platform()
     default_port = 5000
+    default_download_path = ("/usr/lib/pikaraoke/songs",)
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
     default_rw_prefs = 0
-
     default_dl_dir = get_default_dl_dir(platform)
     default_omxplayer_path = "/usr/bin/omxplayer"
-    default_adev = "both"
+    default_omxplayer_adev = "both"
     default_youtubedl_path = get_default_youtube_dl_path(platform)
     default_vlc_path = get_default_vlc_path(platform)
     default_vlc_port = 5002
@@ -759,10 +766,10 @@ if __name__ == "__main__":
         required=False,
     )
     parser.add_argument(
-        "--adev",
+        "--omxplayer_adev",
         help="Pass the audio output device argument to omxplayer. Possible values: hdmi/local/both/alsa[:device]. If you are using a rpi USB soundcard or Hifi audio hat, try: 'alsa:hw:0,0' Default: '%s'"
-        % default_adev,
-        default=default_adev,
+        % default_omxplayer_adev,
+        default=default_omxplayer_adev,
         required=False,
     )
     parser.add_argument(
@@ -889,29 +896,7 @@ if __name__ == "__main__":
 
     # Configure karaoke process
     global k
-    k = karaoke.Karaoke(
-        port=args.port,
-        download_path=dl_path,
-        omxplayer_path=args.omxplayer_path,
-        youtubedl_path=args.youtubedl_path,
-        splash_delay=args.splash_delay,
-        log_level=args.log_level,
-        volume=args.volume,
-        hide_ip=args.hide_ip,
-        hide_raspiwifi_instructions=args.hide_raspiwifi_instructions,
-        hide_splash_screen=args.hide_splash_screen,
-        omxplayer_adev=args.adev,
-        dual_screen=args.dual_screen,
-        high_quality=args.high_quality,
-        use_omxplayer=args.use_omxplayer,
-        use_vlc=args.use_vlc,
-        vlc_path=args.vlc_path,
-        vlc_port=args.vlc_port,
-        logo_path=args.logo_path,
-        show_overlay=args.show_overlay,
-        disable_score=args.disable_score,
-        disable_bg_music=args.disable_bg_music,
-    )
+    k = karaoke.Karaoke(args)
 
     if args.developer_mode:
         th = threading.Thread(target=k.run)
