@@ -652,7 +652,7 @@ def get_default_youtube_dl_path(platform):
 
 def get_default_dl_dir(platform):
     if platform == "raspberry_pi":
-        teste = "teste"
+        teste = "teste1"
         return "/usr/lib/pikaraoke/songs"
     elif platform == "windows":
         legacy_directory = os.path.expanduser("~\pikaraoke\songs")
