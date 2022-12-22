@@ -153,7 +153,7 @@ class VLCClient:
     def play_file(self, file_path, volume, params=[]):
         try:
             file_path = self.process_file(file_path)
-            self.is_transposing = True
+
             if self.is_playing() or self.is_paused():
                 logging.debug("VLC is currently playing, stopping track...")
                 self.stop()
@@ -172,7 +172,7 @@ class VLCClient:
         except Exception as e:
             logging.error("Playing file failed: " + str(e))
 
-    def play_file_transpose(self, file_path, semitones):
+    def play_file_transpose(self, file_path, semitones, volume, extra_params=[]):
         # --speex-resampler-quality=<integer [0 .. 10]>
         #  Resampling quality (0 = worst and fastest, 10 = best and slowest).
 
@@ -201,13 +201,15 @@ class VLCClient:
             "%s" % src_type,
         ]
 
-        self.is_transposing = True
+        #   self.is_transposing = True
         logging.debug("Transposing file...")
-        self.play_file(file_path, params)
+        #   self.play_file(file_path, params)
+        return self.play_file(file_path, volume, params + extra_params)
 
         # Prevent is_running() from returning False while we're transposing
-        s = Timer(2.0, self.set_transposing_complete)
-        s.start()
+
+    #   s = Timer(2.0, self.set_transposing_complete)
+    #   s.start()
 
     def set_transposing_complete(self):
         self.is_transposing = False

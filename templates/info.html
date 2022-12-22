@@ -116,13 +116,13 @@
 <p>
   {# MSG: Text to inform about language switching #}
   {% trans -%}
-    Use the below box to switch between languages that are used by the system.
+    Select the languages that you want to display.
   {%- endtrans %}
 </p>
 <ul>
   {% for key, language in languages | dictsort %}
-  <li><a href="aaaaaaaaa">{{ key }}: {{ language }}</a></li>
-  {% endfor %}
+  <li><a href="{{ url_for('select_language') }}?lang={{key}}">{{ key }}: {{ language }}</a></li>
+    {% endfor %}
 </ul>
 
 {# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}

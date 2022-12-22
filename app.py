@@ -519,7 +519,6 @@ def info():
     youtubedl_version = k.youtubedl_version
 
     is_pi = get_platform() == "raspberry_pi"
-    print(LANGUAGES)
 
     languages = LANGUAGES
 
@@ -576,6 +575,15 @@ def update_ytdl():
     else:
         flash("You don't have permission to update youtube-dl", "is-danger")
     return redirect(url_for("home"))
+
+
+@app.route("/select_language", methods=["GET"])
+def select_language():
+    # if is_admin():
+    lang = request.args.get("lang")
+    k.change_language(lang)
+    logging.debug("MUDOU A LÍNGUA PARA " + lang)
+    return redirect(url_for("info"))
 
 
 @app.route("/refresh")
@@ -661,7 +669,6 @@ def get_default_dl_dir(platform):
     if platform == "raspberry_pi":
         return "/usr/lib/pikaraoke/songs"
     elif platform == "windows":
-        umaCagada = "popoo"
         legacy_directory = os.path.expanduser("~\pikaraoke-songs")
         print(legacy_directory)
         if os.path.exists(legacy_directory):

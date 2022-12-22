@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-12-16 16:48-0300\n"
+"POT-Creation-Date: 2022-12-22 08:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,28 +18,36 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #. Message shown after logging in as admin successfully
-#: app.py:94
+#: app.py:113
 msgid "Admin mode granted!"
 msgstr ""
 
 #. Message shown after failing to login as admin
-#: app.py:98
+#: app.py:117
 msgid "Incorrect admin password!"
 msgstr ""
 
 #. Title of the files page.
 #. Navigation link for the page where the user can add existing songs to the
 #. queue.
-#: app.py:325 templates/base.html:159
+#: app.py:370 templates/base.html:159
 msgid "Browse"
 msgstr ""
 
-#: karaoke.py:396
+#: karaoke.py:383
 msgid "Connect at: "
 msgstr ""
 
-#: karaoke.py:893
-msgid "Testing..."
+#: karaoke.py:504
+msgid "Up next: "
+msgstr ""
+
+#: karaoke.py:506
+msgid "Up next:  "
+msgstr ""
+
+#: karaoke.py:509
+msgid "Added by: "
 msgstr ""
 
 #. Prompt when changing the current profile name.
@@ -149,77 +157,77 @@ msgstr ""
 
 #. Message which shows in the "Now Playing" section when there is no song
 #. currently playing
-#: templates/home.html:30
+#: templates/home.html:47
 msgid "Nothing is playing right now."
 msgstr ""
 
 #. Title text for the icon marking the next person to sing.
-#: templates/home.html:38
+#: templates/home.html:55
 msgid "Next singer"
 msgstr ""
 
 #. Alternative text for the "Up next" section if no more songs are queued up.
 #. Message when the queue of songs is empty.  Shown instead of what the next
 #. song is.
-#: templates/home.html:41 templates/splash.html:17
+#: templates/home.html:58 templates/splash.html:17
 msgid "No song is queued."
 msgstr ""
 
 #. Confirmation message when clicking a button to skip a track.
-#: templates/home.html:113
+#: templates/home.html:133
 msgid ""
 "Are you sure you want to skip this track? If you didn't add this song, "
 "ask permission first!"
 msgstr ""
 
 #. Header showing the currently playing song.
-#: templates/home.html:145
+#: templates/home.html:164
 msgid "Now Playing"
 msgstr ""
 
 #. Title for the section displaying the next song to be played.
-#: templates/home.html:159
+#: templates/home.html:173
 msgid "Next Song"
 msgstr ""
 
 #. Title of the box with controls such as pause and skip.
-#: templates/home.html:167
+#: templates/home.html:179
 msgid "Player Control"
 msgstr ""
 
 #. Title attribute on the button to restart the current song.
-#: templates/home.html:170
+#: templates/home.html:182
 msgid "Restart Song"
 msgstr ""
 
 #. Title attribute on the button to play or pause the     current song.
-#: templates/home.html:174
+#: templates/home.html:185
 msgid "Play/Pause"
 msgstr ""
 
 #. Title attribute on the button to skip to the next     song.
-#: templates/home.html:178
+#: templates/home.html:189
 msgid "Stop Current Song"
 msgstr ""
 
 #. Title attribute on the button to adjust volume down.
-#: templates/home.html:183
+#: templates/home.html:194
 msgid "Volume Down"
 msgstr ""
 
 #. Title attribute on the button to adjust volume up.
-#: templates/home.html:187
+#: templates/home.html:198
 msgid "Volume Up"
 msgstr ""
 
 #. Title of a control to change the key/pitch of the playing song.
-#: templates/home.html:200
+#: templates/home.html:211 templates/home.html:245
 msgid "Change Key"
 msgstr ""
 
 #. Label on the button to confirm the change in key/pitch of the
 #. playing song.
-#: templates/home.html:228
+#: templates/home.html:239
 msgid "Change"
 msgstr ""
 
@@ -248,87 +256,87 @@ msgid ""
 msgstr ""
 
 #. Title of the information page.
-#: templates/info.html:54
+#: templates/info.html:50
 msgid "Information"
 msgstr ""
 
 #. Label which appears before a url which links to the current page.
-#: templates/info.html:64
+#: templates/info.html:56
 #, python-format
 msgid "URL of %(site_title)s:"
 msgstr ""
 
 #. Label before a QR code which brings a frind (pal) to the main page if
 #. scanned, so they can also add songs. QR code follows this text.
-#: templates/info.html:70
+#: templates/info.html:60
 msgid "Handy URL QR code to share with a pal:"
 msgstr ""
 
 #. Label before a link to the Splash screen.
-#: templates/info.html:74
+#: templates/info.html:62
 msgid "Open splash screen"
 msgstr ""
 
 #. Header of the information section about the computer running Pikaraoke.
-#: templates/info.html:80
+#: templates/info.html:66
 msgid "System Info"
 msgstr ""
 
 #. The CPU usage of the computer running Pikaraoke.
-#: templates/info.html:83
+#: templates/info.html:69
 #, python-format
 msgid "CPU: %(cpu)s"
 msgstr ""
 
 #. The disk usage of the computer running Pikaraoke. Used by downloaded songs.
-#: templates/info.html:85
+#: templates/info.html:71
 #, python-format
 msgid "Disk Usage: %(disk)s"
 msgstr ""
 
 #. The memory (RAM) usiage of the computer running Pikaraoke.
-#: templates/info.html:87
+#: templates/info.html:73
 #, python-format
 msgid "Memory: %(memory)s"
 msgstr ""
 
 #. The version of the program "Youtube-dl".
-#: templates/info.html:89
+#: templates/info.html:75
 #, python-format
 msgid "Youtube-dl (yt-dlp) version: %(youtubedl_version)s"
 msgstr ""
 
 #. The version of Pikaraoke running right now.
-#: templates/info.html:91
+#: templates/info.html:77
 #, python-format
 msgid "Pikaraoke version: %(pikaraoke_version)s"
 msgstr ""
 
 #. Title of the updates section.
-#: templates/info.html:98
+#: templates/info.html:81
 msgid "Updates"
 msgstr ""
 
 #. Label before a link which forces Pikaraoke to rescan and pick up any new
 #. songs.
-#: templates/info.html:100
+#: templates/info.html:83
 msgid "Refresh the song list:"
 msgstr ""
 
 #. Text on the link which forces Pikaraoke to rescan and pick up any new songs.
-#: templates/info.html:105
+#: templates/info.html:86
 msgid "Rescan song directory"
 msgstr ""
 
 #. Help text explaining the Rescan song directory link.
-#: templates/info.html:110
+#: templates/info.html:91
 msgid ""
 "You should only need to do this if you manually copied files to the "
 "download directory while pikaraoke was running."
 msgstr ""
 
 #. Text explaining why you might want to update youtube-dl.
-#: templates/info.html:115
+#: templates/info.html:96
 #, python-format
 msgid ""
 "If downloads or searches stopped working, updating youtube-dl will "
@@ -338,27 +346,37 @@ msgstr ""
 
 #. Text for the link which will try and update youtube-dl on the machine
 #. running Pikaraoke.
-#: templates/info.html:121
+#: templates/info.html:102
 msgid "Update youtube-dl"
 msgstr ""
 
 #. Help text which explains why updating youtube-dl can fail.  The log is a
 #. file on the machine running Pikaraoke.
-#: templates/info.html:127
+#: templates/info.html:108
 msgid ""
 "This update link above may fail if you don't have proper file "
 "permissions.\n"
 "    Check the pikaraoke log for errors."
 msgstr ""
 
+#. Title of the section for switching the system language
+#: templates/info.html:115
+msgid "Language"
+msgstr ""
+
+#. Text to inform about language switching
+#: templates/info.html:118
+msgid "Use the below box to switch between languages that are used by the system."
+msgstr ""
+
 #. Title of the section on shutting down / turning off the machine running
 #. Pikaraoke.
-#: templates/info.html:134
+#: templates/info.html:129
 msgid "Shutdown"
 msgstr ""
 
 #. Explainitory text which explains why to use the shutdown link.
-#: templates/info.html:137
+#: templates/info.html:131
 msgid ""
 "Don't just pull the plug! Always shut down your server properly to avoid "
 "data corruption."
@@ -366,54 +384,50 @@ msgstr ""
 
 #. Text for button which turns off Pikaraoke for everyone using it at your
 #. house.
-#: templates/info.html:143
+#: templates/info.html:135
 msgid "Quit Pikaraoke"
 msgstr ""
 
 #. Text for button which reboots the machine running Pikaraoke.
-#: templates/info.html:146
+#: templates/info.html:137
 msgid "Reboot System"
 msgstr ""
 
 #. Text for button which turn soff the machine running Pikaraoke.
-#: templates/info.html:149
+#: templates/info.html:140
 msgid "Shutdown System"
 msgstr ""
 
 #. Title for section containing a few other options on the Info page.
-#: templates/info.html:156
+#: templates/info.html:146
 msgid "Other"
 msgstr ""
 
 #. Text for button
-#: templates/info.html:159
+#: templates/info.html:149
 msgid "Expand Raspberry Pi filesystem"
 msgstr ""
 
 #. Explainitory text which explains why you might want to expand the
 #. filesystem.
-#: templates/info.html:162
+#: templates/info.html:152
 msgid ""
 "If you just installed the pre-built pikaraoke pi image and your SD card "
-"is larger than 4GB,\n"
-"    you may want to expand the filesystem to utilize the remaining space."
-" You only need to do this once.\n"
-"    This will reboot the system."
+"is larger than 4GB, you may want to expand the filesystem to utilize the "
+"remaining space. You only need to do this once. This will reboot the "
+"system."
 msgstr ""
 
 #. Link which will log out the user from admin mode.
-#: templates/info.html:172
+#: templates/info.html:156
 #, python-format
 msgid "Disable admin mode: <a href=\"%(logout_url)s\">Log out</a>"
 msgstr ""
 
 #. Link which will let the user log into admin mode.
-#: templates/info.html:178
+#: templates/info.html:158
 #, python-format
-msgid ""
-"\n"
-"    Enable admin mode: <a href=\"%(login_url)s\">Log in</a>\n"
-"  "
+msgid " Enable admin mode: <a href=\"%(login_url)s\">Log in</a> "
 msgstr ""
 
 #. Title for the log in page for admins.

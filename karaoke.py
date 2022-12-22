@@ -23,13 +23,14 @@ from collections import *
 from lib import omxclient, vlcclient
 from lib.get_platform import get_platform
 
-config = configparser.ConfigParser()
-config.read("config.ini")
-user_lng = config.get("USERPREFERENCES", "language")
+config_obj = configparser.ConfigParser()
+config_obj.read("config.ini")
+user_lng = config_obj.get("USERPREFERENCES", "language")
 
-lang = gettext.translation("messages", localedir="translations", languages=["pt_BR"])
-lang.install()
-_ = lang.gettext
+trans = gettext.translation("messages", localedir="translations", languages=[user_lng])
+trans.install()
+_ = trans.gettext
+
 
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
@@ -95,6 +96,7 @@ class Karaoke:
         self.omxclient = None
         self.screen = None
         self.player_state = {}
+        self._ = _
 
         logging.basicConfig(
             format="[%(asctime)s] %(levelname)s: %(message)s",
@@ -378,7 +380,7 @@ class Karaoke:
                     )
                     self.stop()
                 else:
-                    text = _("Connect at: ")
+                    text = self._("Connect at: ")
                     text = self.font.render(text + self.url, True, (255, 255, 255))
                     self.screen.blit(text, (p_image.get_width() + 35, blitY))
 
@@ -499,12 +501,12 @@ class Karaoke:
                 next_user = self.queue[0]["user"]
                 font_next_song = pygame.font.SysFont(pygame.font.get_default_font(), 60)
                 text = font_next_song.render(
-                    "Up next: %s" % (unidecode(next_song)), True, (0, 128, 0)
+                    _("Up next: ") + "%s" % (unidecode(next_song)), True, (0, 128, 0)
                 )
-                up_next = font_next_song.render("Up next:  ", True, (255, 255, 0))
+                up_next = font_next_song.render(_("Up next:  "), True, (255, 255, 0))
                 font_user_name = pygame.font.SysFont(pygame.font.get_default_font(), 50)
                 user_name = font_user_name.render(
-                    "Added by: %s " % next_user, True, (255, 120, 0)
+                    _("Added by: ") + "%s" % next_user, True, (255, 120, 0)
                 )
                 x = self.width - text.get_width() - 10
                 y = 5
@@ -646,13 +648,13 @@ class Karaoke:
         if self.use_vlc:
             extra_params1 = []
             logging.info("Playing video in VLC: " + self.now_playing)
-            if self.platform != "osx":
-                extra_params1 += [
-                    "--drawable-hwnd"
-                    if self.platform == "windows"
-                    else "--drawable-xid",
-                    hex(pygame.display.get_wm_info()["window"]),
-                ]
+            # if self.platform != "osx":
+            #     extra_params1 += [
+            #         "--drawable-hwnd"
+            #         if self.platform == "windows"
+            #         else "--drawable-xid",
+            #         hex(pygame.display.get_wm_info()["window"]),
+            #     ]
             # if self.audio_delay:
             #   extra_params1 += [f'--audio-desync={self.audio_delay * 1000}']
             self.now_playing = self.filename_from_path(file_path)
@@ -702,7 +704,7 @@ class Karaoke:
             if self.now_playing_transpose == semitones:
                 return
             logging.info("Transposing song by %s semitones" % semitones)
-            # self.now_playing_transpose = semitones
+            self.now_playing_transpose = semitones
             # self.play_file(self.now_playing_filename, semitones)
             status_xml = (
                 self.vlcclient.command().text
@@ -946,9 +948,23 @@ class Karaoke:
         self.is_paused = True
         self.now_playing_transpose = 0
 
+    def change_language(self, language):
+        logging.debug("Changing language to: " + str(language))
+        userprefs = config_obj["USERPREFERENCES"]
+        userprefs["language"] = language
+        with open("config.ini", "w") as conf:
+            config_obj.write(conf)
+        trans = gettext.translation(
+            "messages", localedir="translations", languages=[language]
+        )
+        trans.install()
+        self._ = trans.gettext
+
+        self.render_splash_screen()
+
     def run(self):
         logging.info("Starting PiKaraoke!")
-        logging.debug(_("Testing..."))
+
         self.running = True
         while self.running:
             try:
