@@ -17,27 +17,15 @@ import qrcode
 from unidecode import unidecode
 import configparser
 import gettext
+from selfupdate import update
 
 from collections import *
 
 from lib import omxclient, vlcclient
 from lib.get_platform import get_platform
 
-config_obj = configparser.ConfigParser()
-config_obj.read("config.ini")
-user_lng = config_obj.get("USERPREFERENCES", "language")
-
-trans = gettext.translation("messages", localedir="translations", languages=[user_lng])
-trans.install()
-_ = trans.gettext
-
-
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
-
-pygame.mixer.init()
-pygame.mixer.music.load("sound-effects/saloon-piano-music.ogg")
-pygame.mixer.music.set_volume(0.2)
 
 
 class Karaoke:
@@ -62,6 +50,8 @@ class Karaoke:
     scored = True
     score = None
     critic = None
+    #  user_lng = user_lng
+    #  user_audio_delay = user_audio_delay
 
     def __init__(self, args):
 
@@ -96,7 +86,22 @@ class Karaoke:
         self.omxclient = None
         self.screen = None
         self.player_state = {}
-        self._ = _
+        #   self._ = _
+
+        self.config_obj = configparser.ConfigParser()
+        self.config_obj.read("config.ini")
+        user_lng = self.config_obj.get("USERPREFERENCES", "language")
+        self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
+
+        trans = gettext.translation(
+            "messages", localedir="translations", languages=[user_lng]
+        )
+        trans.install()
+        self._ = trans.gettext
+
+        pygame.mixer.init()
+        pygame.mixer.music.load("sound-effects/saloon-piano-music.ogg")
+        pygame.mixer.music.set_volume(0.2)
 
         logging.basicConfig(
             format="[%(asctime)s] %(levelname)s: %(message)s",
@@ -124,7 +129,10 @@ class Karaoke:
     VLC path: %s
     VLC port: %s
     log_level: %s
-    show overlay: %s"""
+    show overlay: %s
+    user pref language: %s
+    user pref audio delay: %s
+    Base Path: %s"""
             % (
                 self.port,
                 self.hide_ip,
@@ -145,6 +153,9 @@ class Karaoke:
                 self.vlc_port,
                 self.log_level,
                 self.show_overlay,
+                user_lng,
+                self.user_audio_delay,
+                self.base_path,
             )
         )
 
@@ -266,6 +277,16 @@ class Karaoke:
             logging.info(output)
         self.get_youtubedl_version()
         logging.info("Done. New version: %s" % self.youtubedl_version)
+
+    def update_pikaraoke(self):
+        logging.debug("Atualizando o sistema...")
+        try:
+            update()
+            resultado = "PiKaraoke atualizado com sucesso!"
+        except:
+            resultado = "Algo deu errado e não foi possível atualizar o sistema!"
+        logging.debug(resultado)
+        return resultado
 
     def is_network_connected(self):
         return not len(self.ip) < 7
@@ -501,12 +522,16 @@ class Karaoke:
                 next_user = self.queue[0]["user"]
                 font_next_song = pygame.font.SysFont(pygame.font.get_default_font(), 60)
                 text = font_next_song.render(
-                    _("Up next: ") + "%s" % (unidecode(next_song)), True, (0, 128, 0)
+                    self._("Up next: ") + "%s" % (unidecode(next_song)),
+                    True,
+                    (0, 128, 0),
                 )
-                up_next = font_next_song.render(_("Up next:  "), True, (255, 255, 0))
+                up_next = font_next_song.render(
+                    self._("Up next:  "), True, (255, 255, 0)
+                )
                 font_user_name = pygame.font.SysFont(pygame.font.get_default_font(), 50)
                 user_name = font_user_name.render(
-                    _("Added by: ") + "%s" % next_user, True, (255, 120, 0)
+                    self._("Added by: ") + "%s" % next_user, True, (255, 120, 0)
                 )
                 x = self.width - text.get_width() - 10
                 y = 5
@@ -642,11 +667,13 @@ class Karaoke:
                 self.omxclient.kill()
 
     def play_file(self, file_path, extra_params=[]):
+
         self.now_playing = self.filename_from_path(file_path)
         self.now_playing_filename = file_path
 
         if self.use_vlc:
-            extra_params1 = []
+            # extra_params1 = []
+            extra_params += [f"--audio-desync={self.user_audio_delay}"]
             logging.info("Playing video in VLC: " + self.now_playing)
             # if self.platform != "osx":
             #     extra_params1 += [
@@ -657,9 +684,9 @@ class Karaoke:
             #     ]
             # if self.audio_delay:
             #   extra_params1 += [f'--audio-desync={self.audio_delay * 1000}']
-            self.now_playing = self.filename_from_path(file_path)
-            self.now_playing_filename = file_path
-            self.is_paused = "--start-paused" in extra_params1
+            # self.now_playing = self.filename_from_path(file_path)
+            # self.now_playing_filename = file_path
+            # self.is_paused = "--start-paused" in extra_params1
             # if self.normalize_vol and self.logical_volume is not None:
             #    self.volume = self.logical_volume / self.compute_volume(file_path)
             if self.now_playing_transpose == 0:
@@ -667,7 +694,10 @@ class Karaoke:
                 #      file_path, self.volume, extra_params + extra_params1
                 #  )
                 self.vlcclient.play_file(
-                    file_path, self.volume, extra_params + extra_params1
+                    #   file_path, self.volume, extra_params + extra_params1
+                    file_path,
+                    self.volume,
+                    extra_params,
                 )
             else:
                 #  xml = self.vlcclient.play_file_transpose(
@@ -680,7 +710,7 @@ class Karaoke:
                     file_path,
                     self.now_playing_transpose,
                     self.volume,
-                    extra_params + extra_params1,
+                    extra_params,
                 )
             # self.has_subtitle = "<info name='Type'>Subtitle</info>" in xml
             # self.has_video = "<info name='Type'>Video</info>" in xml
@@ -720,6 +750,45 @@ class Karaoke:
             )
         else:
             logging.error("Not using VLC. Can't transpose track.")
+
+    def set_audio_delay(self, delay=0):
+        #   if delay >0:
+        #       audio_delay += self.user_audio_delay + 0.1
+        #   elif delay == "-":
+        #       self.audio_delay -= 0.1
+        #   elif delay == "":
+        #       self.audio_delay = 0
+        delay = str(int(self.user_audio_delay) + delay)
+        logging.debug("Setting an audio delay of " + delay + " on current video")
+        if self.is_file_playing():
+            logging.debug("Está tocando, então, altera o video atual")
+            if self.use_vlc:
+                #  self.vlcclient.command(f"audiodelay&val={self.audio_delay}")
+                #  self.vlcclient.command(f"--audio-desync={delay}")
+                status_xml = (
+                    self.vlcclient.command().text
+                    if self.is_paused
+                    else self.vlcclient.pause(False).text
+                )
+                info = self.vlcclient.get_info_xml(status_xml)
+                posi = info["position"] * info["length"]
+                logging.debug("Posição atual: " + str(posi))
+                logging.debug("Filename atual: " + str(self.now_playing_filename))
+                self.play_file(
+                    self.now_playing_filename,
+                    [f"--start-time={posi}"]
+                    + (["--start-paused"] if self.is_paused else []),
+                )
+
+            else:
+                logging.warning("OMXplayer cannot set audio delay!")
+            return delay
+        logging.warning(
+            "Tried to set audio delay on a playing file, but no file is playing!"
+        )
+        return False
+
+    #  return self.audio_delay
 
     def is_file_playing(self):
         if self.use_vlc:
@@ -950,10 +1019,10 @@ class Karaoke:
 
     def change_language(self, language):
         logging.debug("Changing language to: " + str(language))
-        userprefs = config_obj["USERPREFERENCES"]
+        userprefs = self.config_obj["USERPREFERENCES"]
         userprefs["language"] = language
         with open("config.ini", "w") as conf:
-            config_obj.write(conf)
+            self.config_obj.write(conf)
         trans = gettext.translation(
             "messages", localedir="translations", languages=[language]
         )
@@ -962,32 +1031,52 @@ class Karaoke:
 
         self.render_splash_screen()
 
+    def update_pref_delay(self, delay):
+        if delay == "d":
+            self.user_audio_delay = str(int(self.user_audio_delay) - 100)
+        else:
+            self.user_audio_delay = str(int(self.user_audio_delay) + 100)
+
+        userprefs = self.config_obj["USERPREFERENCES"]
+        userprefs["audio_delay"] = self.user_audio_delay
+        with open("config.ini", "w") as conf:
+            self.config_obj.write(conf)
+
+        self.set_audio_delay()
+
+        return self.user_audio_delay
+
+    def start_audio_delay_test(self):
+        #   path = self.base_path + "\etc\AudioVideoSyncTest.mp4"
+        path = "etc/AudioVideoSyncTest.mp4"
+        self.play_file(path)
+
     def run(self):
         logging.info("Starting PiKaraoke!")
 
         self.running = True
         while self.running:
             try:
-                if len(self.queue) > 0:
-                    if not self.is_file_playing():
-                        if self.scored != True:
-                            self.queue.pop(0)
-                            self.render_score_screen()
-                            self.scored = True
-                        else:
-                            self.reset_now_playing()
-                            if not pygame.display.get_active():
-                                self.pygame_reset_screen()
+                if not self.is_file_playing():
+                    if self.scored != True:
+                        self.render_score_screen()
+                        self.scored = True
 
-                            self.render_next_song_to_splash_screen()
-                            i = 0
-                            while i < (self.splash_delay * 1000):
-                                self.handle_run_loop()
-                                i += self.loop_interval
-                            pygame.mixer.music.stop()
-                            self.play_file(self.queue[0]["file"])
-                            self.now_playing_user = self.queue[0]["user"]
-                            self.scored = False
+                    elif len(self.queue) > 0:
+                        self.reset_now_playing()
+                        if not pygame.display.get_active():
+                            self.pygame_reset_screen()
+
+                        self.render_next_song_to_splash_screen()
+                        i = 0
+                        while i < (self.splash_delay * 1000):
+                            self.handle_run_loop()
+                            i += self.loop_interval
+                        pygame.mixer.music.stop()
+                        self.play_file(self.queue[0]["file"])
+                        self.now_playing_user = self.queue[0]["user"]
+                        self.scored = False
+                        self.queue.pop(0)
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     self.pygame_reset_screen()

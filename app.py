@@ -521,6 +521,7 @@ def info():
     is_pi = get_platform() == "raspberry_pi"
 
     languages = LANGUAGES
+    audio_delay = k.user_audio_delay
 
     return render_template(
         "info.html",
@@ -534,6 +535,7 @@ def info():
         is_pi=is_pi,
         pikaraoke_version=VERSION,
         languages=languages,
+        audio_delay=audio_delay,
         admin=is_admin(),
         admin_enabled=admin_password != None,
     )
@@ -577,6 +579,26 @@ def update_ytdl():
     return redirect(url_for("home"))
 
 
+# def update_youtube_dl():
+#     time.sleep(3)
+#     k.upgrade_youtubedl()
+
+
+@app.route("/update_pikaraoke")
+def update_pikaraoke():
+    if is_admin():
+        flash(
+            "Updating pikaraoke. Just wait.",
+            "is-warning",
+        )
+        #   th = threading.Thread(target=update_pikaraoke)
+        #   th.start()
+        k.update_pikaraoke()
+    else:
+        flash("You don't have permission to update PiKaraoke", "is-danger")
+    return redirect(url_for("home"))
+
+
 @app.route("/select_language", methods=["GET"])
 def select_language():
     # if is_admin():
@@ -584,6 +606,32 @@ def select_language():
     k.change_language(lang)
     logging.debug("MUDOU A LÍNGUA PARA " + lang)
     return redirect(url_for("info"))
+
+
+@app.route("/teste_av_delay")
+def teste_av_delay():
+    k.start_audio_delay_test()
+    logging.debug("........TESTANDO A/V DELAY........")
+    return ""
+
+
+@app.route("/stop_av_delay_test")
+def stop_av_delay_test():
+    k.skip()
+    logging.debug("........STOPPING AV DELAY TEST........")
+    return ""
+
+
+@app.route("/decrease_pref_delay")
+def decrease_pref_delay():
+    audio_delay = k.update_pref_delay("d")
+    return audio_delay
+
+
+@app.route("/increase_pref_delay")
+def increase_pref_delay():
+    audio_delay = k.update_pref_delay("i")
+    return audio_delay
 
 
 @app.route("/refresh")
@@ -670,7 +718,6 @@ def get_default_dl_dir(platform):
         return "/usr/lib/pikaraoke/songs"
     elif platform == "windows":
         legacy_directory = os.path.expanduser("~\pikaraoke-songs")
-        print(legacy_directory)
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
@@ -686,8 +733,9 @@ def get_default_dl_dir(platform):
 if __name__ == "__main__":
 
     platform = get_platform()
+    download_path = ("/usr/lib/pikaraoke/songs",)
+
     default_port = 5000
-    default_download_path = ("/usr/lib/pikaraoke/songs",)
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
@@ -895,6 +943,8 @@ if __name__ == "__main__":
     if not os.path.exists(dl_path):
         print("Creating download path: " + dl_path)
         os.makedirs(dl_path)
+
+    args.download_path = dl_path
 
     if args.developer_mode:
         logging.warning(

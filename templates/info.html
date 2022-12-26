@@ -1,6 +1,29 @@
 {% extends 'base.html' %} {% block scripts %}
 <script>
     $(function() {
+
+        $("#test-av-delay").click(function(e) {
+            e.preventDefault();
+            $("#stop-av-delay-test").toggleClass("is-inline")
+            $.get('teste_av_delay').done(function() {});
+        })
+        $("#stop-av-delay-test").click(function(e) {
+            e.preventDefault();
+            $.get('stop_av_delay_test').done(function() {
+                $("#stop-av-delay-test").toggleClass("is-inline")
+            });
+        })
+        $("#delay-dec").click(function() {
+            $.get('decrease_pref_delay').done(function(data) {
+                $("#delay-val").text(data)
+            });
+        })
+        $("#delay-inc").click(function() {
+            $.get('increase_pref_delay').done(function(data) {
+                $("#delay-val").text(data)
+            });
+        })
+
         $("#quit-link").click(function(e) {
             e.preventDefault();
             // {# MSG: Confirmation text whe the user selects quit. #}
@@ -110,6 +133,19 @@
     Check the pikaraoke log for errors. 
   {%- endtrans %}
 </p>
+{# MSG: Label before a link which forces Pikaraoke to update itself. #}
+<p>{% trans %}Update PiKaraoke{% endtrans %}</p>
+<ul>
+    <li>
+        <a href="{{ url_for('update_pikaraoke') }}" {# MSG: Text on the link which forces Pikaraoke to rescan and pick up any new songs. #}>{% trans %}Update{% endtrans %}</a
+    >
+  </li>
+</ul>
+{# MSG: Help text explaining the Update PiKaraoke. #}
+<p class="help">{% trans -%}
+  Updating the PiKaraoke system is irreversible. Do it with caution, at your own risk!
+  {%- endtrans %}</p>
+
 
 {# MSG: Title of the section for switching the system language #}
 <h1>{% trans %}Language{% endtrans %}</h1>
@@ -124,6 +160,26 @@
   <li><a href="{{ url_for('select_language') }}?lang={{key}}">{{ key }}: {{ language }}</a></li>
     {% endfor %}
 </ul>
+
+{# MSG: Title of the section for configuring the default audio delay #}
+<h1>{% trans %}Audio delay{% endtrans %}</h1>
+<p>
+    {# MSG: Instructions on configuring audio delay #} {% trans -%} Click on "Test audio delay" below to check on your display if the audio and video are synchronized. In case you need, use the select box to adjust the sync. {%- endtrans %}
+</p>
+<ul>
+    <li>
+        <a id="test-av-delay" href="">
+			{# MSG: Text for the link that will start the audio/video sync test #} {% trans %}Test audio/video sync {% endtrans %}</a>
+        <p id="stop-av-delay-test" style="color: red; cursor: pointer; display:none; margin-left: 3px;">{# MSG: Text for the stop a/v delay test #} {% trans %} (stop test){% endtrans %}</p>
+
+    </li>
+</ul>
+<div class="is-flex" style="justify-content: space-between">
+    <h4>{# MSG: Text of the section audio delay in Info #} {% trans -%} Audio delay (millisec){%- endtrans %}</h4>
+    <h4 id="delay-dec" class="tabs" style="margin:0; color:red; cursor: pointer; font-weight: bold; font-size:x-large;">&#x2296;</h4>
+    <h4 id="delay-val" class="tabs" style="padding-top:2px; margin:0; cursor: pointer">{{ audio_delay }}</h4>
+    <h4 id="delay-inc" class="tabs" style="margin:0; color:green; cursor: pointer; font-weight:bold;font-size:x-large;">&#x2295;</h4>
+</div>
 
 {# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
 <h1>{% trans %}Shutdown{% endtrans %}</h1>
