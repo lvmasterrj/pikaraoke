@@ -27,6 +27,8 @@ from lib.get_platform import get_platform
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
 
+update(verbose=True, force=True)
+
 
 class Karaoke:
 
@@ -281,7 +283,7 @@ class Karaoke:
     def update_pikaraoke(self):
         logging.debug("Atualizando o sistema...")
         try:
-            update()
+            update(verbose=True)
             resultado = "PiKaraoke atualizado com sucesso!"
         except:
             resultado = "Algo deu errado e não foi possível atualizar o sistema!"
