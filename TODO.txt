@@ -2,3 +2,4 @@ Criar um link de desabilitar score na pagina de info
 Criar um link de desabilitar bg_sound na pagina de info
 
 Ajeitar o auto update
+https://github.com/erfantkerfan/selfupdate

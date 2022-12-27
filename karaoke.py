@@ -17,7 +17,6 @@ import qrcode
 from unidecode import unidecode
 import configparser
 import gettext
-from selfupdate import update
 
 from collections import *
 
@@ -26,8 +25,6 @@ from lib.get_platform import get_platform
 
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
-
-update(verbose=True, force=True)
 
 
 class Karaoke:
@@ -283,7 +280,17 @@ class Karaoke:
     def update_pikaraoke(self):
         logging.debug("Atualizando o sistema...")
         try:
-            update(verbose=True)
+            # subprocess.check_call(["git", "clone", "https://github.com/lvmasterrj/pikaraoke.git"])
+            subprocess.check_call(
+                [
+                    sys.executable,
+                    "-m",
+                    "pip",
+                    "install",
+                    "-U",
+                    "git+https://github.com/lvmasterrj/pikaraoke.git",
+                ]
+            )
             resultado = "PiKaraoke atualizado com sucesso!"
         except:
             resultado = "Algo deu errado e não foi possível atualizar o sistema!"
