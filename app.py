@@ -671,7 +671,7 @@ def get_default_dl_dir(platform):
 if __name__ == "__main__":
 
     platform = get_platform()
-    default_port = 5000
+    default_port = 5555
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
