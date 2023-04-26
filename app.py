@@ -611,26 +611,24 @@ def select_language():
 @app.route("/teste_av_delay")
 def teste_av_delay():
     k.start_audio_delay_test()
-    logging.debug("........TESTANDO A/V DELAY........")
     return ""
 
 
 @app.route("/stop_av_delay_test")
 def stop_av_delay_test():
     k.skip()
-    logging.debug("........STOPPING AV DELAY TEST........")
     return ""
 
 
-@app.route("/decrease_pref_delay")
+@app.route("/decrease_pref_av_delay")
 def decrease_pref_delay():
-    audio_delay = k.update_pref_delay("d")
+    audio_delay = k.update_pref_av_delay("d")
     return audio_delay
 
 
-@app.route("/increase_pref_delay")
+@app.route("/increase_pref_av_delay")
 def increase_pref_delay():
-    audio_delay = k.update_pref_delay("i")
+    audio_delay = k.update_pref_av_delay("i")
     return audio_delay
 
 

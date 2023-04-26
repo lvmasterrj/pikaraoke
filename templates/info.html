@@ -14,12 +14,12 @@
             });
         })
         $("#delay-dec").click(function() {
-            $.get('decrease_pref_delay').done(function(data) {
+            $.get('decrease_pref_av_delay').done(function(data) {
                 $("#delay-val").text(data)
             });
         })
         $("#delay-inc").click(function() {
-            $.get('increase_pref_delay').done(function(data) {
+            $.get('increase_pref_av_delay').done(function(data) {
                 $("#delay-val").text(data)
             });
         })

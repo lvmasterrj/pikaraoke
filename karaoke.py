@@ -279,17 +279,21 @@ class Karaoke:
 
     def update_pikaraoke(self):
         logging.debug("Atualizando o sistema...")
+
         try:
             # subprocess.check_call(["git", "clone", "https://github.com/lvmasterrj/pikaraoke.git"])
             subprocess.check_call(
-                [
-                    sys.executable,
-                    "-m",
-                    "pip",
-                    "install",
-                    "-U",
-                    "git+https://github.com/lvmasterrj/pikaraoke.git",
-                ]
+                'pip install --upgrade --src="'
+                + self.base_path
+                + '" -e git+https://github.com/lvmasterrj/pikaraoke.git@Teste#egg=app'
+                #  [
+                #      sys.executable,
+                #      "-m",
+                #      "pip",
+                #      "install",
+                #      "-U",
+                #      "git+https://github.com/lvmasterrj/pikaraoke.git",
+                #  ]
             )
             resultado = "PiKaraoke atualizado com sucesso!"
         except:
@@ -1040,7 +1044,7 @@ class Karaoke:
 
         self.render_splash_screen()
 
-    def update_pref_delay(self, delay):
+    def update_pref_av_delay(self, delay):
         if delay == "d":
             self.user_audio_delay = str(int(self.user_audio_delay) - 100)
         else:
