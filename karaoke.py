@@ -89,7 +89,8 @@ class Karaoke:
 
         self.config_obj = configparser.ConfigParser()
         # This is for the autostart script to work properly
-        os.chdir(os.path.dirname(sys.argv[0]))
+        if self.platform != "windows":
+            os.chdir(os.path.dirname(sys.argv[0]))
         self.config_obj.read("config.ini")
         user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
@@ -512,15 +513,15 @@ class Karaoke:
             scoreNum = str(math.ceil(random.triangular(0, 100, 100))).zfill(2)
 
             if int(scoreNum) < 30:
-                sel_color = "red"
+                sel_color = (255, 50, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-l.ogg")
                 critic = "Never sing again... ever"
             elif int(scoreNum) >= 30 and int(scoreNum) < 60:
-                sel_color = "yellow"
+                sel_color = (255, 255, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-m.ogg")
                 critic = "I've seen better singers"
             else:
-                sel_color = "blue"
+                sel_color = (50, 50, 255)
                 applause = pygame.mixer.Sound("sound-effects/applause-h.ogg")
                 critic = "Congratulations! Couldn't be better"
 
