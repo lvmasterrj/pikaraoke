@@ -88,8 +88,8 @@ class Karaoke:
         #   self._ = _
 
         self.config_obj = configparser.ConfigParser()
-        self.config_obj.read("./config.ini")
-        user_lng = self.config_obj.get("USERPREFERENCES", "language")
+        self.config_obj.read("config.ini")
+        user_lng = self.config_obj.get("aUSERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
 
         trans = gettext.translation(
