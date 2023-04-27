@@ -277,29 +277,58 @@ class Karaoke:
         self.get_youtubedl_version()
         logging.info("Done. New version: %s" % self.youtubedl_version)
 
+    """ def check_for_update(self, dir):
+        print("Verificando o código mais recente...")
+
+        # Fetch most up to date version of code.
+        p = git(
+            "--git-dir=" + dir + ".git/",
+            "--work-tree=" + dir,
+            "fetch",
+            "origin",
+            "master",
+            _out=ProcessFetch,
+            _out_bufsize=0,
+            _tty_in=True,
+        )
+
+        print("Fetch complete.")
+        time.sleep(2)
+        print("Comparando os códigos...")
+        statusCheck = git("--git-dir=" + dir + ".git/", "--work-tree=" + dir, "status")
+
+        if "Your branch is up-to-date" in statusCheck:
+            print("Código já atualizado")
+            return False
+        else:
+            print("Atualização disponível")
+            return True """
+
     def update_pikaraoke(self):
         logging.debug("Atualizando o sistema...")
 
-        try:
-            # subprocess.check_call(["git", "clone", "https://github.com/lvmasterrj/pikaraoke.git"])
-            subprocess.check_call(
-                'pip install --upgrade --src="'
-                + self.base_path
-                + '" -e git+https://github.com/lvmasterrj/pikaraoke.git@Teste#egg=app'
-                #  [
-                #      sys.executable,
-                #      "-m",
-                #      "pip",
-                #      "install",
-                #      "-U",
-                #      "git+https://github.com/lvmasterrj/pikaraoke.git",
-                #  ]
+        """ dir = self.base_path
+
+        if self.check_for_update(dir):
+            print("Resetting code...")
+            resetCheck = git(
+                "--git-dir=" + dir + ".git/",
+                "--work-tree=" + dir,
+                "reset",
+                "--hard",
+                "origin/master",
             )
+            print(str(resetCheck))
+
+        try:
+            import sh
+            from sh import git
+
             resultado = "PiKaraoke atualizado com sucesso!"
         except:
             resultado = "Algo deu errado e não foi possível atualizar o sistema!"
         logging.debug(resultado)
-        return resultado
+        return resultado """
 
     def is_network_connected(self):
         return not len(self.ip) < 7
