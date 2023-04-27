@@ -88,6 +88,8 @@ class Karaoke:
         #   self._ = _
 
         self.config_obj = configparser.ConfigParser()
+        # This is for the autostart script to work properly
+        os.chdir(os.path.dirname(sys.argv[0]))
         self.config_obj.read("config.ini")
         user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
