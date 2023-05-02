@@ -370,19 +370,17 @@ class Karaoke:
             pygame.font.init()
             pygame.mouse.set_visible(0)
             self.font = pygame.font.SysFont(pygame.font.get_default_font(), 40)
-            ######################################################################### REVERTER
-            self.width = pygame.display.Info().current_w
-            self.height = pygame.display.Info().current_h
-            # self.width = 800
-            # self.height = 600
+            # self.width = pygame.display.Info().current_w
+            # self.height = pygame.display.Info().current_h
+            self.width = 800
+            self.height = 600
             logging.debug("Initializing screen mode")
-            ######################################################################### REVERTER
-            if self.platform == "windows":
-                self.screen = pygame.display.set_mode(
-                    [self.width, self.height], self.get_default_display_mode()
-                )
             # if self.platform == "windows":
-            #     self.screen = pygame.display.set_mode([self.width, self.height])
+            #     self.screen = pygame.display.set_mode(
+            #         [self.width, self.height], self.get_default_display_mode()
+            #     )
+            if self.platform == "windows":
+                self.screen = pygame.display.set_mode([self.width, self.height])
             else:
                 # this section is an unbelievable nasty hack - for some reason Pygame
                 # needs a keyboardinterrupt to initialise in some limited circumstances
@@ -440,14 +438,16 @@ class Karaoke:
                 self.screen.blit(p_image, (20, blitY - 125))
                 if not self.is_network_connected():
                     text = self.font.render(
-                        "Wifi/Network not connected. Shutting down in 10s...",
+                        self._("Wifi/Network not connected. Shutting down in 10s..."),
                         True,
                         (255, 255, 255),
                     )
                     self.screen.blit(text, (p_image.get_width() + 35, blitY))
                     time.sleep(10)
                     logging.info(
-                        "No IP found. Network/Wifi configuration required. For wifi config, try: sudo raspi-config or the desktop GUI: startx"
+                        self._(
+                            "No IP found. Network/Wifi configuration required. For wifi config, try: sudo raspi-config or the desktop GUI: startx"
+                        )
                     )
                     self.stop()
                 else:
@@ -536,7 +536,7 @@ class Karaoke:
         )
 
         score_text = your_score_font.render(
-            "Your Score",
+            self._("Your Score"),
             True,
             (150, 0, 150),
         )
@@ -595,19 +595,29 @@ class Karaoke:
                 sel_color = (255, 50, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-l.ogg")
                 critic = [
-                    "Never sing again... ever",
-                    "I hope you don't do this for a living",
+                    self._("Never sing again... ever."),
+                    self._("I hope you don't do this for a living."),
+                    self._("Thank god it's over."),
+                    self._("Pass the mic for someone else, please!"),
                 ]
             elif int(scoreNum) >= 30 and int(scoreNum) < 60:
                 sel_color = (255, 200, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-m.ogg")
-                critic = ["I've seen better singers", "ok... just ok"]
+                critic = [
+                    self._("I've seen better singers."),
+                    self._("Ok... just ok."),
+                    self._("Not bad for a beginner."),
+                    self._("You put up a nice show."),
+                ]
             else:
                 sel_color = (50, 150, 255)
                 applause = pygame.mixer.Sound("sound-effects/applause-h.ogg")
                 critic = [
-                    "Congratulations! Couldn't be better",
-                    "Wow, have you tried The Voice?",
+                    self._("Congratulations! Couldn't be better."),
+                    self._("Wow, have you tried The Voice?"),
+                    self._("Please, sing another one!"),
+                    self._("You rock! You know that?!"),
+                    self._("I wish more people could sing like this."),
                 ]
 
             i = 0
