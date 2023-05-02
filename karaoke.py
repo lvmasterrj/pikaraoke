@@ -370,14 +370,19 @@ class Karaoke:
             pygame.font.init()
             pygame.mouse.set_visible(0)
             self.font = pygame.font.SysFont(pygame.font.get_default_font(), 40)
+            ######################################################################### REVERTER
             self.width = pygame.display.Info().current_w
             self.height = pygame.display.Info().current_h
+            # self.width = 800
+            # self.height = 600
             logging.debug("Initializing screen mode")
-
+            ######################################################################### REVERTER
             if self.platform == "windows":
                 self.screen = pygame.display.set_mode(
                     [self.width, self.height], self.get_default_display_mode()
                 )
+            # if self.platform == "windows":
+            #     self.screen = pygame.display.set_mode([self.width, self.height])
             else:
                 # this section is an unbelievable nasty hack - for some reason Pygame
                 # needs a keyboardinterrupt to initialise in some limited circumstances
@@ -483,20 +488,87 @@ class Karaoke:
                 self.screen.blit(text2, (10, 50))
                 self.screen.blit(text3, (10, 90))
 
+    # Function that scales an image to the full screen
+    def transform_scale_keep_ratio(self, image):
+        iwidth, iheight = image.get_size()
+        scale = min(self.width / iwidth, self.height / iheight)
+        new_size = (round(iwidth * scale), round(iheight * scale))
+        scaled_image = pygame.transform.smoothscale(image, new_size)
+        image_rect = scaled_image.get_rect(center=(self.width // 2, self.height // 2))
+        return scaled_image, image_rect
+
     def refresh_score_screen(self):
         self.screen.fill((18, 0, 20))
 
-        text = self.font.render(
-            "Score...",
-            True,
-            (255, 255, 255),
+        surface1 = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+        surface2 = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+
+        background = pygame.image.load("stage.jpg")
+
+        scaled_bg, bg_rect = self.transform_scale_keep_ratio(background)
+
+        self.screen.blit(scaled_bg, bg_rect)
+
+        your_score_bg_rect_size = [self.width * 0.26, self.height * 0.27]
+        critic_bg_rect_size = [self.width * 0.6, self.height * 0.1]
+
+        critic_bg_rect = pygame.Rect(
+            self.width / 2 - critic_bg_rect_size[0] / 2,
+            self.height * 0.6,
+            critic_bg_rect_size[0],
+            critic_bg_rect_size[1],
         )
-        self.screen.blit(text, (200, 200))
+
+        your_score_bg_rect = pygame.Rect(
+            self.width / 2 - your_score_bg_rect_size[0] / 2,
+            self.height * 0.18,
+            your_score_bg_rect_size[0],
+            your_score_bg_rect_size[1],
+        )
+
+        pygame.draw.rect(surface1, [255, 255, 255, 200], your_score_bg_rect, 0, 20)
+        pygame.draw.rect(surface1, [150, 0, 150], your_score_bg_rect, 5, 20)
+
+        self.screen.blit(surface1, (0, 0))
+
+        your_score_font = pygame.font.Font(
+            "FugazOne-Regular.ttf", round(self.width * 0.03)
+        )
+
+        score_text = your_score_font.render(
+            "Your Score",
+            True,
+            (150, 0, 150),
+        )
+
+        self.screen.blit(
+            score_text,
+            (
+                your_score_bg_rect.centerx - score_text.get_rect().width / 2,
+                self.height * 0.2,
+            ),
+        )
 
         if self.score != None:
-            self.screen.blit(self.score, (500, 200))
+            self.screen.blit(
+                self.score,
+                (
+                    your_score_bg_rect.centerx - self.score.get_rect().width / 2,
+                    self.height * 0.27,
+                ),
+            )
             if self.critic != None:
-                self.screen.blit(self.critic, (500, 500))
+                pygame.draw.rect(surface2, [255, 255, 255, 200], critic_bg_rect, 0, 20)
+                pygame.draw.rect(surface2, [150, 0, 150], critic_bg_rect, 5, 20)
+                self.screen.blit(surface2, (0, 0))
+
+                self.screen.blit(
+                    self.critic,
+                    (
+                        critic_bg_rect.centerx - self.critic.get_rect().width / 2,
+                        critic_bg_rect.centery - self.critic.get_rect().height / 2,
+                    ),
+                )
 
         pygame.display.update()
 
@@ -504,46 +576,61 @@ class Karaoke:
         if self.disable_score != True:
             logging.debug("Rendering score screen")
 
+            score_number_font = pygame.font.Font(
+                "FugazOne-Regular.ttf", round(self.width * 0.064)
+            )
+            critic_text_font = pygame.font.Font(
+                "FugazOne-Regular.ttf", round(self.width * 0.018)
+            )
+
             self.refresh_score_screen()
 
             score_sound = pygame.mixer.Sound("sound-effects/score.ogg")
             score_sound.set_volume(0.2)
             score_sound.play()
 
-            scoreNum = str(math.ceil(random.triangular(0, 100, 100))).zfill(2)
+            scoreNum = str(math.ceil(random.triangular(0, 100, 99))).zfill(2)
 
             if int(scoreNum) < 30:
                 sel_color = (255, 50, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-l.ogg")
-                critic = "Never sing again... ever"
+                critic = [
+                    "Never sing again... ever",
+                    "I hope you don't do this for a living",
+                ]
             elif int(scoreNum) >= 30 and int(scoreNum) < 60:
-                sel_color = (255, 255, 50)
+                sel_color = (255, 200, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-m.ogg")
-                critic = "I've seen better singers"
+                critic = ["I've seen better singers", "ok... just ok"]
             else:
-                sel_color = (50, 50, 255)
+                sel_color = (50, 150, 255)
                 applause = pygame.mixer.Sound("sound-effects/applause-h.ogg")
-                critic = "Congratulations! Couldn't be better"
+                critic = [
+                    "Congratulations! Couldn't be better",
+                    "Wow, have you tried The Voice?",
+                ]
 
             i = 0
-            while i < 64:
+            while i < 42:
                 scoreRnd = str(random.randint(0, 99)).zfill(2)
-                self.score = self.font.render(
+                self.score = score_number_font.render(
                     scoreRnd,
                     True,
-                    (255, 255, 255),
+                    (150, 0, 150),
                 )
                 self.refresh_score_screen()
                 pygame.time.wait(i * 2)
                 i += 1
 
-            self.score = self.font.render(
+            self.score = score_number_font.render(
                 scoreNum,
                 True,
                 sel_color,
             )
 
-            self.critic = self.font.render(critic, True, (255, 255, 255))
+            self.critic = critic_text_font.render(
+                random.choice(critic), True, (150, 0, 150)
+            )
             self.refresh_score_screen()
 
             applause.play()
