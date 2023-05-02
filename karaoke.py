@@ -292,7 +292,7 @@ class Karaoke:
         except Exception as e:
             resultado = "Erro ao tentar atualizar o PiKaraoke"
             logging.debug(e)
-        # self.stop()
+
         if self.platform == "raspberry_pi":
             os.system("reboot")
         return resultado
