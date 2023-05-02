@@ -733,7 +733,7 @@ if __name__ == "__main__":
     platform = get_platform()
     download_path = ("/usr/lib/pikaraoke/songs",)
 
-    default_port = 5000
+    default_port = 5555
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
