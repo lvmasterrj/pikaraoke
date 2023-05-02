@@ -23,7 +23,13 @@
                 $("#delay-val").text(data)
             });
         })
-
+        $("#update-link").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
+            if (window.confirm("{{ _('Are you sure you want to update the piKaraoke system?') }}")) {
+                location.href = this.href;
+            }
+        })
         $("#quit-link").click(function(e) {
             e.preventDefault();
             // {# MSG: Confirmation text whe the user selects quit. #}
@@ -137,7 +143,7 @@
 <p>{% trans %}Update PiKaraoke{% endtrans %}</p>
 <ul>
     <li>
-        <a href="{{ url_for('update_pikaraoke') }}" {# MSG: Text on the link which forces Pikaraoke to update itself #}>{% trans %}Update{% endtrans %}</a
+        <a id="update-link" href="{{ url_for('update_pikaraoke') }}" {# MSG: Text on the link which forces Pikaraoke to update itself #}>{% trans %}Update{% endtrans %}</a
     >
   </li>
 </ul>

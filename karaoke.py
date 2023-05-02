@@ -287,15 +287,14 @@ class Karaoke:
             import git
 
             g = git.cmd.Git(self.base_path)
-            msg = g.pull()
+            g.pull()
             resultado = "PiKaraoke atualizado com sucesso!"
         except Exception as e:
             resultado = "Erro ao tentar atualizar o PiKaraoke"
-            msg = e
-        self.stop()
+            logging.debug(e)
+        # self.stop()
         if self.platform == "raspberry_pi":
             os.system("reboot")
-        logging.debug(msg)
         return resultado
 
     def is_network_connected(self):
