@@ -292,6 +292,7 @@ class Karaoke:
         except Exception as e:
             resultado = "Erro ao tentar atualizar o PiKaraoke"
             msg = e
+        self.stop()
         logging.debug(msg)
         return resultado
 
