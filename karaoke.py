@@ -289,8 +289,9 @@ class Karaoke:
             g = git.cmd.Git(self.base_path)
             msg = g.pull()
             resultado = "PiKaraoke atualizado com sucesso!"
-        except:
+        except Exception as e:
             resultado = "Erro ao tentar atualizar o PiKaraoke"
+            msg = e
         logging.debug(msg)
         return resultado
 
