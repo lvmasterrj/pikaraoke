@@ -387,7 +387,7 @@ class Karaoke:
 
             if self.disable_bg_music != True:
                 if len(self.queue) == 0:
-                    pygame.mixer.music.play()
+                    pygame.mixer.music.play(-1)
 
             self.screen.fill((18, 0, 20))
 
@@ -462,15 +462,11 @@ class Karaoke:
         image_rect = scaled_image.get_rect(center=(self.width // 2, self.height // 2))
         return scaled_image, image_rect
 
-    def refresh_score_screen(self):
-        self.screen.fill((18, 0, 20))
+    def refresh_score_screen(self, scaled_bg, bg_rect):
+        # self.screen.fill((18, 0, 20))
 
         surface1 = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         surface2 = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
-
-        background = pygame.image.load("stage.jpg")
-
-        scaled_bg, bg_rect = self.transform_scale_keep_ratio(background)
 
         self.screen.blit(scaled_bg, bg_rect)
 
@@ -545,6 +541,9 @@ class Karaoke:
         if self.disable_score != True:
             logging.debug("Rendering score screen")
 
+            background = pygame.image.load("stage.jpg").convert()
+            scaled_bg, bg_rect = self.transform_scale_keep_ratio(background)
+
             score_number_font = pygame.font.Font(
                 "FugazOne-Regular.ttf", round(self.width * 0.064)
             )
@@ -552,11 +551,10 @@ class Karaoke:
                 "FugazOne-Regular.ttf", round(self.width * 0.018)
             )
 
-            self.refresh_score_screen()
+            self.refresh_score_screen(scaled_bg, bg_rect)
 
             score_sound = pygame.mixer.Sound("sound-effects/score.ogg")
             score_sound.set_volume(0.2)
-            score_sound.play()
 
             scoreNum = str(math.ceil(random.triangular(0, 100, 99))).zfill(2)
 
@@ -589,17 +587,17 @@ class Karaoke:
                     self._("I wish more people could sing like this."),
                 ]
 
-            i = 0
-            while i < 42:
+            start = pygame.time.get_ticks()
+
+            while pygame.time.get_ticks() - start < 4200:
                 scoreRnd = str(random.randint(0, 99)).zfill(2)
                 self.score = score_number_font.render(
                     scoreRnd,
                     True,
                     (150, 0, 150),
                 )
-                self.refresh_score_screen()
-                pygame.time.wait(i * 2)
-                i += 1
+                self.refresh_score_screen(scaled_bg, bg_rect)
+                pygame.time.wait(100)
 
             self.score = score_number_font.render(
                 scoreNum,
@@ -610,7 +608,7 @@ class Karaoke:
             self.critic = critic_text_font.render(
                 random.choice(critic), True, (150, 0, 150)
             )
-            self.refresh_score_screen()
+            self.refresh_score_screen(scaled_bg, bg_rect)
 
             applause.play()
 
@@ -1159,6 +1157,7 @@ class Karaoke:
 
     def start_audio_delay_test(self):
         #   path = self.base_path + "\etc\AudioVideoSyncTest.mp4"
+        pygame.mixer.music.stop()
         path = "etc/AudioVideoSyncTest.mp4"
         self.play_file(path)
 
