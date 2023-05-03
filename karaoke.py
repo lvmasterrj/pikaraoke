@@ -491,8 +491,10 @@ class Karaoke:
             your_score_bg_rect_size[1],
         )
 
-        pygame.draw.rect(surface1, [255, 255, 255, 200], your_score_bg_rect, 0, 20)
-        pygame.draw.rect(surface1, [150, 0, 150], your_score_bg_rect, 5, 20)
+        # pygame.draw.rect(surface1, [255, 255, 255, 200], your_score_bg_rect, 0, 20)
+        # pygame.draw.rect(surface1, [150, 0, 150], your_score_bg_rect, 5, 20)
+        pygame.draw.rect(surface1, [255, 255, 255, 200], your_score_bg_rect, 0)
+        pygame.draw.rect(surface1, [150, 0, 150], your_score_bg_rect, 5)
 
         self.screen.blit(surface1, (0, 0))
 
@@ -523,8 +525,10 @@ class Karaoke:
                 ),
             )
             if self.critic != None:
-                pygame.draw.rect(surface2, [255, 255, 255, 200], critic_bg_rect, 0, 20)
-                pygame.draw.rect(surface2, [150, 0, 150], critic_bg_rect, 5, 20)
+                # pygame.draw.rect(surface2, [255, 255, 255, 200], critic_bg_rect, 0, 20)
+                # pygame.draw.rect(surface2, [150, 0, 150], critic_bg_rect, 5, 20)
+                pygame.draw.rect(surface2, [255, 255, 255, 200], critic_bg_rect, 0)
+                pygame.draw.rect(surface2, [150, 0, 150], critic_bg_rect, 5)
                 self.screen.blit(surface2, (0, 0))
 
                 self.screen.blit(
