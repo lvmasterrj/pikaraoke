@@ -555,6 +555,7 @@ class Karaoke:
 
             score_sound = pygame.mixer.Sound("sound-effects/score.ogg")
             score_sound.set_volume(0.2)
+            score_sound.play()
 
             scoreNum = str(math.ceil(random.triangular(0, 100, 99))).zfill(2)
 
