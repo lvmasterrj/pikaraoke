@@ -590,7 +590,7 @@ class Karaoke:
 
             start = pygame.time.get_ticks()
 
-            while pygame.time.get_ticks() - start < 4100:
+            while pygame.time.get_ticks() - start < 4200:
                 scoreRnd = str(random.randint(0, 99)).zfill(2)
                 self.score = score_number_font.render(
                     scoreRnd,
