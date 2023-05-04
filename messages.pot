@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-02 17:08-0300\n"
+"POT-Creation-Date: 2023-05-04 14:39-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,85 +34,99 @@ msgstr ""
 msgid "Browse"
 msgstr ""
 
-#: karaoke.py:405
+#: karaoke.py:406
 msgid "Wifi/Network not connected. Shutting down in 10s..."
 msgstr ""
 
-#: karaoke.py:412
+#: karaoke.py:413
 msgid ""
 "No IP found. Network/Wifi configuration required. For wifi config, try: "
 "sudo raspi-config or the desktop GUI: startx"
 msgstr ""
 
-#: karaoke.py:418
+#: karaoke.py:419
 msgid "Connect at: "
 msgstr ""
 
-#: karaoke.py:503
+#: karaoke.py:434
+msgid "RaspiWifiConfig setup mode detected!"
+msgstr ""
+
+#: karaoke.py:439
+#, python-format
+msgid "Connect another device/smartphone to the Wifi AP: '%s'"
+msgstr ""
+
+#: karaoke.py:445
+#, python-format
+msgid "Then point its browser to: '%s://%s%s' and follow the instructions."
+msgstr ""
+
+#: karaoke.py:506
 msgid "Your Score"
 msgstr ""
 
-#: karaoke.py:562
+#: karaoke.py:571
 msgid "Never sing again... ever."
 msgstr ""
 
-#: karaoke.py:563
+#: karaoke.py:572
 msgid "I hope you don't do this for a living."
 msgstr ""
 
-#: karaoke.py:564
+#: karaoke.py:573
 msgid "Thank god it's over."
 msgstr ""
 
-#: karaoke.py:565
+#: karaoke.py:574
 msgid "Pass the mic for someone else, please!"
 msgstr ""
 
-#: karaoke.py:571
+#: karaoke.py:580
 msgid "I've seen better singers."
 msgstr ""
 
-#: karaoke.py:572
+#: karaoke.py:581
 msgid "Ok... just ok."
 msgstr ""
 
-#: karaoke.py:573
+#: karaoke.py:582
 msgid "Not bad for a beginner."
 msgstr ""
 
-#: karaoke.py:574
+#: karaoke.py:583
 msgid "You put up a nice show."
 msgstr ""
 
-#: karaoke.py:580
+#: karaoke.py:589
 msgid "Congratulations! Couldn't be better."
 msgstr ""
 
-#: karaoke.py:581
+#: karaoke.py:590
 msgid "Wow, have you tried The Voice?"
 msgstr ""
 
-#: karaoke.py:582
+#: karaoke.py:591
 msgid "Please, sing another one!"
 msgstr ""
 
-#: karaoke.py:583
+#: karaoke.py:592
 msgid "You rock! You know that?!"
 msgstr ""
 
-#: karaoke.py:584
+#: karaoke.py:593
 msgid "I wish more people could sing like this."
 msgstr ""
 
-#: karaoke.py:631
+#: karaoke.py:645
 msgid "Up next: "
 msgstr ""
 
-#: karaoke.py:636
+#: karaoke.py:650
 msgid "Up next:  "
 msgstr ""
 
-#: karaoke.py:640
+#: karaoke.py:654
 msgid "Added by: "
 msgstr ""
 

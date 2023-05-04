@@ -431,16 +431,20 @@ class Karaoke:
                 ) = self.get_raspi_wifi_conf_vals()
 
                 text1 = self.font.render(
-                    "RaspiWifiConfig setup mode detected!", True, (255, 255, 255)
+                    self._("RaspiWifiConfig setup mode detected!"),
+                    True,
+                    (255, 255, 255),
                 )
                 text2 = self.font.render(
-                    "Connect another device/smartphone to the Wifi AP: '%s'"
+                    self._("Connect another device/smartphone to the Wifi AP: '%s'")
                     % ssid_prefix,
                     True,
                     (255, 255, 255),
                 )
                 text3 = self.font.render(
-                    "Then point its browser to: '%s://%s%s' and follow the instructions."
+                    self._(
+                        "Then point its browser to: '%s://%s%s' and follow the instructions."
+                    )
                     % (
                         "https" if ssl_enabled == "1" else "http",
                         self.raspi_wifi_config_ip,
@@ -553,9 +557,10 @@ class Karaoke:
 
             self.refresh_score_screen(scaled_bg, bg_rect)
 
-            score_sound = pygame.mixer.Sound("sound-effects/score.ogg")
+            score_sound = pygame.mixer.Sound("sound-effects/score1.ogg")
             score_sound.set_volume(0.2)
-            score_sound.play()
+            # score_sound.play()
+            channel = score_sound.play()
 
             scoreNum = str(math.ceil(random.triangular(0, 100, 99))).zfill(2)
 
@@ -590,7 +595,8 @@ class Karaoke:
 
             start = pygame.time.get_ticks()
 
-            while pygame.time.get_ticks() - start < 4200:
+            # while pygame.time.get_ticks() - start < 4300:
+            while channel.get_busy():
                 scoreRnd = str(random.randint(0, 99)).zfill(2)
                 self.score = score_number_font.render(
                     scoreRnd,
@@ -599,6 +605,10 @@ class Karaoke:
                 )
                 self.refresh_score_screen(scaled_bg, bg_rect)
                 pygame.time.wait(100)
+
+            score_sound = pygame.mixer.Sound("sound-effects/score2.ogg")
+            score_sound.set_volume(0.2)
+            score_sound.play()
 
             self.score = score_number_font.render(
                 scoreNum,
