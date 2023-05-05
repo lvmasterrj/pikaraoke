@@ -84,6 +84,7 @@ def get_locale():
 
 @app.route("/")
 def home():
+    s = k.get_state()
     return render_template(
         "home.html",
         site_title=site_name,
@@ -91,6 +92,11 @@ def home():
         show_transpose=k.use_vlc,
         transpose_value=k.now_playing_transpose,
         admin=is_admin(),
+        volume=s["volume"],
+        seektrack_value=s["time"],
+        seektrack_max=s["length"],
+        audio_delay=s["audiodelay"],
+        #   vocal_info=k.get_vocal_info(),
     )
 
 
@@ -248,7 +254,8 @@ def pause():
 @app.route("/transpose/<semitones>", methods=["GET"])
 def transpose(semitones):
     k.transpose_current(semitones)
-    return redirect(url_for("home"))
+    #  return redirect(url_for("home"))
+    return ""
 
 
 @app.route("/restart")
@@ -512,9 +519,9 @@ def info():
     youtubedl_version = k.youtubedl_version
 
     is_pi = get_platform() == "raspberry_pi"
-    print(LANGUAGES)
 
     languages = LANGUAGES
+    audio_delay = k.user_audio_delay
 
     return render_template(
         "info.html",
@@ -528,6 +535,7 @@ def info():
         is_pi=is_pi,
         pikaraoke_version=VERSION,
         languages=languages,
+        audio_delay=audio_delay,
         admin=is_admin(),
         admin_enabled=admin_password != None,
     )
@@ -569,6 +577,59 @@ def update_ytdl():
     else:
         flash("You don't have permission to update youtube-dl", "is-danger")
     return redirect(url_for("home"))
+
+
+# def update_youtube_dl():
+#     time.sleep(3)
+#     k.upgrade_youtubedl()
+
+
+@app.route("/update_pikaraoke")
+def update_pikaraoke():
+    if is_admin():
+        flash(
+            "Updating pikaraoke. Just wait.",
+            "is-warning",
+        )
+        #   th = threading.Thread(target=update_pikaraoke)
+        #   th.start()
+        k.update_pikaraoke()
+    else:
+        flash("You don't have permission to update PiKaraoke", "is-danger")
+    return redirect(url_for("home"))
+
+
+@app.route("/select_language", methods=["GET"])
+def select_language():
+    # if is_admin():
+    lang = request.args.get("lang")
+    k.change_language(lang)
+    logging.debug("MUDOU A LÍNGUA PARA " + lang)
+    return redirect(url_for("info"))
+
+
+@app.route("/teste_av_delay")
+def teste_av_delay():
+    k.start_audio_delay_test()
+    return ""
+
+
+@app.route("/stop_av_delay_test")
+def stop_av_delay_test():
+    k.skip()
+    return ""
+
+
+@app.route("/decrease_pref_av_delay")
+def decrease_pref_delay():
+    audio_delay = k.update_pref_av_delay("d")
+    return audio_delay
+
+
+@app.route("/increase_pref_av_delay")
+def increase_pref_delay():
+    audio_delay = k.update_pref_av_delay("i")
+    return audio_delay
 
 
 @app.route("/refresh")
@@ -652,10 +713,9 @@ def get_default_youtube_dl_path(platform):
 
 def get_default_dl_dir(platform):
     if platform == "raspberry_pi":
-        teste = "teste1"
         return "/usr/lib/pikaraoke/songs"
     elif platform == "windows":
-        legacy_directory = os.path.expanduser("~\pikaraoke\songs")
+        legacy_directory = os.path.expanduser("~\pikaraoke-songs")
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
@@ -671,15 +731,16 @@ def get_default_dl_dir(platform):
 if __name__ == "__main__":
 
     platform = get_platform()
+    download_path = ("/usr/lib/pikaraoke/songs",)
+
     default_port = 5555
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
     default_rw_prefs = 0
-
     default_dl_dir = get_default_dl_dir(platform)
     default_omxplayer_path = "/usr/bin/omxplayer"
-    default_adev = "both"
+    default_omxplayer_adev = "both"
     default_youtubedl_path = get_default_youtube_dl_path(platform)
     default_vlc_path = get_default_vlc_path(platform)
     default_vlc_port = 5002
@@ -759,10 +820,10 @@ if __name__ == "__main__":
         required=False,
     )
     parser.add_argument(
-        "--adev",
+        "--omxplayer_adev",
         help="Pass the audio output device argument to omxplayer. Possible values: hdmi/local/both/alsa[:device]. If you are using a rpi USB soundcard or Hifi audio hat, try: 'alsa:hw:0,0' Default: '%s'"
-        % default_adev,
-        default=default_adev,
+        % default_omxplayer_adev,
+        default=default_omxplayer_adev,
         required=False,
     )
     parser.add_argument(
@@ -881,6 +942,8 @@ if __name__ == "__main__":
         print("Creating download path: " + dl_path)
         os.makedirs(dl_path)
 
+    args.download_path = dl_path
+
     if args.developer_mode:
         logging.warning(
             "Splash screen is disabled in developer mode due to main thread conflicts"
@@ -889,29 +952,7 @@ if __name__ == "__main__":
 
     # Configure karaoke process
     global k
-    k = karaoke.Karaoke(
-        port=args.port,
-        download_path=dl_path,
-        omxplayer_path=args.omxplayer_path,
-        youtubedl_path=args.youtubedl_path,
-        splash_delay=args.splash_delay,
-        log_level=args.log_level,
-        volume=args.volume,
-        hide_ip=args.hide_ip,
-        hide_raspiwifi_instructions=args.hide_raspiwifi_instructions,
-        hide_splash_screen=args.hide_splash_screen,
-        omxplayer_adev=args.adev,
-        dual_screen=args.dual_screen,
-        high_quality=args.high_quality,
-        use_omxplayer=args.use_omxplayer,
-        use_vlc=args.use_vlc,
-        vlc_path=args.vlc_path,
-        vlc_port=args.vlc_port,
-        logo_path=args.logo_path,
-        show_overlay=args.show_overlay,
-        disable_score=args.disable_score,
-        disable_bg_music=args.disable_bg_music,
-    )
+    k = karaoke.Karaoke(args)
 
     if args.developer_mode:
         th = threading.Thread(target=k.run)

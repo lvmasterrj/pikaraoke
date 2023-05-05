@@ -1,17 +1,18 @@
-# Translations template for PROJECT.
-# Copyright (C) 2023 ORGANIZATION
+# English translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2023-05-04 14:39-0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-12-22 08:34-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -690,4 +691,59 @@ msgstr ""
 #: templates/splash.html:10
 msgid "Next singer:"
 msgstr ""
+
+#~ msgid ""
+#~ "Use the below box to switch "
+#~ "between languages that are used by "
+#~ "the system."
+#~ msgstr ""
+
+#~ msgid "Never sing again... ever"
+#~ msgstr ""
+
+#~ msgid "I hope you don't do this for a living"
+#~ msgstr ""
+
+#~ msgid "I've seen better singers"
+#~ msgstr ""
+
+#~ msgid "ok... just ok"
+#~ msgstr ""
+
+#~ msgid "Congratulations! Couldn't be better"
+#~ msgstr ""
+
+#~ msgid "Please, sing again!"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Updating the PiKaraoke system is "
+#~ "irreversible. Do it with caution, at "
+#~ "your own risk!"
+#~ msgstr ""
+
+#~ msgid "Select the languages that you want to display."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "    Select the languages that you want to display.\n"
+#~ "  "
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Click on \"Test audio delay\" below "
+#~ "to check on your display if the"
+#~ " audio and video are synchronized. In"
+#~ " case you need, use the select "
+#~ "box to adjust the sync."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Click on \"Test audio/video sync\" below"
+#~ " to check on your display if "
+#~ "the audio and video are synchronized."
+#~ " In case you need, use the "
+#~ "select box to adjust the sync."
+#~ msgstr ""
 

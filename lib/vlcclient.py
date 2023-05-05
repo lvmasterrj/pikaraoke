@@ -28,6 +28,7 @@ def get_default_vlc_path(platform):
     else:
         return "/usr/bin/vlc"
 
+
 class VLCClient:
     def __init__(self, port=5002, path=None, qrcode=None, url=None):
 
@@ -93,17 +94,21 @@ class VLCClient:
 
         self.volume_offset = 10
         self.process = None
-    
+
     def get_marquee_cmd(self):
-        return ["--sub-source", 'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="Pikaraoke - connect at: \n%s",position=9,x=38,color=0xFFFFFF,size=11,opacity=200}' % (self.qrcode, self.url)]
+        return [
+            "--sub-source",
+            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="Pikaraoke - connect at: \n%s",position=9,x=38,color=0xFFFFFF,size=11,opacity=200}'
+            % (self.qrcode, self.url),
+        ]
 
     def handle_zipped_cdg(self, file_path):
         extracted_dir = os.path.join(self.tmp_dir, "extracted")
-        if (os.path.exists(extracted_dir)):
+        if os.path.exists(extracted_dir):
             shutil.rmtree(extracted_dir)
-        with zipfile.ZipFile(file_path, 'r') as zip_ref:
+        with zipfile.ZipFile(file_path, "r") as zip_ref:
             zip_ref.extractall(extracted_dir)
-        
+
         mp3_file = None
         cdg_file = None
         files = os.listdir(extracted_dir)
@@ -113,50 +118,53 @@ class VLCClient:
                 mp3_file = file
             elif ext.casefold() == ".cdg":
                 cdg_file = file
-        
+
         if (mp3_file is not None) and (cdg_file is not None):
-            if (os.path.splitext(mp3_file)[0] == os.path.splitext(cdg_file)[0] ):
+            if os.path.splitext(mp3_file)[0] == os.path.splitext(cdg_file)[0]:
                 return os.path.join(extracted_dir, mp3_file)
             else:
-                raise Exception("Zipped .mp3 file did not have a matching .cdg file: " + files)
-        else: 
+                raise Exception(
+                    "Zipped .mp3 file did not have a matching .cdg file: " + files
+                )
+        else:
             raise Exception("No .mp3 or .cdg was found in the zip file: " + file_path)
 
     def handle_mp3_cdg(self, file_path):
         f = os.path.splitext(os.path.basename(file_path))[0]
-        pattern= f +'.cdg'
+        pattern = f + ".cdg"
         rule = re.compile(re.escape(pattern), re.IGNORECASE)
-        p=os.path.dirname(file_path)       # get the path, not the filename
+        p = os.path.dirname(file_path)  # get the path, not the filename
         for n in os.listdir(p):
             if rule.match(n):
-                return(file_path)
-        if (1):
+                return file_path
+        if 1:
             # we didn't return, so always raise the exception: assert might work better?
             raise Exception("No matching .cdg file found for: " + file_path)
 
     def process_file(self, file_path):
         file_extension = os.path.splitext(file_path)[1]
-        if (file_extension.casefold() == ".zip"):
+        if file_extension.casefold() == ".zip":
             return self.handle_zipped_cdg(file_path)
-        elif (file_extension.casefold() == ".mp3"):
+        elif file_extension.casefold() == ".mp3":
             return self.handle_mp3_cdg(file_path)
         else:
             return file_path
 
-    def play_file(self, file_path, additional_parameters=None):
-        try: 
+    def play_file(self, file_path, volume, params=[]):
+        try:
             file_path = self.process_file(file_path)
+
             if self.is_playing() or self.is_paused():
                 logging.debug("VLC is currently playing, stopping track...")
                 self.stop()
                 # this pause prevents vlc http server from being borked after transpose
                 time.sleep(0.2)
             if self.platform == "windows":
-                file_path = r"{}".format(file_path.replace('/','\\'))
-            if additional_parameters == None:
-                command = self.cmd_base + [file_path]
-            else:
-                command = self.cmd_base + additional_parameters + [file_path]
+                file_path = r"{}".format(file_path.replace("/", "\\"))
+            # if additional_parameters == None:
+            #     command = self.cmd_base + [file_path]
+            # else:
+            command = self.cmd_base + params + [file_path]
             logging.debug("VLC Command: %s" % command)
             self.process = subprocess.Popen(
                 command, shell=(self.platform == "windows"), stdin=subprocess.PIPE
@@ -164,7 +172,7 @@ class VLCClient:
         except Exception as e:
             logging.error("Playing file failed: " + str(e))
 
-    def play_file_transpose(self, file_path, semitones):
+    def play_file_transpose(self, file_path, semitones, volume, extra_params=[]):
         # --speex-resampler-quality=<integer [0 .. 10]>
         #  Resampling quality (0 = worst and fastest, 10 = best and slowest).
 
@@ -193,19 +201,21 @@ class VLCClient:
             "%s" % src_type,
         ]
 
-        self.is_transposing = True
+        #   self.is_transposing = True
         logging.debug("Transposing file...")
-        self.play_file(file_path, params)
+        #   self.play_file(file_path, params)
+        return self.play_file(file_path, volume, params + extra_params)
 
         # Prevent is_running() from returning False while we're transposing
-        s = Timer(2.0, self.set_transposing_complete)
-        s.start()
+
+    #   s = Timer(2.0, self.set_transposing_complete)
+    #   s.start()
 
     def set_transposing_complete(self):
         self.is_transposing = False
         logging.debug("Transposing complete")
 
-    def command(self, command):
+    def command(self, command="", save_status=True):
         if self.is_running():
             url = self.http_command_endpoint + command
             request = requests.get(url, auth=("", self.http_password))
@@ -213,8 +223,8 @@ class VLCClient:
         else:
             logging.error("No active VLC process. Could not run command: " + command)
 
-    def pause(self):
-        return self.command("pl_pause")
+    def pause(self, save_status=True):
+        return self.command("pl_pause", save_status)
 
     def play(self):
         return self.command("pl_play")
@@ -229,6 +239,41 @@ class VLCClient:
                 % e
             )
             return
+
+    def get_val_xml(self, xml, key, end_key_str="<"):
+        posi = xml.find(f"<{key}>")
+        if posi < 0:
+            return None
+        s = xml[posi + len(key) + 2 :]
+        posi = s.find(end_key_str)
+        if posi < 0:
+            return None
+        return s[:posi]
+
+    def cast_float(self, num):
+        try:
+            return float(num)
+        except:
+            return num
+
+    def get_info_xml(self, xml=None):
+        try:
+            if xml is None:
+                xml = self.get_status()
+            return {
+                key: self.cast_float(self.get_val_xml(xml, key))
+                for key in [
+                    "position",
+                    "length",
+                    "volume",
+                    "time",
+                    "audiodelay",
+                    "state",
+                    "subtitledelay",
+                ]
+            }
+        except:
+            return {}
 
     def restart(self):
         logging.info(self.command("seek&val=0"))
