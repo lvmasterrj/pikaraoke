@@ -552,6 +552,8 @@ def delayed_halt(cmd):
         process = subprocess.Popen(["raspi-config", "--expand-rootfs"])
         process.wait()
         os.system("reboot")
+    if cmd == 4:
+        os.execl(sys.executable, os.path.abspath(__file__), *sys.argv)
 
 
 def update_youtube_dl():
@@ -582,7 +584,12 @@ def force_audio_hdmi():
         )
         #   th = threading.Thread(target=update_pikaraoke)
         #   th.start()
-        k.force_audio("0")
+        response = k.force_audio("0")
+        if response:
+            th = threading.Thread(target=delayed_halt, args=[4])
+            th.start()
+        else:
+            flash(_("Error trying to force audio output."), "is-danger")
     else:
         flash(_("You don't have permission to define audio output"), "is-danger")
     return redirect(url_for("home"))
@@ -597,7 +604,10 @@ def force_audio_jack():
         )
         #   th = threading.Thread(target=update_pikaraoke)
         #   th.start()
-        k.force_audio("1")
+        response = k.force_audio("1")
+        if response:
+            th = threading.Thread(target=delayed_halt, args=[4])
+            th.start()
     else:
         flash(_("You don't have permission to define audio output"), "is-danger")
     return redirect(url_for("home"))
