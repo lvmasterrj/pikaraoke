@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: mawkee@gmail.com\n"
-"POT-Creation-Date: 2023-05-04 14:39-0300\n"
+"POT-Creation-Date: 2023-05-09 12:09-0300\n"
 "PO-Revision-Date: 2022-06-28 18:57-0300\n"
 "Last-Translator: FULL NAME <mawkee@gmail.com>\n"
 "Language: pt_BR\n"
@@ -19,27 +19,174 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #. Message shown after logging in as admin successfully
-#: app.py:113
+#: app.py:108
 msgid "Admin mode granted!"
 msgstr "Modo administrador concedido!"
 
 #. Message shown after failing to login as admin
-#: app.py:117
+#: app.py:112
 msgid "Incorrect admin password!"
 msgstr "Senha de administração incorreta!"
+
+#: app.py:125
+msgid "Logged out of admin mode!"
+msgstr "Deslogado do modo administrador"
+
+#: app.py:149
+msgid "Problem loading /nowplaying, pikaraoke may still be starting up: "
+msgstr ""
+"Erro ao carregar o que está tocando, talvez o sistema ainda esteja "
+"iniciando"
+
+#: app.py:179
+#, python-format
+msgid "Added %s random tracks"
+msgstr "Adicionadas %s músicas aleatórias"
+
+#: app.py:181
+msgid "Ran out of songs!"
+msgstr "Acabaram as músicas!"
+
+#: app.py:190
+msgid "Cleared the queue!"
+msgstr "Fila zerada!"
+
+#: app.py:198
+msgid "Moved down in queue: "
+msgstr "Movida para baixo na fila: "
+
+#: app.py:200
+msgid "Error moving down in queue: "
+msgstr "Erro ao mover para baixo na fila: "
+
+#: app.py:204
+msgid "Moved up in queue: "
+msgstr "Movida para cima na fila: "
+
+#: app.py:206
+msgid "Error moving up in queue: "
+msgstr "Erro ao mover para cima na fila: "
+
+#: app.py:210
+msgid "Deleted from queue: "
+msgstr "Removida da fila: "
+
+#: app.py:212
+msgid "Error deleting from queue: "
+msgstr "Erro ao remover da fila: "
 
 #. Title of the files page.
 #. Navigation link for the page where the user can add existing songs to the
 #. queue.
-#: app.py:370 templates/base.html:159
+#: app.py:362 templates/base.html:159
 msgid "Browse"
 msgstr "Navegar"
 
-#: karaoke.py:406
+#: app.py:383
+msgid "Download started: ''. This may take a couple of minutes to complete. "
+msgstr "Download iniciado: ''. Isso pode demorar alguns minutos. "
+
+#: app.py:390
+msgid "Song will be added to queue."
+msgstr "A música será adicionada à fila."
+
+#: app.py:392
+msgid "Song will appear in the \"available songs\" list."
+msgstr "A música aparecerá na lista \"músicas disponíveis\"."
+
+#: app.py:413
+msgid "Error: Can't delete this song because it is in the current queue: "
+msgstr ""
+"Erro: Não foi possível deletar essa música pois ela está atualmente na "
+"fila: "
+
+#: app.py:419
+msgid "Song deleted: "
+msgstr "Música deletada"
+
+#: app.py:421
+msgid "Error: No song parameter specified!"
+msgstr "Erro: Nenhum parametro de som especificado!"
+
+#: app.py:427
+msgid "Error: Can't edit this song because it is in the current queue: "
+msgstr ""
+"Erro: Não foi possível editar essa música pois ela está atualmente na "
+"fila: "
+
+#: app.py:458
+#, python-format
+msgid "Error Renaming file: '%s' to '%s'. Filename already exists."
+msgstr "Erro ao renomear o arquivo: '%s' para '%s'. Esse nome já existe."
+
+#: app.py:465
+#, python-format
+msgid "Renamed file: '%s' to '%s'."
+msgstr "Arquivo renomeado: '%s' para '%s'."
+
+#: app.py:469
+msgid "Error: No filename parameters were specified!"
+msgstr "Erro: Nenhum nome ffoi especificado!"
+
+#: app.py:566
+msgid "Updating youtube-dl! Should take a minute or two... "
+msgstr "Atualizando o youtube-dl! Deve demorar um minuto ou dois... "
+
+#: app.py:572
+msgid "You don't have permission to update youtube-dl"
+msgstr "Você não tem permissão para atualizar o youtube-dl"
+
+#: app.py:580
+msgid "Updating pikaraoke. Just wait."
+msgstr "Atualizando o pikaraoke. Aguarde um momento."
+
+#: app.py:587
+msgid "You don't have permission to update PiKaraoke"
+msgstr "Você não tem permissão para atualizar o PiKaraoke"
+
+#: app.py:628 app.py:650
+msgid "You don't have permission to shut down"
+msgstr "Você não tem permissão para desligar o sistema"
+
+#: app.py:635
+msgid "Quitting pikaraoke now!"
+msgstr "Saindo do PiKaraoke"
+
+#: app.py:639
+msgid "You don't have permission to quit"
+msgstr "Você não tem permissão para sair do PiKaraoke"
+
+#: app.py:646
+msgid "Shutting down system now!"
+msgstr "Desligando o sistema"
+
+#: app.py:657
+msgid "Rebooting system now!"
+msgstr "Reiniciando o sistema"
+
+#: app.py:661
+msgid "You don't have permission to Reboot"
+msgstr "Você não tem permissão para reiniciar o sistema"
+
+#: app.py:668
+msgid "Expanding filesystem and rebooting system now!"
+msgstr "Expandindo o sistema de arquivos e reiniciando o sistema"
+
+#: app.py:672
+msgid "Cannot expand fs on non-raspberry pi devices!"
+msgstr ""
+"Não foi possível expandir o sistema de arquivos, o dispositivo não é um "
+"raspberry pi!"
+
+#: app.py:674
+msgid "You don't have permission to resize the filesystem"
+msgstr "Você não tem permissão para redimensionar o sistema de arquivos."
+
+#: karaoke.py:399
 msgid "Wifi/Network not connected. Shutting down in 10s..."
 msgstr "Nenhuma Wifi/Rede conectada. Desligando em 10s..."
 
-#: karaoke.py:413
+#: karaoke.py:406
 msgid ""
 "No IP found. Network/Wifi configuration required. For wifi config, try: "
 "sudo raspi-config or the desktop GUI: startx"
@@ -47,89 +194,89 @@ msgstr ""
 "Nenhum IP encontrado. É necessário a configuração de uma Rede/Wifi. "
 "Experimente: sudo raspi-config ou entrar na interface de desktop: startx"
 
-#: karaoke.py:419
+#: karaoke.py:412
 msgid "Connect at: "
 msgstr "Conecte-se a: "
 
-#: karaoke.py:434
+#: karaoke.py:427
 msgid "RaspiWifiConfig setup mode detected!"
 msgstr "Modo de configuração do RaspiWofo detectado!"
 
-#: karaoke.py:439
+#: karaoke.py:432
 #, python-format
 msgid "Connect another device/smartphone to the Wifi AP: '%s'"
 msgstr "Connect algum dispositivo/smartfone no seguinte Wifi: '%s'"
 
-#: karaoke.py:445
+#: karaoke.py:438
 #, python-format
 msgid "Then point its browser to: '%s://%s%s' and follow the instructions."
 msgstr "No navegador, acesse: '%s://%s%s' e siga as instruções."
 
-#: karaoke.py:506
+#: karaoke.py:496
 msgid "Your Score"
 msgstr "Pontuação"
 
-#: karaoke.py:571
+#: karaoke.py:560
 msgid "Never sing again... ever."
 msgstr "Nunca mais volte a cantar... nunca."
 
-#: karaoke.py:572
+#: karaoke.py:561
 msgid "I hope you don't do this for a living."
 msgstr "Espero que você não faça isso para viver."
 
-#: karaoke.py:573
+#: karaoke.py:562
 msgid "Thank god it's over."
 msgstr "Graças a Deus acabou."
 
-#: karaoke.py:574
+#: karaoke.py:563
 msgid "Pass the mic for someone else, please!"
 msgstr "Passe o microfone para alguém, por favor!"
 
-#: karaoke.py:580
+#: karaoke.py:569
 msgid "I've seen better singers."
 msgstr "Já vi cantores melhores."
 
-#: karaoke.py:581
+#: karaoke.py:570
 msgid "Ok... just ok."
 msgstr "Ok... simplesmente ok."
 
-#: karaoke.py:582
+#: karaoke.py:571
 msgid "Not bad for a beginner."
 msgstr "Nada mal para quem está começando."
 
-#: karaoke.py:583
+#: karaoke.py:572
 msgid "You put up a nice show."
 msgstr "Você mandou bem."
 
-#: karaoke.py:589
+#: karaoke.py:578
 msgid "Congratulations! Couldn't be better."
 msgstr "Parabéns! Não poderia ser melhor."
 
-#: karaoke.py:590
+#: karaoke.py:579
 msgid "Wow, have you tried The Voice?"
 msgstr "Wow, já tentou se inscrever no The Voice?"
 
-#: karaoke.py:591
+#: karaoke.py:580
 msgid "Please, sing another one!"
 msgstr "Por favor, cante mais uma!"
 
-#: karaoke.py:592
+#: karaoke.py:581
 msgid "You rock! You know that?!"
 msgstr "Você arrasou! Sabia disso?!"
 
-#: karaoke.py:593
+#: karaoke.py:582
 msgid "I wish more people could sing like this."
 msgstr "Gostaria que mais pessoas pudessem cantar assim."
 
-#: karaoke.py:645
+#: karaoke.py:629
 msgid "Up next: "
 msgstr "A seguir: "
 
-#: karaoke.py:650
+#: karaoke.py:634
 msgid "Up next:  "
 msgstr "A seguir: "
 
-#: karaoke.py:654
+#: karaoke.py:638
 msgid "Added by: "
 msgstr "Adicionado por: "
 
@@ -582,13 +729,13 @@ msgstr ""
 #: templates/info.html:217
 #, python-format
 msgid "Disable admin mode: <a href=\"%(logout_url)s\">Log out</a>"
-msgstr "Desabilitar modo administrador: <a href=“%(logout_url)s”>Deslogar</a>"
+msgstr "Desabilitar modo administrador: <a href=\"%(logout_url)s\">Deslogar</a>"
 
 #. Link which will let the user log into admin mode.
 #: templates/info.html:219
 #, python-format
 msgid " Enable admin mode: <a href=\"%(login_url)s\">Log in</a> "
-msgstr "Habilitar modo admin: <a href=“%(login_url)s”>Logar</a>\n"
+msgstr " Habilitar modo admin: <a href=\"%(login_url)s\">Logar</a>"
 
 #. Title for the log in page for admins.
 #. Text on submit button for the admin login form.

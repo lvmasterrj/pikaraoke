@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-04 14:39-0300\n"
+"POT-Creation-Date: 2023-05-09 12:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,115 +18,254 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #. Message shown after logging in as admin successfully
-#: app.py:113
+#: app.py:108
 msgid "Admin mode granted!"
 msgstr ""
 
 #. Message shown after failing to login as admin
-#: app.py:117
+#: app.py:112
 msgid "Incorrect admin password!"
+msgstr ""
+
+#: app.py:125
+msgid "Logged out of admin mode!"
+msgstr ""
+
+#: app.py:149
+msgid "Problem loading /nowplaying, pikaraoke may still be starting up: "
+msgstr ""
+
+#: app.py:179
+#, python-format
+msgid "Added %s random tracks"
+msgstr ""
+
+#: app.py:181
+msgid "Ran out of songs!"
+msgstr ""
+
+#: app.py:190
+msgid "Cleared the queue!"
+msgstr ""
+
+#: app.py:198
+msgid "Moved down in queue: "
+msgstr ""
+
+#: app.py:200
+msgid "Error moving down in queue: "
+msgstr ""
+
+#: app.py:204
+msgid "Moved up in queue: "
+msgstr ""
+
+#: app.py:206
+msgid "Error moving up in queue: "
+msgstr ""
+
+#: app.py:210
+msgid "Deleted from queue: "
+msgstr ""
+
+#: app.py:212
+msgid "Error deleting from queue: "
 msgstr ""
 
 #. Title of the files page.
 #. Navigation link for the page where the user can add existing songs to the
 #. queue.
-#: app.py:370 templates/base.html:159
+#: app.py:362 templates/base.html:159
 msgid "Browse"
 msgstr ""
 
-#: karaoke.py:406
+#: app.py:383
+msgid "Download started: ''. This may take a couple of minutes to complete. "
+msgstr ""
+
+#: app.py:390
+msgid "Song will be added to queue."
+msgstr ""
+
+#: app.py:392
+msgid "Song will appear in the \"available songs\" list."
+msgstr ""
+
+#: app.py:413
+msgid "Error: Can't delete this song because it is in the current queue: "
+msgstr ""
+
+#: app.py:419
+msgid "Song deleted: "
+msgstr ""
+
+#: app.py:421
+msgid "Error: No song parameter specified!"
+msgstr ""
+
+#: app.py:427
+msgid "Error: Can't edit this song because it is in the current queue: "
+msgstr ""
+
+#: app.py:458
+#, python-format
+msgid "Error Renaming file: '%s' to '%s'. Filename already exists."
+msgstr ""
+
+#: app.py:465
+#, python-format
+msgid "Renamed file: '%s' to '%s'."
+msgstr ""
+
+#: app.py:469
+msgid "Error: No filename parameters were specified!"
+msgstr ""
+
+#: app.py:566
+msgid "Updating youtube-dl! Should take a minute or two... "
+msgstr ""
+
+#: app.py:572
+msgid "You don't have permission to update youtube-dl"
+msgstr ""
+
+#: app.py:580
+msgid "Updating pikaraoke. Just wait."
+msgstr ""
+
+#: app.py:587
+msgid "You don't have permission to update PiKaraoke"
+msgstr ""
+
+#: app.py:628 app.py:650
+msgid "You don't have permission to shut down"
+msgstr ""
+
+#: app.py:635
+msgid "Quitting pikaraoke now!"
+msgstr ""
+
+#: app.py:639
+msgid "You don't have permission to quit"
+msgstr ""
+
+#: app.py:646
+msgid "Shutting down system now!"
+msgstr ""
+
+#: app.py:657
+msgid "Rebooting system now!"
+msgstr ""
+
+#: app.py:661
+msgid "You don't have permission to Reboot"
+msgstr ""
+
+#: app.py:668
+msgid "Expanding filesystem and rebooting system now!"
+msgstr ""
+
+#: app.py:672
+msgid "Cannot expand fs on non-raspberry pi devices!"
+msgstr ""
+
+#: app.py:674
+msgid "You don't have permission to resize the filesystem"
+msgstr ""
+
+#: karaoke.py:399
 msgid "Wifi/Network not connected. Shutting down in 10s..."
 msgstr ""
 
-#: karaoke.py:413
+#: karaoke.py:406
 msgid ""
 "No IP found. Network/Wifi configuration required. For wifi config, try: "
 "sudo raspi-config or the desktop GUI: startx"
 msgstr ""
 
-#: karaoke.py:419
+#: karaoke.py:412
 msgid "Connect at: "
 msgstr ""
 
-#: karaoke.py:434
+#: karaoke.py:427
 msgid "RaspiWifiConfig setup mode detected!"
 msgstr ""
 
-#: karaoke.py:439
+#: karaoke.py:432
 #, python-format
 msgid "Connect another device/smartphone to the Wifi AP: '%s'"
 msgstr ""
 
-#: karaoke.py:445
+#: karaoke.py:438
 #, python-format
 msgid "Then point its browser to: '%s://%s%s' and follow the instructions."
 msgstr ""
 
-#: karaoke.py:506
+#: karaoke.py:496
 msgid "Your Score"
 msgstr ""
 
-#: karaoke.py:571
+#: karaoke.py:560
 msgid "Never sing again... ever."
 msgstr ""
 
-#: karaoke.py:572
+#: karaoke.py:561
 msgid "I hope you don't do this for a living."
 msgstr ""
 
-#: karaoke.py:573
+#: karaoke.py:562
 msgid "Thank god it's over."
 msgstr ""
 
-#: karaoke.py:574
+#: karaoke.py:563
 msgid "Pass the mic for someone else, please!"
 msgstr ""
 
-#: karaoke.py:580
+#: karaoke.py:569
 msgid "I've seen better singers."
 msgstr ""
 
-#: karaoke.py:581
+#: karaoke.py:570
 msgid "Ok... just ok."
 msgstr ""
 
-#: karaoke.py:582
+#: karaoke.py:571
 msgid "Not bad for a beginner."
 msgstr ""
 
-#: karaoke.py:583
+#: karaoke.py:572
 msgid "You put up a nice show."
 msgstr ""
 
-#: karaoke.py:589
+#: karaoke.py:578
 msgid "Congratulations! Couldn't be better."
 msgstr ""
 
-#: karaoke.py:590
+#: karaoke.py:579
 msgid "Wow, have you tried The Voice?"
 msgstr ""
 
-#: karaoke.py:591
+#: karaoke.py:580
 msgid "Please, sing another one!"
 msgstr ""
 
-#: karaoke.py:592
+#: karaoke.py:581
 msgid "You rock! You know that?!"
 msgstr ""
 
-#: karaoke.py:593
+#: karaoke.py:582
 msgid "I wish more people could sing like this."
 msgstr ""
 
-#: karaoke.py:645
+#: karaoke.py:629
 msgid "Up next: "
 msgstr ""
 
-#: karaoke.py:650
+#: karaoke.py:634
 msgid "Up next:  "
 msgstr ""
 
-#: karaoke.py:654
+#: karaoke.py:638
 msgid "Added by: "
 msgstr ""
 
