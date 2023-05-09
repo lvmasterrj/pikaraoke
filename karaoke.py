@@ -287,7 +287,8 @@ class Karaoke:
                 + "}"
             )
             asound.write(str)
-            os.system("reboot")
+            self.running = False
+            os.system("sudo python3 " + self.base_path + "/app.py")
             resultado = "Audio direcionado com sucesso."
         except Exception as e:
             resultado = "Error trying to force audio output"
