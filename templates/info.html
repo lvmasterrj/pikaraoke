@@ -2,6 +2,14 @@
 <script>
     $(function() {
 
+        $("#force-audio-hdmi").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
+            if (window.confirm("{{ _('Are you sure you want to update the piKaraoke system?') }}")) {
+                location.href = this.href;
+            }
+
+        })
         $("#test-av-delay").click(function(e) {
             e.preventDefault();
             $("#stop-av-delay-test").toggleClass("is-inline")
@@ -82,7 +90,7 @@
 
 <div class="has-text-centered">
     <p>
-        {# MSG: Label which appears before a url which links to the current page. #} {%- trans -%} URL of {{site_title}}: {%- endtrans -%}
+        {# MSG: Label which appears before a url which links to the current page. #} {% trans %} URL of {{site_title}}: {% endtrans %}
     </p>
     <p class="is-size-4 has-text-warning has-text-centered">{{ url }}</p>
     {# MSG: Label before a QR code which brings a frind (pal) to the main page if scanned, so they can also add songs. QR code follows this text. #}
@@ -117,9 +125,9 @@
   </li>
 </ul>
 {# MSG: Help text explaining the Rescan song directory link. #}
-<p class="help">{% trans -%}
+<p class="help">{% trans %}
   You should only need to do this if you manually copied files to the download directory while pikaraoke was running.
-  {%- endtrans %}</p>
+  {% endtrans %}</p>
 
 {# MSG: Text explaining why you might want to update youtube-dl. #}
 <p>{% trans %}If downloads or searches stopped working, updating youtube-dl will probably fix it.
@@ -134,10 +142,10 @@
 </ul>
 <p class="help">
   {# MSG: Help text which explains why updating youtube-dl can fail.  The log is a file on the machine running Pikaraoke. #}
-  {% trans -%}
+  {% trans %}
     This update link above may fail if you don't have proper file permissions.
     Check the pikaraoke log for errors. 
-  {%- endtrans %}
+  {% endtrans %}
 </p>
 {# MSG: Label before a link which forces Pikaraoke to update itself. #}
 <p>{% trans %}Update PiKaraoke{% endtrans %}</p>
@@ -148,10 +156,10 @@
   </li>
 </ul>
 {# MSG: Help text explaining the Update PiKaraoke. #}
-<p class="help">{% trans -%}
+<p class="help">{% trans %}
   Updating the PiKaraoke system is irreversible. Do it with caution, at your own risk!
   After updating, the system will reboot.
-  {%- endtrans %}</p>
+  {% endtrans %}</p>
 
 
 {# MSG: Title of the section for switching the system language #}
@@ -169,7 +177,7 @@
 {# MSG: Title of the section for configuring the default audio delay #}
 <h1>{% trans %}Audio delay{% endtrans %}</h1>
 <p>
-    {# MSG: Instructions on configuring audio delay #} {% trans -%} Click on "Test audio/video sync" below to check on your display if the audio and video are synchronized. In case you need, use the buttons to adjust the sync. {%- endtrans %}
+    {# MSG: Instructions on configuring audio delay #} {% trans %} Click on "Test audio/video sync" below to check on your display if the audio and video are synchronized. In case you need, use the buttons to adjust the sync. {% endtrans %}
 </p>
 <ul>
     <li>
@@ -180,16 +188,34 @@
     </li>
 </ul>
 <div class="is-flex" style="justify-content: space-between">
-    <h4>{# MSG: Text of the section audio delay in Info #} {% trans -%} Audio delay (millisec){%- endtrans %}</h4>
+    <h4>{# MSG: Text of the section audio delay in Info #} {% trans %} Audio delay (millisec){% endtrans %}</h4>
     <h4 id="delay-dec" class="tabs" style="margin:0; color:red; cursor: pointer; font-weight: bold; font-size:x-large;">&#x2296;</h4>
     <h4 id="delay-val" class="tabs" style="padding-top:2px; margin:0; cursor: pointer">{{ audio_delay }}</h4>
     <h4 id="delay-inc" class="tabs" style="margin:0; color:green; cursor: pointer; font-weight:bold;font-size:x-large;">&#x2295;</h4>
 </div>
 
-{# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
+{% if is_pi %} {# MSG: Title of the section for configuring the rPi audio output #}
+<h1>{% trans %}Force audio output (experimental){% endtrans %}</h1>
+<p>
+    {# MSG: Instructions on configuring audio output #} {% trans %}Here you can force the rPi to output the audio through HDMI or the 3.5 jack.{% endtrans %}
+</p>
+<p>
+    {# MSG: Information about the force audio output #} {% trans %}Have in mind that this is experimental and may not work. It will create/edit a file in "/etc/asound.conf" with some commom parameters that used to do the job.
+</p>
+<ul>
+    <li>
+        <a id="force-audio-hdmi" href="{{ url_for('force_audio_hdmi') }}">
+			{# MSG: Text for the link that will force audio output through hdmi #} {% trans %}Force audio output through HDMI{% endtrans %}</a>
+    </li>
+    <li>
+        <a id="force-audio-jack" href="{{ url_for('force_audio_jack') }}">
+			{# MSG: Text for the link that will force the audio output through jack #} {% trans %}Force audio output through 3.5 Jack{% endtrans %}</a>
+    </li>
+</ul>
+{% endif %} {# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
 <h1>{% trans %}Shutdown{% endtrans %}</h1>
 <p>
-    {# MSG: Explainitory text which explains why to use the shutdown link. #} {% trans -%} Don't just pull the plug! Always shut down your server properly to avoid data corruption. {%- endtrans %}
+    {# MSG: Explainitory text which explains why to use the shutdown link. #} {% trans %} Don't just pull the plug! Always shut down your server properly to avoid data corruption. {% endtrans %}
 </p>
 <ul>
     {# MSG: Text for button which turns off Pikaraoke for everyone using it at your house. #}
@@ -210,11 +236,11 @@
     {% trans %}Expand Raspberry Pi filesystem{% endtrans %}
   </a></li>
 {# MSG: Explainitory text which explains why you might want to expand the filesystem. #}
-<p class="help">{% trans -%} If you just installed the pre-built pikaraoke pi image and your SD card is larger than 4GB, you may want to expand the filesystem to utilize the remaining space. You only need to do this once. This will reboot the system. {%- endtrans %}</p>
+<p class="help">{% trans %} If you just installed the pre-built pikaraoke pi image and your SD card is larger than 4GB, you may want to expand the filesystem to utilize the remaining space. You only need to do this once. This will reboot the system. {% endtrans %}</p>
 {% endif %}
 
 <hr/> {% if admin_enabled %} {# MSG: Link which will log out the user from admin mode. #}
-<p>{% trans logout_url=url_for('logout') -%} Disable admin mode: <a href="{{ logout_url }}">Log out</a> {%- endtrans %}</p>
+<p>{% trans logout_url=url_for('logout') -%} Disable admin mode: <a href="{{ logout_url }}">Log out</a> {% endtrans %}</p>
 {% endif %} {% else %} {# from if admin #} {# MSG: Link which will let the user log into admin mode. #}
 <p>{% trans login_url=url_for('login') %} Enable admin mode: <a href="{{ login_url }}">Log in</a> {% endtrans %}</p>
 {% endif %} {% endblock %}

@@ -573,6 +573,36 @@ def update_ytdl():
     return redirect(url_for("home"))
 
 
+@app.route("/force_audio_hdmi")
+def force_audio_hdmi():
+    if is_admin():
+        flash(
+            _("Forcing audio output through HDMI"),
+            "is-warning",
+        )
+        #   th = threading.Thread(target=update_pikaraoke)
+        #   th.start()
+        k.force_audio(0)
+    else:
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    return redirect(url_for("home"))
+
+
+@app.route("/force_audio_jack")
+def force_audio_jack():
+    if is_admin():
+        flash(
+            _("Forcing audio output through 3.5 Jack"),
+            "is-warning",
+        )
+        #   th = threading.Thread(target=update_pikaraoke)
+        #   th.start()
+        k.force_audio(1)
+    else:
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    return redirect(url_for("home"))
+
+
 @app.route("/update_pikaraoke")
 def update_pikaraoke():
     if is_admin():

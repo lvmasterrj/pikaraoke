@@ -274,6 +274,21 @@ class Karaoke:
         self.get_youtubedl_version()
         logging.info("Done. New version: %s" % self.youtubedl_version)
 
+    def force_audio(self, output):
+        logging.debug("Forcing audio output through: " + output)
+
+        try:
+            asound = open("/etc/asound.conf", "w+")
+            str = "pcm.!default{type hw card %s} ctl.!default {type hw card $s}" % (
+                output,
+                output,
+            )
+            asound.write(str)
+        except Exception as e:
+            resultado = "Error trying to update PiKaraoke"
+            logging.debug(e)
+        return resultado
+
     def update_pikaraoke(self):
         logging.debug("Updating system...")
 
