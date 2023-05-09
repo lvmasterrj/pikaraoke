@@ -582,7 +582,7 @@ def force_audio_hdmi():
         )
         #   th = threading.Thread(target=update_pikaraoke)
         #   th.start()
-        k.force_audio(0)
+        k.force_audio("0")
     else:
         flash(_("You don't have permission to define audio output"), "is-danger")
     return redirect(url_for("home"))
@@ -597,7 +597,7 @@ def force_audio_jack():
         )
         #   th = threading.Thread(target=update_pikaraoke)
         #   th.start()
-        k.force_audio(1)
+        k.force_audio("1")
     else:
         flash(_("You don't have permission to define audio output"), "is-danger")
     return redirect(url_for("home"))

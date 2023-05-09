@@ -285,7 +285,7 @@ class Karaoke:
             )
             asound.write(str)
         except Exception as e:
-            resultado = "Error trying to update PiKaraoke"
+            resultado = "Error trying to force audio output"
             logging.debug(e)
         return resultado
 
