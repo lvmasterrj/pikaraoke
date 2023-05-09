@@ -287,6 +287,7 @@ class Karaoke:
                 + "}"
             )
             asound.write(str)
+            os.system("reboot")
             resultado = "Audio direcionado com sucesso."
         except Exception as e:
             resultado = "Error trying to force audio output"
