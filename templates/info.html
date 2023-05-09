@@ -5,7 +5,15 @@
         $("#force-audio-hdmi").click(function(e) {
             e.preventDefault();
             // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
-            if (window.confirm("{{ _('Are you sure you want to update the piKaraoke system?') }}")) {
+            if (window.confirm("{{ _('Are you sure you want to force the audio output to HDMI?') }}")) {
+                location.href = this.href;
+            }
+
+        })
+        $("#force-audio-jack").click(function(e) {
+            e.preventDefault();
+            // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
+            if (window.confirm("{{ _('Are you sure you want to force the audio output to the 3.5 jack?') }}")) {
                 location.href = this.href;
             }
 

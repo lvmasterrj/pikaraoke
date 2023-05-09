@@ -279,10 +279,7 @@ class Karaoke:
 
         try:
             asound = open("/etc/asound.conf", "w+")
-            str = "pcm.!default{type hw card %s} ctl.!default {type hw card $s}" % (
-                output,
-                output,
-            )
+            str = "pcm.!default{type hw card" + output + "} ctl.!default {type hw card " + output + "}"
             asound.write(str)
             resultado = "Audio direcionado com sucesso."
         except Exception as e:
