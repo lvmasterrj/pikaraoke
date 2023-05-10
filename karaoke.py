@@ -1097,7 +1097,7 @@ class Karaoke:
         self.now_playing_user = None
         self.is_paused = True
         self.now_playing_transpose = 0
-        self.transposing = False
+        # self.transposing = False
 
     def change_language(self, language):
         logging.debug("Changing language to: " + str(language))
@@ -1141,13 +1141,13 @@ class Karaoke:
             try:
                 if not self.is_file_playing():
                     if self.scored != True:
-                        logging.debug(
-                            f"******* NOT TRANSPOSING ({str(self.transposing)})"
-                        )
                         self.render_score_screen()
                         self.scored = True
 
                     elif len(self.queue) > 0 and not self.transposing:
+                        logging.debug(
+                            f"******************** NOT TRANSPOSING ({str(self.transposing)})"
+                        )
                         self.reset_now_playing()
                         if not pygame.display.get_active():
                             self.pygame_reset_screen()
