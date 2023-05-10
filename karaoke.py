@@ -5,9 +5,10 @@ import random
 import socket
 import subprocess
 import time
+import contextlib
 import math
 from pathlib import Path
-from subprocess import check_output
+from subprocess import CalledProcessError, check_output
 import pygame
 import qrcode
 from unidecode import unidecode
@@ -258,9 +259,16 @@ class Karaoke:
         logging.info(
             "Upgrading youtube-dl, current version: %s" % self.youtubedl_version
         )
-        output = check_output([self.youtubedl_path, "-U"]).decode("utf8").strip()
+        try:
+            output = (
+                check_output([self.youtubedl_path, "-U"], stderr=subprocess.STDOUT)
+                .decode("utf8")
+                .strip()
+            )
+        except CalledProcessError as e:
+            output = e.output.decode("utf8")
         logging.info(output)
-        if "It looks like you installed youtube-dl with a package manager" in output:
+        if "You installed yt-dlp with pip or using the wheel from PyPi" in output:
             try:
                 logging.info("Attempting youtube-dl upgrade via pip3...")
                 output = check_output(
@@ -408,7 +416,7 @@ class Karaoke:
             logo_rect = logo.get_rect(center=self.screen.get_rect().center)
             self.screen.blit(logo, logo_rect)
 
-            blitY = self.screen.get_rect().bottomleft[1] - 40
+            blitY = self.screen.get_rect().bottomleft[1] - 80
 
             if not self.hide_ip:
                 p_image = pygame.image.load(self.qr_code_path)
@@ -739,7 +747,8 @@ class Karaoke:
 
     def delete(self, song_path):
         logging.info("Deleting song: " + song_path)
-        os.remove(song_path)
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(song_path)
         ext = os.path.splitext(song_path)
         # if we have an associated cdg file, delete that too
         cdg_file = song_path.replace(ext[1], ".cdg")
@@ -822,11 +831,7 @@ class Karaoke:
 
     def transpose_current(self, semitones):
         if self.use_vlc:
-            if self.now_playing_transpose == semitones:
-                return
             logging.info("Transposing song by %s semitones" % semitones)
-            self.transposing = True
-            self.scored = True
             self.now_playing_transpose = semitones
             status_xml = (
                 self.vlcclient.command().text
@@ -1149,12 +1154,13 @@ class Karaoke:
         while self.running:
             try:
                 if not self.is_file_playing():
-                    logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
-                    if self.scored != True:
-                        self.render_score_screen()
-                        self.scored = True
+                    # logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
+                    # if self.scored != True:
+                    #     self.render_score_screen()
+                    #     self.scored = True
 
-                    elif len(self.queue) > 0:
+                    # elif len(self.queue) > 0:
+                    if len(self.queue) > 0:
                         logging.debug("Routine: Queue > 0")
                         self.reset_now_playing()
                         if not pygame.display.get_active():
