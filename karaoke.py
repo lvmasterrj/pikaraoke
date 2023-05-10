@@ -407,7 +407,7 @@ class Karaoke:
             logging.debug("Rendering splash screen")
 
             if self.disable_bg_music != True:
-                if len(self.queue) == 0:
+                if len(self.queue) == 0 and not self.is_file_playing():
                     pygame.mixer.music.play(-1)
 
             self.screen.fill((18, 0, 20))
@@ -791,7 +791,6 @@ class Karaoke:
             return None
 
     def kill_player(self):
-        logging.debug("Killing player")
         if self.use_vlc:
             logging.debug("Killing old VLC processes")
             if self.vlcclient != None:
@@ -806,8 +805,8 @@ class Karaoke:
         self.now_playing_filename = file_path
 
         if self.use_vlc:
-            extra_params += [f"--audio-desync={self.user_audio_delay}"]
             logging.info("Playing video in VLC: " + self.now_playing)
+            extra_params += [f"--audio-desync={self.user_audio_delay}"]
 
             if self.now_playing_transpose == 0:
                 self.vlcclient.play_file(
@@ -986,7 +985,6 @@ class Karaoke:
             return False
 
     def skip(self):
-        logging.debug("Skipping")
         if self.is_file_playing():
             logging.info("Skipping: " + self.now_playing)
             if self.use_vlc:
@@ -1000,7 +998,6 @@ class Karaoke:
             return False
 
     def pause(self):
-        logging.debug("Pausing")
         if self.is_file_playing():
             logging.info("Toggling pause: " + self.now_playing)
             if self.use_vlc:
@@ -1041,23 +1038,23 @@ class Karaoke:
             logging.warning("Tried to volume down, but no file is playing!")
             return False
 
-    def get_state(self):
-        logging.debug("Getting state")
-        if self.use_vlc and self.vlcclient.is_transposing:
-            return defaultdict(lambda: None, self.player_state)
-        if not self.is_file_playing():
-            self.player_state["now_playing"] = None
-            return defaultdict(lambda: None, self.player_state)
-        new_state = (
-            self.vlcclient.get_info_xml()
-            if self.use_vlc
-            else {
-                "volume": self.omxclient.volume_offset,
-                "state": ("paused" if self.omxclient.paused else "playing"),
-            }
-        )
-        self.player_state.update(new_state)
-        return defaultdict(lambda: None, self.player_state)
+    # def get_state(self):
+    #     logging.debug("Getting state")
+    #     if self.use_vlc and self.vlcclient.is_transposing:
+    #         return defaultdict(lambda: None, self.player_state)
+    #     if not self.is_file_playing():
+    #         self.player_state["now_playing"] = None
+    #         return defaultdict(lambda: None, self.player_state)
+    #     new_state = (
+    #         self.vlcclient.get_info_xml()
+    #         if self.use_vlc
+    #         else {
+    #             "volume": self.omxclient.volume_offset,
+    #             "state": ("paused" if self.omxclient.paused else "playing"),
+    #         }
+    #     )
+    #     self.player_state.update(new_state)
+    #     return defaultdict(lambda: None, self.player_state)
 
     def restart(self):
         logging.debug("Restarting")
@@ -1096,7 +1093,6 @@ class Karaoke:
     # Use this to reset the screen in case it loses focus
     # This seems to occur in windows after playing a video
     def pygame_reset_screen(self):
-        logging.debug("Reseting pygame screen")
         if self.hide_splash_screen:
             pass
         else:
@@ -1112,7 +1108,7 @@ class Karaoke:
         self.now_playing_user = None
         self.is_paused = True
         self.now_playing_transpose = 0
-        self.transposing = False
+        # self.transposing = False
 
     def change_language(self, language):
         logging.debug("Changing language to: " + str(language))
@@ -1154,13 +1150,13 @@ class Karaoke:
         self.running = True
         while self.running:
             try:
-                if not self.is_file_playing():
+                if not self.is_file_playing() and self.now_playing != None:
                     logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
-                    # if self.scored != True:
-                    #     self.render_score_screen()
-                    #     self.scored = True
+                    if self.scored != True:
+                        self.render_score_screen()
+                        self.scored = True
 
-                    if len(self.queue) > 0:
+                    elif len(self.queue) > 0:
                         logging.debug("Routine: Queue > 0")
                         self.reset_now_playing()
                         if not pygame.display.get_active():
@@ -1171,7 +1167,7 @@ class Karaoke:
                         while i < (self.splash_delay * 1000):
                             self.handle_run_loop()
                             i += self.loop_interval
-                        pygame.mixer.music.stop()
+                        # pygame.mixer.music.stop()
                         self.play_file(self.queue[0]["file"])
                         self.now_playing_user = self.queue[0]["user"]
                         logging.debug("Setting scored to False")
