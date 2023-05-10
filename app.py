@@ -80,7 +80,7 @@ def get_locale():
 
 @app.route("/")
 def home():
-    s = k.get_state()
+    #  s = k.get_state()
     return render_template(
         "home.html",
         site_title=site_name,
@@ -88,10 +88,10 @@ def home():
         show_transpose=k.use_vlc,
         transpose_value=k.now_playing_transpose,
         admin=is_admin(),
-        volume=s["volume"],
-        seektrack_value=s["time"],
-        seektrack_max=s["length"],
-        audio_delay=s["audiodelay"],
+        #   volume=s["volume"],
+        #   seektrack_value=s["time"],
+        #   seektrack_max=s["length"],
+        #   audio_delay=s["audiodelay"],
     )
 
 
