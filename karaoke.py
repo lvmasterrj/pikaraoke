@@ -1148,7 +1148,7 @@ class Karaoke:
         while self.running:
             try:
                 if not self.is_file_playing():
-                    logging.debug("Routine: No file playing")
+                    logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
                     if self.scored != True:
                         self.render_score_screen()
                         self.scored = True
