@@ -833,18 +833,19 @@ class Karaoke:
         if self.use_vlc:
             logging.info("Transposing song by %s semitones" % semitones)
             self.now_playing_transpose = semitones
-            status_xml = (
-                self.vlcclient.command().text
-                if self.is_paused
-                else self.vlcclient.pause(False).text
-            )
-            info = self.vlcclient.get_info_xml(status_xml)
-            posi = info["position"] * info["length"]
-            self.play_file(
-                self.now_playing_filename,
-                [f"--start-time={posi}"]
-                + (["--start-paused"] if self.is_paused else []),
-            )
+            # status_xml = (
+            #     self.vlcclient.command().text
+            #     if self.is_paused
+            #     else self.vlcclient.pause(False).text
+            # )
+            # info = self.vlcclient.get_info_xml(status_xml)
+            # posi = info["position"] * info["length"]
+            # self.play_file(
+            #     self.now_playing_filename,
+            #     [f"--start-time={posi}"]
+            #     + (["--start-paused"] if self.is_paused else []),
+            # )
+            self.play_file(self.now_playing_filename)
         else:
             logging.error("Not using VLC. Can't transpose track.")
 
@@ -1154,13 +1155,12 @@ class Karaoke:
         while self.running:
             try:
                 if not self.is_file_playing():
-                    # logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
-                    # if self.scored != True:
-                    #     self.render_score_screen()
-                    #     self.scored = True
+                    logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
+                    if self.scored != True:
+                        self.render_score_screen()
+                        self.scored = True
 
-                    # elif len(self.queue) > 0:
-                    if len(self.queue) > 0:
+                    elif len(self.queue) > 0:
                         logging.debug("Routine: Queue > 0")
                         self.reset_now_playing()
                         if not pygame.display.get_active():
