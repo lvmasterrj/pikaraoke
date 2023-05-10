@@ -1167,6 +1167,7 @@ class Karaoke:
                         pygame.mixer.music.stop()
                         self.play_file(self.queue[0]["file"])
                         self.now_playing_user = self.queue[0]["user"]
+                        logging.debug("Setting scored to False")
                         self.scored = False
                         self.queue.pop(0)
 
