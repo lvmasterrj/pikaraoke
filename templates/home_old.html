@@ -1,0 +1,244 @@
+{% extends 'base.html' %} {% block scripts %}
+<script>
+    var cutoffTime = Date.now();
+    var queryTime = Date.now();
+    var transpose_seeking = false;
+    var seektrack_seeking = false;
+    var audiodelay_typing = false;
+    var subdelay_typing = false;
+    var volume_changing = false;
+    var toggleSwitch;
+    var obj = {};
+    var transpose_val = 0
+
+    function getSemitonesLabel(value) {
+        if (value > 0) {
+            return "+" + value + " semitones";
+        } else {
+            return value + " semitones";
+        }
+    }
+
+    function getNowPlaying() {
+        //   queryTime = Date.now();
+        $.get('{{ url_for("nowplaying") }}').done(function(data) {
+            // if (!data || queryTime < cutoffTime) return;
+            var obj = JSON.parse(data);
+            if (obj.now_playing) {
+                var nowPlayingHtml = `<p style="margin-bottom: 5px">${obj.now_playing}</p>
+            <p class="has-text-success" style="margin-bottom: 5px"><i class="icon icon-mic-1" title="Current singer"></i>${obj.now_playing_user}</p>`;
+                if ($("#semitones-label")) {
+                    if (obj.transpose_value != 0) {
+                        nowPlayingHtml +=
+                            // {# MSG: Label for display of how many semitones the song has been shifted. #}
+                            "<span class='is-size-6 has-text-success'><b>Key</b>: " +
+                            getSemitonesLabel(obj.transpose_value) +
+                            "<span>";
+                    }
+                    //   if (!transpose_seeking) {
+                    // $("#transpose").val(obj.transpose_value);
+                    $("#semitones-label").html(getSemitonesLabel(obj.transpose_value));
+                    transpose_val = obj.transpose_value
+                        //   }
+                }
+                $("#now-playing").html(nowPlayingHtml);
+                $(".control-box").show();
+            } else {
+                // {# MSG: Message which shows in the "Now Playing" section when there is no song currently playing #}
+                $("#now-playing").html("{{ _('Nothing is playing right now.') }}");
+                $(".control-box").hide();
+            }
+
+            if (obj.up_next) {
+                $("#up-next").html(`<p style="margin-bottom: 5px">${obj.up_next}</p>
+            <p class="has-text-success">
+              {# MSG: Title text for the icon marking the next person to sing. #}
+              <i class="icon icon-mic-1" title="{{ _('Next singer') }}"></i>${obj.next_user}</p>`);
+            } else {
+                // {# MSG: Alternative text for the "Up next" section if no more songs are queued up. #}
+                $("#up-next").html("{{ _('No song is queued.') }}");
+            }
+
+            if (obj.is_paused) {
+                $("#pause-resume").removeClass("icon-pause");
+                $("#pause-resume").addClass("icon-play");
+                $(".playing_gif").attr(
+                    "src",
+                    "{{  url_for('static', filename='images/now-playing.png') }}"
+                );
+            } else {
+                $("#pause-resume").removeClass("icon-play");
+                $("#pause-resume").addClass("icon-pause");
+                $(".playing_gif").attr(
+                    "src",
+                    "{{  url_for('static', filename='images/now-playing.gif') }}"
+                );
+            }
+        });
+    }
+
+    $(function() {
+        $(".control-box").hide();
+
+        $("#semitone-dec").click(function() {
+            var value = --transpose_val
+            $.get("/transpose/" + value);
+            // transpose_seeking = true;
+        })
+        $("#semitone-inc").click(function() {
+            var value = ++transpose_val
+            $.get("/transpose/" + value);
+            // transpose_seeking = true;
+        })
+
+        //   var slider = document.getElementById("transpose");
+        //   var slider_prev_value = 0;
+        //   var output = document.getElementById("semitones-label");
+        //   if (slider) {
+        //       output.innerHTML = getSemitonesLabel(slider.value);
+        //       // Update the current slider value (each time you drag the slider handle)
+        //       slider.oninput = function() {
+        //           output.innerHTML = getSemitonesLabel(slider.value);
+        //       };
+        //       slider.oninput()
+        //       slider_prev_value = slider.value;
+        //   }
+
+        //   $("#transpose").change(function() {
+        //       var value;
+        //       if (slider) {
+        //           value = slider.value;
+        //       } else {
+        //           value = 0;
+        //       }
+        //       if (value != slider_prev_value) {
+        //           cutoffTime = Date.now();
+        //           $.get("/transpose/" + value);
+        //           output.innerHTML = getSemitonesLabel(slider.value);
+        //           slider_prev_value = value
+        //       }
+        //   });
+
+        $("#pause-resume").click(function() {
+            $.get("/pause");
+            togglePausePlayButton();
+        });
+
+        $("#vol-up").click(function() {
+            $.get("/vol_up");
+        });
+
+        $("#vol-down").click(function() {
+            $.get("/vol_down");
+        });
+
+        $("#restart").click(function() {
+            r = confirm("Are you sure you want to restart this track?");
+            if (r) {
+                $.get("/restart");
+            }
+        });
+
+        $("#skip").click(function() {
+            r = confirm(
+                // {# MSG: Confirmation message when clicking a button to skip a track. #}
+                `{{ _("Are you sure you want to skip this track? If you didn't add this song, ask permission first!") }}`
+            );
+            if (r) {
+                $.get("/skip");
+            }
+        });
+
+        $("#semitones-info").click(function() {
+            showNotification(
+                // {# MSG: Semitone information. #}
+                `{{ _("A semitone is also known as a half-step. It is the smallest interval used in classical Western music, equal to a twelfth of an octave or half a tone.") }}`,
+                "is-info",
+                10000
+            );
+        });
+
+        function togglePausePlayButton() {
+            if ($("#pause-resume").hasClass("icon-pause")) {
+                $("#pause-resume").removeClass("icon-pause");
+                $("#pause-resume").addClass("icon-play");
+            } else {
+                $("#pause-resume").removeClass("icon-play");
+                $("#pause-resume").addClass("icon-pause");
+            }
+        }
+
+        getNowPlaying();
+        setInterval(getNowPlaying, 1500);
+    });
+</script>
+{% endblock %} {% block header %}
+<h1>
+    {% block title %} {# MSG: Header showing the currently playing song. #} {% trans %}Now Playing{% endtrans %}
+    <img class="playing_gif control-box" width="40" src="{{  url_for('static', filename='images/now-playing.png') }}" />{% endblock %}
+</h1>
+{% endblock %} {% block content %}
+
+<p class="is-size-4 has-text-warning" id="now-playing"></p>
+
+<hr />
+<h3>
+    {# MSG: Title for the section displaying the next song to be played. #} {% trans %}Next Song{% endtrans %}
+</h3>
+<p id="up-next" class="has-text-warning"></p>
+<hr /> {% if admin %}
+<div class="has-background-black-bis box control-box" style="max-width: 500px">
+    {# MSG: Title of the box with controls such as pause and skip. #}
+    <h4>{% trans %}Player Control{% endtrans %}</h4>
+    <p class="is-size-3">
+        {# MSG: Title attribute on the button to restart the current song. #}
+        <a title="{{ _('Restart Song') }}" id="restart"><i class="icon icon-to-start"></i> </a
+    >&nbsp;&nbsp; {# MSG: Title attribute on the button to play or pause the
+    current song. #}
+    <a title="{{ _('Play/Pause') }}"
+      ><i id="pause-resume" class="icon icon-pause"></i> </a
+    >&nbsp;&nbsp; {# MSG: Title attribute on the button to skip to the next
+    song. #}
+    <a title="{{ _('Stop Current Song') }}" id="skip"
+      ><i class="icon icon-to-end"></i> </a
+    >&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="is-pulled-right">
+      {# MSG: Title attribute on the button to adjust volume down. #}
+      <a title="{{ _('Volume Down') }}" id="vol-down"
+        ><i class="icon icon-volume-down"></i> </a
+      >&nbsp;&nbsp; {# MSG: Title attribute on the button to adjust volume up.
+      #}
+      <a title="{{ _('Volume Up') }}" id="vol-up"
+        ><i class="icon icon-volume-up"></i>
+      </a>
+        </span>
+    </p>
+    <!-- </div> -->
+
+    {% if show_transpose %}
+
+    <div class="is-flex" style="justify-content: space-between; padding-top: 1em">
+        <div>
+            <h4>{% trans %}Change Key{% endtrans %}</h4>
+        </div>
+        <div class="is-flex">
+            <h4 id="semitone-dec" class="tabs" style="margin:0; margin-right:3px; color:red; cursor: pointer; font-weight: bold; font-size:x-large;">&#x2296;</h4>
+            <h4 id="semitones-label" class="tabs" style="padding-top:2px; margin:3px 5px; cursor: pointer" val="0"></h4>
+            <a id="semitones-info" style="margin:5px 0"><i class="icon icon-info-circled-1" title="Info"></i></a>
+            <h4 id="semitone-inc" class="tabs" style="margin:0; margin-left:3px; color:green; cursor: pointer; font-weight:bold;font-size:x-large;">&#x2295;</h4>
+            <!-- <h4 id="semitones-label"></h4>
+             -->
+        </div>
+    </div>
+
+    <!-- <div style="width: 100%">
+        <div class="is-flex">
+            <input id="transpose" type="range" min="-12" max="12" value="{{ transpose_value }}" width="300px" class="transpose-slider" style="width: 100%" onmousedown="transpose_seeking=true" onmouseup="transpose_seeking=false" ontouchstart="transpose_seeking=true"
+                ontouchend="transpose_seeking=false" />
+        </div>
+    </div> -->
+</div>
+{% endif %} {% endif %}
+
+<div></div>
+{% endblock %}
