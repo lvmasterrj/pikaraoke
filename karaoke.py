@@ -782,6 +782,7 @@ class Karaoke:
             return None
 
     def kill_player(self):
+        logging.debug("Killing player")
         if self.use_vlc:
             logging.debug("Killing old VLC processes")
             if self.vlcclient != None:
@@ -978,6 +979,7 @@ class Karaoke:
             return False
 
     def skip(self):
+        logging.debug("Skipping")
         if self.is_file_playing():
             logging.info("Skipping: " + self.now_playing)
             if self.use_vlc:
@@ -991,6 +993,7 @@ class Karaoke:
             return False
 
     def pause(self):
+        logging.debug("Pausing")
         if self.is_file_playing():
             logging.info("Toggling pause: " + self.now_playing)
             if self.use_vlc:
@@ -1032,6 +1035,7 @@ class Karaoke:
             return False
 
     def get_state(self):
+        logging.debug("Getting state")
         if self.use_vlc and self.vlcclient.is_transposing:
             return defaultdict(lambda: None, self.player_state)
         if not self.is_file_playing():
@@ -1049,6 +1053,7 @@ class Karaoke:
         return defaultdict(lambda: None, self.player_state)
 
     def restart(self):
+        logging.debug("Restarting")
         if self.is_file_playing():
             if self.use_vlc:
                 self.vlcclient.restart()
@@ -1061,6 +1066,7 @@ class Karaoke:
             return False
 
     def stop(self):
+        logging.debug("Stoping")
         self.running = False
 
     def handle_run_loop(self):
@@ -1083,6 +1089,7 @@ class Karaoke:
     # Use this to reset the screen in case it loses focus
     # This seems to occur in windows after playing a video
     def pygame_reset_screen(self):
+        logging.debug("Reseting pygame screen")
         if self.hide_splash_screen:
             pass
         else:
@@ -1092,6 +1099,7 @@ class Karaoke:
             self.render_splash_screen()
 
     def reset_now_playing(self):
+        logging.debug("Reseting now playing")
         self.now_playing = None
         self.now_playing_filename = None
         self.now_playing_user = None
@@ -1144,7 +1152,7 @@ class Karaoke:
                         self.render_score_screen()
                         self.scored = True
 
-                    elif len(self.queue) > 0 and not self.transposing:
+                    elif len(self.queue) > 0:
                         self.reset_now_playing()
                         if not pygame.display.get_active():
                             self.pygame_reset_screen()
@@ -1157,9 +1165,6 @@ class Karaoke:
                         pygame.mixer.music.stop()
                         self.play_file(self.queue[0]["file"])
                         self.now_playing_user = self.queue[0]["user"]
-                        logging.debug(
-                            f"******************** NOT TRANSPOSING ({str(self.transposing)})"
-                        )
                         self.scored = False
                         self.queue.pop(0)
 
