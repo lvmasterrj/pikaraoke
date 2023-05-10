@@ -826,6 +826,7 @@ class Karaoke:
                 return
             logging.info("Transposing song by %s semitones" % semitones)
             self.transposing = True
+            self.scored = True
             self.now_playing_transpose = semitones
             status_xml = (
                 self.vlcclient.command().text
