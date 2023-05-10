@@ -35,6 +35,7 @@ class Karaoke:
     now_playing_filename = None
     now_playing_user = None
     now_playing_transpose = 0
+    transposing = False
     is_paused = True
     process = None
     qr_code_path = None
@@ -823,6 +824,7 @@ class Karaoke:
             if self.now_playing_transpose == semitones:
                 return
             logging.info("Transposing song by %s semitones" % semitones)
+            self.transposing = True
             self.now_playing_transpose = semitones
             status_xml = (
                 self.vlcclient.command().text
@@ -1095,6 +1097,7 @@ class Karaoke:
         self.now_playing_user = None
         self.is_paused = True
         self.now_playing_transpose = 0
+        self.transposing = False
 
     def change_language(self, language):
         logging.debug("Changing language to: " + str(language))
@@ -1141,7 +1144,7 @@ class Karaoke:
                         self.render_score_screen()
                         self.scored = True
 
-                    elif len(self.queue) > 0:
+                    elif len(self.queue) > 0 and not self.transposing:
                         self.reset_now_playing()
                         if not pygame.display.get_active():
                             self.pygame_reset_screen()
