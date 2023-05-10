@@ -1145,6 +1145,9 @@ class Karaoke:
                         self.scored = True
 
                     elif len(self.queue) > 0 and not self.transposing:
+                        logging.debug(
+                            f"******* NOT TRANSPOSING ({str(self.transposing)})"
+                        )
                         self.reset_now_playing()
                         if not pygame.display.get_active():
                             self.pygame_reset_screen()
