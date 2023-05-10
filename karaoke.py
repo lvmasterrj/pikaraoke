@@ -1188,7 +1188,7 @@ class Karaoke:
                             i += self.loop_interval
                         self.play_file(self.queue[0]["file"])
                         self.now_playing_user = self.queue[0]["user"]
-                        self.q
+                        self.queue.pop(0)
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     logging.debug(
                         "Routine: Pygame display innactive and no file playing"
