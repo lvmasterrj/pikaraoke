@@ -1148,11 +1148,13 @@ class Karaoke:
         while self.running:
             try:
                 if not self.is_file_playing():
+                    logging.debug("Routine: No file playing")
                     if self.scored != True:
                         self.render_score_screen()
                         self.scored = True
 
                     elif len(self.queue) > 0:
+                        logging.debug("Routine: Queue > 0")
                         self.reset_now_playing()
                         if not pygame.display.get_active():
                             self.pygame_reset_screen()
@@ -1169,6 +1171,9 @@ class Karaoke:
                         self.queue.pop(0)
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
+                    logging.debug(
+                        "Routine: Pygame display innactive and no file playing"
+                    )
                     self.pygame_reset_screen()
                 self.handle_run_loop()
             except KeyboardInterrupt:
