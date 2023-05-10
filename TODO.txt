@@ -2,8 +2,4 @@ Criar um link de desabilitar score na pagina de info
 Criar um link de desabilitar bg_sound na pagina de info
 
 Mudar a pagina da música para diminuir e aumentar os semitons e diminuir e aumentar o delay.
-Adicionar opção de saída de audio (hdmi ou jack)
 Adicionar bluetooth nas opções de configurações
-
-Ajeitar o auto update
-https://github.com/erfantkerfan/selfupdate
