@@ -1150,45 +1150,42 @@ class Karaoke:
         self.running = True
         while self.running:
             try:
-                if not self.is_file_playing() and self.now_playing != None:
-                    logging.debug(f"Routine: No file playing. Scoring? ({self.scored})")
+                if not self.is_file_playing():
                     if self.scored != True:
                         self.render_score_screen()
                         self.scored = True
 
                     elif len(self.queue) > 0:
-                        logging.debug("Routine: Queue > 0")
-                        self.reset_now_playing()
-                        # if not pygame.display.get_active():
-                        #     self.pygame_reset_screen()
-
-                        # self.render_next_song_to_splash_screen()
-                        # i = 0
-                        # while i < (self.splash_delay * 1000):
-                        #     self.handle_run_loop()
-                        #     i += self.loop_interval
-                        # # pygame.mixer.music.stop()
-                        # self.play_file(self.queue[0]["file"])
-                        # self.now_playing_user = self.queue[0]["user"]
-                        # logging.debug("Setting scored to False")
-                        # self.scored = False
-                        # self.queue.pop(0)
-
-                if not self.is_file_playing() and self.now_playing != None:
-                    self.reset_now_playing()
-                if len(self.queue) > 0:
-                    if not self.is_file_playing():
                         self.reset_now_playing()
                         if not pygame.display.get_active():
                             self.pygame_reset_screen()
+
                         self.render_next_song_to_splash_screen()
                         i = 0
                         while i < (self.splash_delay * 1000):
                             self.handle_run_loop()
                             i += self.loop_interval
+                        pygame.mixer.music.stop()
                         self.play_file(self.queue[0]["file"])
                         self.now_playing_user = self.queue[0]["user"]
+                        self.scored = False
                         self.queue.pop(0)
+
+                #  if not self.is_file_playing() and self.now_playing != None:
+                #      self.reset_now_playing()
+                #  if len(self.queue) > 0:
+                #      if not self.is_file_playing():
+                #          self.reset_now_playing()
+                #          if not pygame.display.get_active():
+                #              self.pygame_reset_screen()
+                #          self.render_next_song_to_splash_screen()
+                #          i = 0
+                #          while i < (self.splash_delay * 1000):
+                #              self.handle_run_loop()
+                #              i += self.loop_interval
+                #          self.play_file(self.queue[0]["file"])
+                #          self.now_playing_user = self.queue[0]["user"]
+                #          self.queue.pop(0)
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     logging.debug(
                         "Routine: Pygame display innactive and no file playing"

@@ -3,3 +3,5 @@ Criar um link de desabilitar bg_sound na pagina de info
 
 Mudar a pagina da música para diminuir e aumentar os semitons e diminuir e aumentar o delay.
 Adicionar bluetooth nas opções de configurações
+
+Create categories for the songs
