@@ -71,8 +71,6 @@ class Karaoke:
             self.default_logo_path if args.logo_path == None else args.logo_path
         )
         self.show_overlay = args.show_overlay
-        self.disable_score = args.disable_score
-        self.disable_bg_music = args.disable_bg_music
         self.log_level = int(args.log_level)
 
         # other initializations
@@ -87,12 +85,23 @@ class Karaoke:
         if self.platform != "windows":
             # os.chdir(os.path.dirname(sys.argv[0]))
             os.chdir(self.base_path)
+
         self.config_obj.read("config.ini")
-        user_lng = self.config_obj.get("USERPREFERENCES", "language")
+        self.user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
+        self.disable_score = (
+            args.disable_score
+            if not args.disable_score == None
+            else self.config_obj.get("USERPREFERENCES", "disable_score")
+        )
+        self.disable_bg_music = (
+            args.disable_bg_music
+            if not args.disable_bg_music == None
+            else self.config_obj.get("USERPREFERENCES", "disable_bg_music")
+        )
 
         trans = gettext.translation(
-            "messages", localedir="translations", languages=[user_lng]
+            "messages", localedir="translations", languages=[self.user_lng]
         )
         trans.install()
         self._ = trans.gettext
@@ -130,6 +139,8 @@ class Karaoke:
     show overlay: %s
     user pref language: %s
     user pref audio delay: %s
+    user pref disable score: %s
+    user pref disable background music: %s
     Base Path: %s"""
             % (
                 self.port,
@@ -151,8 +162,10 @@ class Karaoke:
                 self.vlc_port,
                 self.log_level,
                 self.show_overlay,
-                user_lng,
+                self.user_lng,
                 self.user_audio_delay,
+                self.disable_score,
+                self.disable_bg_music,
                 self.base_path,
             )
         )
@@ -319,6 +332,14 @@ class Karaoke:
             os.system("reboot")
         return resultado
 
+    def change_prefs(self, pref, val):
+        logging.debug("Changing Preferences")
+        userprefs = self.config_obj["USERPREFERENCES"]
+        userprefs[pref] = str(val)
+        with open("config.ini", "w") as conf:
+            self.config_obj.write(conf)
+        setattr(self, pref, str(val))
+
     def is_network_connected(self):
         return not len(self.ip) < 7
 
@@ -406,7 +427,7 @@ class Karaoke:
         if not self.hide_splash_screen:
             logging.debug("Rendering splash screen")
 
-            if self.disable_bg_music != True:
+            if self.disable_bg_music == str(0):
                 if len(self.queue) == 0 and not self.is_file_playing():
                     pygame.mixer.music.play(-1)
 
@@ -558,7 +579,10 @@ class Karaoke:
         pygame.display.update()
 
     def render_score_screen(self):
-        if self.disable_score != True:
+        logging.debug(
+            "======================= self.disable_score = " + self.disable_score
+        )
+        if self.disable_score == str(0):
             logging.debug("Rendering score screen")
 
             background = pygame.image.load("stage.jpg").convert()

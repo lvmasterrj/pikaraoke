@@ -39,6 +39,26 @@
                 $("#delay-val").text(data)
             });
         })
+        $("#pref-bg-music").click(function() {
+            var val = $("#pref-bg-music").is(":checked") ? 1 : 0;
+            $.get('change_prefs', {
+                    "pref": "disable_bg_music",
+                    "val": val
+                })
+                // .done(function(data) {
+                //     showNotification(
+                //         "{{ _('Background music preference successfully changed')}}",
+                //         "is-info"
+                //     );
+                // });
+        })
+        $("#pref-score").click(function() {
+            var val = $("#pref-score").is(":checked") ? 1 : 0;
+            $.get('change_prefs', {
+                "pref": "disable_score",
+                "val": val
+            })
+        })
         $("#update-link").click(function(e) {
             e.preventDefault();
             // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
@@ -201,6 +221,26 @@
     <h4 id="delay-val" class="tabs" style="padding-top:2px; margin:0; cursor: pointer">{{ audio_delay }}</h4>
     <h4 id="delay-inc" class="tabs" style="margin:0; color:green; cursor: pointer; font-weight:bold;font-size:x-large;">&#x2295;</h4>
 </div>
+
+{# MSG: Title of the section for setting preferences #}
+<h1>{% trans %}Preferences{% endtrans %}</h1>
+<p>
+    {# MSG: Text to inform about language switching #} {% trans %}Select the languages that you want to display.{% endtrans %}
+</p>
+<ul>
+    <li>
+        <label class="checkbox">
+				<input id="pref-bg-music" type="checkbox" {% if disable_bg_music == "1" %}checked{% endif %}>
+				Disable background music on splash screen
+			</label>
+    </li>
+    <li>
+        <label class="checkbox">
+				<input id="pref-score" type="checkbox" {% if disable_score == "1" %}checked{% endif %}>
+				Disable the score screen after each song
+			</label>
+    </li>
+</ul>
 
 {% if is_pi %} {# MSG: Title of the section for configuring the rPi audio output #}
 <h1>{% trans %}Force audio output (experimental){% endtrans %}</h1>

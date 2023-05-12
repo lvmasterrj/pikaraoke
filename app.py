@@ -517,6 +517,9 @@ def info():
     languages = LANGUAGES
     audio_delay = k.user_audio_delay
 
+    #  disable_bg_music = k.disable_bg_music
+    #  disable_score = k.disable_score
+
     return render_template(
         "info.html",
         site_title=site_name,
@@ -530,6 +533,8 @@ def info():
         pikaraoke_version=VERSION,
         languages=languages,
         audio_delay=audio_delay,
+        disable_bg_music=k.disable_bg_music,
+        disable_score=k.disable_score,
         admin=is_admin(),
         admin_enabled=admin_password != None,
     )
@@ -606,6 +611,18 @@ def force_audio_jack():
         if response:
             th = threading.Thread(target=delayed_halt, args=[2])
             th.start()
+    else:
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    return redirect(url_for("home"))
+
+
+@app.route("/change_prefs")
+def change_prefs():
+    if is_admin():
+        pref = request.args["pref"]
+        val = int(request.args["val"])
+        response = k.change_prefs(pref, val)
+        flash(_("You don't have permission to define audio output"), "is-danger")
     else:
         flash(_("You don't have permission to define audio output"), "is-danger")
     return redirect(url_for("home"))
@@ -914,14 +931,16 @@ if __name__ == "__main__":
     ),
     parser.add_argument(
         "--disable-score",
-        help="Disable the score after each song",
+        help="Disable the score screen after each song",
         action="store_true",
+        default=None,
         required=False,
     ),
     parser.add_argument(
         "--disable-bg-music",
-        help="Disable the background music on splash screen",
+        help="Disable background music on splash screen",
         action="store_true",
+        default=None,
         required=False,
     ),
     parser.add_argument(
