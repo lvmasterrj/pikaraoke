@@ -5,3 +5,5 @@ Mudar a pagina da música para diminuir e aumentar os semitons e diminuir e aume
 Adicionar bluetooth nas opções de configurações
 
 Create categories for the songs
+
+Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227
