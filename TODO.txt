@@ -2,5 +2,7 @@ Criar um link de desabilitar score na pagina de info
 Criar um link de desabilitar bg_sound na pagina de info
 Criar um link de delay da músic na screen do que está tocando
 
+Colocar a opção de deixar o qrcode aparecendo durante a música
+
 Ajeitar o auto update
 https://github.com/erfantkerfan/selfupdate
