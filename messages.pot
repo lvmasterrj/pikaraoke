@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-05-09 12:09-0300\n"
+"POT-Creation-Date: 2023-11-03 14:42-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -121,151 +121,171 @@ msgstr ""
 msgid "Error: No filename parameters were specified!"
 msgstr ""
 
-#: app.py:566
+#: app.py:571
 msgid "Updating youtube-dl! Should take a minute or two... "
 msgstr ""
 
-#: app.py:572
+#: app.py:577
 msgid "You don't have permission to update youtube-dl"
 msgstr ""
 
-#: app.py:580
-msgid "Updating pikaraoke. Just wait."
+#: app.py:585
+msgid "Forcing audio output through HDMI"
 msgstr ""
 
-#: app.py:587
-msgid "You don't have permission to update PiKaraoke"
+#: app.py:595
+msgid "Error trying to force audio output."
 msgstr ""
 
-#: app.py:628 app.py:650
-msgid "You don't have permission to shut down"
+#: app.py:597 app.py:615 app.py:625 app.py:627
+msgid "You don't have permission to define audio output"
+msgstr ""
+
+#: app.py:605
+msgid "Forcing audio output through 3.5 Jack"
 msgstr ""
 
 #: app.py:635
+msgid "Updating pikaraoke. Just wait."
+msgstr ""
+
+#: app.py:642
+msgid "You don't have permission to update PiKaraoke"
+msgstr ""
+
+#: app.py:683 app.py:705
+msgid "You don't have permission to shut down"
+msgstr ""
+
+#: app.py:690
 msgid "Quitting pikaraoke now!"
 msgstr ""
 
-#: app.py:639
+#: app.py:694
 msgid "You don't have permission to quit"
 msgstr ""
 
-#: app.py:646
+#: app.py:701
 msgid "Shutting down system now!"
 msgstr ""
 
-#: app.py:657
+#: app.py:712
 msgid "Rebooting system now!"
 msgstr ""
 
-#: app.py:661
+#: app.py:716
 msgid "You don't have permission to Reboot"
 msgstr ""
 
-#: app.py:668
+#: app.py:723
 msgid "Expanding filesystem and rebooting system now!"
 msgstr ""
 
-#: app.py:672
+#: app.py:727
 msgid "Cannot expand fs on non-raspberry pi devices!"
 msgstr ""
 
-#: app.py:674
+#: app.py:729
 msgid "You don't have permission to resize the filesystem"
 msgstr ""
 
-#: karaoke.py:399
+#: karaoke.py:207
+msgid "Pikaraoke - Connect at: "
+msgstr ""
+
+#: karaoke.py:449
 msgid "Wifi/Network not connected. Shutting down in 10s..."
 msgstr ""
 
-#: karaoke.py:406
+#: karaoke.py:456
 msgid ""
 "No IP found. Network/Wifi configuration required. For wifi config, try: "
 "sudo raspi-config or the desktop GUI: startx"
 msgstr ""
 
-#: karaoke.py:412
+#: karaoke.py:462
 msgid "Connect at: "
 msgstr ""
 
-#: karaoke.py:427
+#: karaoke.py:477
 msgid "RaspiWifiConfig setup mode detected!"
 msgstr ""
 
-#: karaoke.py:432
+#: karaoke.py:482
 #, python-format
 msgid "Connect another device/smartphone to the Wifi AP: '%s'"
 msgstr ""
 
-#: karaoke.py:438
+#: karaoke.py:488
 #, python-format
 msgid "Then point its browser to: '%s://%s%s' and follow the instructions."
 msgstr ""
 
-#: karaoke.py:496
+#: karaoke.py:546
 msgid "Your Score"
 msgstr ""
 
-#: karaoke.py:560
+#: karaoke.py:613
 msgid "Never sing again... ever."
 msgstr ""
 
-#: karaoke.py:561
+#: karaoke.py:614
 msgid "I hope you don't do this for a living."
 msgstr ""
 
-#: karaoke.py:562
+#: karaoke.py:615
 msgid "Thank god it's over."
 msgstr ""
 
-#: karaoke.py:563
+#: karaoke.py:616
 msgid "Pass the mic for someone else, please!"
 msgstr ""
 
-#: karaoke.py:569
+#: karaoke.py:622
 msgid "I've seen better singers."
 msgstr ""
 
-#: karaoke.py:570
+#: karaoke.py:623
 msgid "Ok... just ok."
 msgstr ""
 
-#: karaoke.py:571
+#: karaoke.py:624
 msgid "Not bad for a beginner."
 msgstr ""
 
-#: karaoke.py:572
+#: karaoke.py:625
 msgid "You put up a nice show."
 msgstr ""
 
-#: karaoke.py:578
+#: karaoke.py:631
 msgid "Congratulations! Couldn't be better."
 msgstr ""
 
-#: karaoke.py:579
+#: karaoke.py:632
 msgid "Wow, have you tried The Voice?"
 msgstr ""
 
-#: karaoke.py:580
+#: karaoke.py:633
 msgid "Please, sing another one!"
 msgstr ""
 
-#: karaoke.py:581
+#: karaoke.py:634
 msgid "You rock! You know that?!"
 msgstr ""
 
-#: karaoke.py:582
+#: karaoke.py:635
 msgid "I wish more people could sing like this."
 msgstr ""
 
-#: karaoke.py:629
+#: karaoke.py:682
 msgid "Up next: "
 msgstr ""
 
-#: karaoke.py:634
+#: karaoke.py:687
 msgid "Up next:  "
 msgstr ""
 
-#: karaoke.py:638
+#: karaoke.py:691
 msgid "Added by: "
 msgstr ""
 
@@ -376,192 +396,218 @@ msgstr ""
 
 #. Message which shows in the "Now Playing" section when there is no song
 #. currently playing
-#: templates/home.html:47
+#: templates/home.html:30 templates/home_old.html:48
 msgid "Nothing is playing right now."
 msgstr ""
 
 #. Title text for the icon marking the next person to sing.
-#: templates/home.html:55
+#: templates/home.html:38 templates/home_old.html:56
 msgid "Next singer"
 msgstr ""
 
 #. Alternative text for the "Up next" section if no more songs are queued up.
 #. Message when the queue of songs is empty.  Shown instead of what the next
 #. song is.
-#: templates/home.html:58 templates/splash.html:17
+#: templates/home.html:41 templates/home_old.html:59 templates/splash.html:17
 msgid "No song is queued."
 msgstr ""
 
 #. Confirmation message when clicking a button to skip a track.
-#: templates/home.html:133
+#: templates/home.html:113 templates/home_old.html:145
 msgid ""
 "Are you sure you want to skip this track? If you didn't add this song, "
 "ask permission first!"
 msgstr ""
 
 #. Header showing the currently playing song.
-#: templates/home.html:164
+#: templates/home.html:145 templates/home_old.html:177
 msgid "Now Playing"
 msgstr ""
 
 #. Title for the section displaying the next song to be played.
-#: templates/home.html:173
+#: templates/home.html:159 templates/home_old.html:186
 msgid "Next Song"
 msgstr ""
 
 #. Title of the box with controls such as pause and skip.
-#: templates/home.html:179
+#: templates/home.html:167 templates/home_old.html:192
 msgid "Player Control"
 msgstr ""
 
 #. Title attribute on the button to restart the current song.
-#: templates/home.html:182
+#: templates/home.html:170 templates/home_old.html:195
 msgid "Restart Song"
 msgstr ""
 
 #. Title attribute on the button to play or pause the     current song.
-#: templates/home.html:185
+#: templates/home.html:174 templates/home_old.html:198
 msgid "Play/Pause"
 msgstr ""
 
 #. Title attribute on the button to skip to the next     song.
-#: templates/home.html:189
+#: templates/home.html:178 templates/home_old.html:202
 msgid "Stop Current Song"
 msgstr ""
 
 #. Title attribute on the button to adjust volume down.
-#: templates/home.html:194
+#: templates/home.html:183 templates/home_old.html:207
 msgid "Volume Down"
 msgstr ""
 
 #. Title attribute on the button to adjust volume up.
-#: templates/home.html:198
+#: templates/home.html:187 templates/home_old.html:211
 msgid "Volume Up"
 msgstr ""
 
 #. Title of a control to change the key/pitch of the playing song.
-#: templates/home.html:211 templates/home.html:245
+#: templates/home.html:200 templates/home_old.html:222
 msgid "Change Key"
 msgstr ""
 
 #. Label on the button to confirm the change in key/pitch of the
 #. playing song.
-#: templates/home.html:239
+#: templates/home.html:228
 msgid "Change"
+msgstr ""
+
+#. Semitone information.
+#: templates/home_old.html:155
+msgid ""
+"A semitone is also known as a half-step. It is the smallest interval used"
+" in classical Western music, equal to a twelfth of an octave or half a "
+"tone."
 msgstr ""
 
 #. Confirmation text whe the user starts to turn off the machine running
 #. Pikaraoke.
-#: templates/info.html:29
+#: templates/info.html:8
+msgid "Are you sure you want to force the audio output to HDMI?"
+msgstr ""
+
+#. Confirmation text whe the user starts to turn off the machine running
+#. Pikaraoke.
+#: templates/info.html:16
+msgid "Are you sure you want to force the audio output to the 3.5 jack?"
+msgstr ""
+
+#: templates/info.html:50
+msgid "Background music preference successfully changed"
+msgstr ""
+
+#. Confirmation text whe the user starts to turn off the machine running
+#. Pikaraoke.
+#: templates/info.html:65
 msgid "Are you sure you want to update the piKaraoke system?"
 msgstr ""
 
 #. Confirmation text whe the user selects quit.
-#: templates/info.html:36
+#: templates/info.html:72
 msgid "Are you sure you want to quit?"
 msgstr ""
 
 #. Confirmation text whe the user starts to turn off the machine running
 #. Pikaraoke.
-#: templates/info.html:44
+#: templates/info.html:80
 msgid "Are you sure you want to shut down?"
 msgstr ""
 
 #. Confirmation text whe the user starts to reboot the machine running
 #. Pikaraoke.
-#: templates/info.html:52
+#: templates/info.html:88
 msgid "Are you sure you want to reboot?"
 msgstr ""
 
 #. Confirmation text whe the user asks to update the Youtube-dl tool.
-#: templates/info.html:62
+#: templates/info.html:98
 msgid ""
 "Are you sure you want to update Youtube-dl right now? Current and pending"
 " downloads may fail."
 msgstr ""
 
 #. Title of the information page.
-#: templates/info.html:79
+#: templates/info.html:115
 msgid "Information"
 msgstr ""
 
 #. Label which appears before a url which links to the current page.
-#: templates/info.html:85
+#: templates/info.html:121
 #, python-format
-msgid "URL of %(site_title)s:"
+msgid " URL of %(site_title)s: "
 msgstr ""
 
 #. Label before a QR code which brings a frind (pal) to the main page if
 #. scanned, so they can also add songs. QR code follows this text.
-#: templates/info.html:89
+#: templates/info.html:125
 msgid "Handy URL QR code to share with a pal:"
 msgstr ""
 
 #. Label before a link to the Splash screen.
-#: templates/info.html:91
+#: templates/info.html:127
 msgid "Open splash screen"
 msgstr ""
 
 #. Header of the information section about the computer running Pikaraoke.
-#: templates/info.html:95
+#: templates/info.html:131
 msgid "System Info"
 msgstr ""
 
 #. The CPU usage of the computer running Pikaraoke.
-#: templates/info.html:98
+#: templates/info.html:134
 #, python-format
 msgid "CPU: %(cpu)s"
 msgstr ""
 
 #. The disk usage of the computer running Pikaraoke. Used by downloaded songs.
-#: templates/info.html:100
+#: templates/info.html:136
 #, python-format
 msgid "Disk Usage: %(disk)s"
 msgstr ""
 
 #. The memory (RAM) usiage of the computer running Pikaraoke.
-#: templates/info.html:102
+#: templates/info.html:138
 #, python-format
 msgid "Memory: %(memory)s"
 msgstr ""
 
 #. The version of the program "Youtube-dl".
-#: templates/info.html:104
+#: templates/info.html:140
 #, python-format
 msgid "Youtube-dl (yt-dlp) version: %(youtubedl_version)s"
 msgstr ""
 
 #. The version of Pikaraoke running right now.
-#: templates/info.html:106
+#: templates/info.html:142
 #, python-format
 msgid "Pikaraoke version: %(pikaraoke_version)s"
 msgstr ""
 
 #. Title of the updates section.
-#: templates/info.html:110
+#: templates/info.html:146
 msgid "Updates"
 msgstr ""
 
 #. Label before a link which forces Pikaraoke to rescan and pick up any new
 #. songs.
-#: templates/info.html:112
+#: templates/info.html:148
 msgid "Refresh the song list:"
 msgstr ""
 
 #. Text on the link which forces Pikaraoke to rescan and pick up any new songs.
-#: templates/info.html:115
+#: templates/info.html:151
 msgid "Rescan song directory"
 msgstr ""
 
 #. Help text explaining the Rescan song directory link.
-#: templates/info.html:120
+#: templates/info.html:156
 msgid ""
-"You should only need to do this if you manually copied files to the "
-"download directory while pikaraoke was running."
+"\n"
+"  You should only need to do this if you manually copied files to the "
+"download directory while pikaraoke was running.\n"
+"  "
 msgstr ""
 
 #. Text explaining why you might want to update youtube-dl.
-#: templates/info.html:125
+#: templates/info.html:161
 #, python-format
 msgid ""
 "If downloads or searches stopped working, updating youtube-dl will "
@@ -571,132 +617,171 @@ msgstr ""
 
 #. Text for the link which will try and update youtube-dl on the machine
 #. running Pikaraoke.
-#: templates/info.html:131
+#: templates/info.html:167
 msgid "Update youtube-dl"
 msgstr ""
 
 #. Help text which explains why updating youtube-dl can fail.  The log is a
 #. file on the machine running Pikaraoke.
-#: templates/info.html:137
+#: templates/info.html:173
 msgid ""
-"This update link above may fail if you don't have proper file "
+"\n"
+"    This update link above may fail if you don't have proper file "
 "permissions.\n"
-"    Check the pikaraoke log for errors."
+"    Check the pikaraoke log for errors. \n"
+"  "
 msgstr ""
 
 #. Label before a link which forces Pikaraoke to update itself.
-#: templates/info.html:143
+#: templates/info.html:179
 msgid "Update PiKaraoke"
 msgstr ""
 
 #. Text on the link which forces Pikaraoke to update itself
-#: templates/info.html:146
+#: templates/info.html:182
 msgid "Update"
 msgstr ""
 
 #. Help text explaining the Update PiKaraoke.
-#: templates/info.html:151
+#: templates/info.html:187
 msgid ""
-"Updating the PiKaraoke system is irreversible. Do it with caution, at "
+"\n"
+"  Updating the PiKaraoke system is irreversible. Do it with caution, at "
 "your own risk!\n"
-"  After updating, the system will reboot."
+"  After updating, the system will reboot.\n"
+"  "
 msgstr ""
 
 #. Title of the section for switching the system language
-#: templates/info.html:158
+#: templates/info.html:194
 msgid "Language"
 msgstr ""
 
 #. Text to inform about language switching
-#: templates/info.html:161
+#: templates/info.html:197 templates/info.html:228
 msgid "Select the languages that you want to display."
 msgstr ""
 
 #. Title of the section for configuring the default audio delay
-#: templates/info.html:170
+#: templates/info.html:206
 msgid "Audio delay"
 msgstr ""
 
 #. Instructions on configuring audio delay
-#: templates/info.html:172
+#: templates/info.html:208
 msgid ""
-"Click on \"Test audio/video sync\" below to check on your display if the "
-"audio and video are synchronized. In case you need, use the buttons to "
-"adjust the sync."
+" Click on \"Test audio/video sync\" below to check on your display if the"
+" audio and video are synchronized. In case you need, use the buttons to "
+"adjust the sync. "
 msgstr ""
 
 #. Text for the link that will start the audio/video sync test
-#: templates/info.html:177
+#: templates/info.html:213
 msgid "Test audio/video sync "
 msgstr ""
 
 #. Text for the stop a/v delay test
-#: templates/info.html:178
+#: templates/info.html:214
 msgid " (stop test)"
 msgstr ""
 
 #. Text of the section audio delay in Info
-#: templates/info.html:183
-msgid "Audio delay (millisec)"
+#: templates/info.html:219
+msgid " Audio delay (millisec)"
+msgstr ""
+
+#. Title of the section for setting preferences
+#: templates/info.html:226
+msgid "Preferences"
+msgstr ""
+
+#. Title of the section for configuring the rPi audio output
+#: templates/info.html:246
+msgid "Force audio output (experimental)"
+msgstr ""
+
+#. Instructions on configuring audio output
+#: templates/info.html:248
+msgid ""
+"Here you can force the rPi to output the audio through HDMI or the 3.5 "
+"jack."
+msgstr ""
+
+#. Information about the force audio output
+#: templates/info.html:251
+msgid ""
+"Have in mind that this is experimental and may not work. It will "
+"create/edit a file in \"/etc/asound.conf\" with some commom parameters "
+"that used to do the job."
+msgstr ""
+
+#. Text for the link that will force audio output through hdmi
+#: templates/info.html:256
+msgid "Force audio output through HDMI"
+msgstr ""
+
+#. Text for the link that will force the audio output through jack
+#: templates/info.html:260
+msgid "Force audio output through 3.5 Jack"
 msgstr ""
 
 #. Title of the section on shutting down / turning off the machine running
 #. Pikaraoke.
-#: templates/info.html:190
+#: templates/info.html:264
 msgid "Shutdown"
 msgstr ""
 
 #. Explainitory text which explains why to use the shutdown link.
-#: templates/info.html:192
+#: templates/info.html:266
 msgid ""
-"Don't just pull the plug! Always shut down your server properly to avoid "
-"data corruption."
+" Don't just pull the plug! Always shut down your server properly to avoid"
+" data corruption. "
 msgstr ""
 
 #. Text for button which turns off Pikaraoke for everyone using it at your
 #. house.
-#: templates/info.html:196
+#: templates/info.html:270
 msgid "Quit Pikaraoke"
 msgstr ""
 
 #. Text for button which reboots the machine running Pikaraoke.
-#: templates/info.html:198
+#: templates/info.html:272
 msgid "Reboot System"
 msgstr ""
 
 #. Text for button which turn soff the machine running Pikaraoke.
-#: templates/info.html:201
+#: templates/info.html:275
 msgid "Shutdown System"
 msgstr ""
 
 #. Title for section containing a few other options on the Info page.
-#: templates/info.html:207
+#: templates/info.html:281
 msgid "Other"
 msgstr ""
 
 #. Text for button
-#: templates/info.html:210
+#: templates/info.html:284
 msgid "Expand Raspberry Pi filesystem"
 msgstr ""
 
 #. Explainitory text which explains why you might want to expand the
 #. filesystem.
-#: templates/info.html:213
+#: templates/info.html:287
 msgid ""
-"If you just installed the pre-built pikaraoke pi image and your SD card "
+" If you just installed the pre-built pikaraoke pi image and your SD card "
 "is larger than 4GB, you may want to expand the filesystem to utilize the "
 "remaining space. You only need to do this once. This will reboot the "
-"system."
+"system. "
 msgstr ""
 
 #. Link which will log out the user from admin mode.
-#: templates/info.html:217
+#: templates/info.html:291
 #, python-format
-msgid "Disable admin mode: <a href=\"%(logout_url)s\">Log out</a>"
+msgid "Disable admin mode: <a href=\"%(logout_url)s\">Log out</a> "
 msgstr ""
 
 #. Link which will let the user log into admin mode.
-#: templates/info.html:219
+#: templates/info.html:293
 #, python-format
 msgid " Enable admin mode: <a href=\"%(login_url)s\">Log in</a> "
 msgstr ""

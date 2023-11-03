@@ -204,6 +204,7 @@ class Karaoke:
                 self.vlcclient = vlcclient.VLCClient(
                     port=self.vlc_port,
                     path=self.vlc_path,
+                    connecttext=self._("Pikaraoke - Connect at: "),
                     qrcode=self.qr_code_path,
                     url=self.url,
                 )
