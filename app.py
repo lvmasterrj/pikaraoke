@@ -535,6 +535,7 @@ def info():
         audio_delay=audio_delay,
         disable_bg_music=k.disable_bg_music,
         disable_score=k.disable_score,
+        show_overlay=k.show_overlay,
         admin=is_admin(),
         admin_enabled=admin_password != None,
     )
@@ -915,6 +916,7 @@ if __name__ == "__main__":
         "--show-overlay",
         action="store_true",
         help="Show overlay on top of video with pikaraoke QR code and IP",
+        default=None,
         required=False,
     ),
     parser.add_argument(

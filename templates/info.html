@@ -59,6 +59,13 @@
                 "val": val
             })
         })
+        $("#pref-overlay").click(function() {
+            var val = $("#pref-overlay").is(":checked") ? 1 : 0;
+            $.get('change_prefs', {
+                "pref": "show_overlay",
+                "val": val
+            })
+        })
         $("#update-link").click(function(e) {
             e.preventDefault();
             // {# MSG: Confirmation text whe the user starts to turn off the machine running Pikaraoke. #}
@@ -238,6 +245,12 @@
         <label class="checkbox">
 				<input id="pref-score" type="checkbox" {% if disable_score == "1" %}checked{% endif %}>
 				Disable the score screen after each song
+			</label>
+    </li>
+    <li>
+        <label class="checkbox">
+				<input id="pref-overlay" type="checkbox" {% if show_overlay == "1" %}checked{% endif %}>
+				Enable to show the QR code on top of the videos
 			</label>
     </li>
 </ul>

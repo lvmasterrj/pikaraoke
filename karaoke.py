@@ -70,7 +70,7 @@ class Karaoke:
         self.logo_path = (
             self.default_logo_path if args.logo_path == None else args.logo_path
         )
-        self.show_overlay = args.show_overlay
+        # self.show_overlay = args.show_overlay
         self.log_level = int(args.log_level)
 
         # other initializations
@@ -90,14 +90,16 @@ class Karaoke:
         self.user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
         self.disable_score = (
-            args.disable_score
-            if not args.disable_score == None
+            args.disable_score if not args.disable_score is None
             else self.config_obj.get("USERPREFERENCES", "disable_score")
         )
         self.disable_bg_music = (
-            args.disable_bg_music
-            if not args.disable_bg_music == None
+            args.disable_bg_music if not args.disable_bg_music is None
             else self.config_obj.get("USERPREFERENCES", "disable_bg_music")
+        )
+        self.show_overlay = (
+            args.show_overlay if not args.show_overlay is None
+            else self.config_obj.get("USERPREFERENCES", "show_overlay")
         )
 
         trans = gettext.translation(
@@ -199,8 +201,9 @@ class Karaoke:
         self.kill_player()
 
         self.generate_qr_code()
+
         if self.use_vlc:
-            if self.show_overlay:
+            if not self.show_overlay == str(0):
                 self.vlcclient = vlcclient.VLCClient(
                     port=self.vlc_port,
                     path=self.vlc_path,
@@ -580,9 +583,6 @@ class Karaoke:
         pygame.display.update()
 
     def render_score_screen(self):
-        logging.debug(
-            "======================= self.disable_score = " + self.disable_score
-        )
         if self.disable_score == str(0):
             logging.debug("Rendering score screen")
 
