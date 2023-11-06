@@ -386,12 +386,12 @@ class Karaoke:
             # self.width = 800
             # self.height = 600
             logging.debug("Initializing screen mode")
-            if self.platform == "windows":
-                self.screen = pygame.display.set_mode(
-                    [self.width, self.height], self.get_default_display_mode()
-                )
             # if self.platform == "windows":
-            #     self.screen = pygame.display.set_mode([self.width, self.height])
+            #     self.screen = pygame.display.set_mode(
+            #         [self.width, self.height], self.get_default_display_mode()
+            #     )
+            if self.platform == "windows":
+                self.screen = pygame.display.set_mode([self.width, self.height])
             else:
                 # this section is an unbelievable nasty hack - for some reason Pygame
                 # needs a keyboardinterrupt to initialise in some limited circumstances
