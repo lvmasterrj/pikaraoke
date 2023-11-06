@@ -8,8 +8,6 @@ import subprocess
 import sys
 import threading
 import time
-from functools import wraps
-
 import cherrypy
 import psutil
 from flask_babel import Babel
@@ -17,13 +15,11 @@ import flask_babel
 from flask import (
     Flask,
     flash,
-    jsonify,
     make_response,
     redirect,
     render_template,
     request,
     send_file,
-    send_from_directory,
     url_for,
 )
 from flask_paginate import Pagination, get_page_parameter
@@ -84,7 +80,7 @@ def get_locale():
 
 @app.route("/")
 def home():
-    s = k.get_state()
+    #  s = k.get_state()
     return render_template(
         "home.html",
         site_title=site_name,
@@ -92,11 +88,10 @@ def home():
         show_transpose=k.use_vlc,
         transpose_value=k.now_playing_transpose,
         admin=is_admin(),
-        volume=s["volume"],
-        seektrack_value=s["time"],
-        seektrack_max=s["length"],
-        audio_delay=s["audiodelay"],
-        #   vocal_info=k.get_vocal_info(),
+        #   volume=s["volume"],
+        #   seektrack_value=s["time"],
+        #   seektrack_max=s["length"],
+        #   audio_delay=s["audiodelay"],
     )
 
 
@@ -127,7 +122,7 @@ def login():
 def logout():
     resp = make_response(redirect("/"))
     resp.set_cookie("admin", "")
-    flash("Logged out of admin mode!", "is-success")
+    flash(_("Logged out of admin mode!"), "is-success")
     return resp
 
 
@@ -151,7 +146,8 @@ def nowplaying():
         return json.dumps(rc)
     except (Exception) as e:
         logging.error(
-            "Problem loading /nowplaying, pikaraoke may still be starting up: " + str(e)
+            _("Problem loading /nowplaying, pikaraoke may still be starting up: ")
+            + str(e)
         )
         return ""
 
@@ -180,9 +176,9 @@ def add_random():
     amount = int(request.args["amount"])
     rc = k.queue_add_random(amount)
     if rc:
-        flash("Added %s random tracks" % amount, "is-success")
+        flash(_("Added %s random tracks") % amount, "is-success")
     else:
-        flash("Ran out of songs!", "is-warning")
+        flash(_("Ran out of songs!"), "is-warning")
     return redirect(url_for("queue"))
 
 
@@ -191,7 +187,7 @@ def queue_edit():
     action = request.args["action"]
     if action == "clear":
         k.queue_clear()
-        flash("Cleared the queue!", "is-warning")
+        flash(_("Cleared the queue!"), "is-warning")
         return redirect(url_for("queue"))
     else:
         song = request.args["song"]
@@ -199,21 +195,21 @@ def queue_edit():
         if action == "down":
             result = k.queue_edit(song, "down")
             if result:
-                flash("Moved down in queue: " + song, "is-success")
+                flash(_("Moved down in queue: ") + song, "is-success")
             else:
-                flash("Error moving down in queue: " + song, "is-danger")
+                flash(_("Error moving down in queue: ") + song, "is-danger")
         elif action == "up":
             result = k.queue_edit(song, "up")
             if result:
-                flash("Moved up in queue: " + song, "is-success")
+                flash(_("Moved up in queue: ") + song, "is-success")
             else:
-                flash("Error moving up in queue: " + song, "is-danger")
+                flash(_("Error moving up in queue: ") + song, "is-danger")
         elif action == "delete":
             result = k.queue_edit(song, "delete")
             if result:
-                flash("Deleted from queue: " + song, "is-success")
+                flash(_("Deleted from queue: ") + song, "is-success")
             else:
-                flash("Error deleting from queue: " + song, "is-danger")
+                flash(_("Error deleting from queue: ") + song, "is-danger")
     return redirect(url_for("queue"))
 
 
@@ -231,11 +227,7 @@ def enqueue():
         user = d["song-added-by"]
     rc = k.enqueue(song, user)
     song_title = filename_from_path(song)
-    # if rc:
-    #     flash("Song added to queue: " + song_title, "is-success")
-    # else:
-    #     flash("Song is already in queue: " + song_title, "is-danger")
-    # return redirect(url_for("home"))
+
     return json.dumps({"song": song_title, "success": rc})
 
 
@@ -388,16 +380,16 @@ def download():
     t.daemon = True
     t.start()
 
-    flash_message = (
+    flash_message = _(
         "Download started: '"
         + song
         + "'. This may take a couple of minutes to complete. "
     )
 
     if queue:
-        flash_message += "Song will be added to queue."
+        flash_message += _("Song will be added to queue.")
     else:
-        flash_message += 'Song will appear in the "available songs" list.'
+        flash_message += _('Song will appear in the "available songs" list.')
     flash(flash_message, "is-info")
     return redirect(url_for("search"))
 
@@ -418,21 +410,23 @@ def delete_file():
         song_path = request.args["song"]
         if song_path in k.queue:
             flash(
-                "Error: Can't delete this song because it is in the current queue: "
+                _("Error: Can't delete this song because it is in the current queue: ")
                 + song_path,
                 "is-danger",
             )
         else:
             k.delete(song_path)
-            flash("Song deleted: " + song_path, "is-warning")
+            flash(_("Song deleted: " + song_path), "is-warning")
     else:
-        flash("Error: No song parameter specified!", "is-danger")
+        flash(_("Error: No song parameter specified!"), "is-danger")
     return redirect(url_for("browse"))
 
 
 @app.route("/files/edit", methods=["GET", "POST"])
 def edit_file():
-    queue_error_msg = "Error: Can't edit this song because it is in the current queue: "
+    queue_error_msg = _(
+        "Error: Can't edit this song because it is in the current queue: "
+    )
     if "song" in request.args:
         song_path = request.args["song"]
         # print "SONG_PATH" + song_path
@@ -461,18 +455,18 @@ def edit_file():
                     os.path.join(k.download_path, new_name + file_extension)
                 ):
                     flash(
-                        "Error Renaming file: '%s' to '%s'. Filename already exists."
+                        _("Error Renaming file: '%s' to '%s'. Filename already exists.")
                         % (old_name, new_name + file_extension),
                         "is-danger",
                     )
                 else:
                     k.rename(old_name, new_name)
                     flash(
-                        "Renamed file: '%s' to '%s'." % (old_name, new_name),
+                        _("Renamed file: '%s' to '%s'.") % (old_name, new_name),
                         "is-warning",
                     )
         else:
-            flash("Error: No filename parameters were specified!", "is-danger")
+            flash(_("Error: No filename parameters were specified!"), "is-danger")
         return redirect(url_for("browse"))
 
 
@@ -523,6 +517,9 @@ def info():
     languages = LANGUAGES
     audio_delay = k.user_audio_delay
 
+    #  disable_bg_music = k.disable_bg_music
+    #  disable_score = k.disable_score
+
     return render_template(
         "info.html",
         site_title=site_name,
@@ -536,6 +533,9 @@ def info():
         pikaraoke_version=VERSION,
         languages=languages,
         audio_delay=audio_delay,
+        disable_bg_music=k.disable_bg_music,
+        disable_score=k.disable_score,
+        show_overlay=k.show_overlay,
         admin=is_admin(),
         admin_enabled=admin_password != None,
     )
@@ -569,33 +569,78 @@ def update_youtube_dl():
 def update_ytdl():
     if is_admin():
         flash(
-            "Updating youtube-dl! Should take a minute or two... ",
+            _("Updating youtube-dl! Should take a minute or two... "),
             "is-warning",
         )
         th = threading.Thread(target=update_youtube_dl)
         th.start()
     else:
-        flash("You don't have permission to update youtube-dl", "is-danger")
+        flash(_("You don't have permission to update youtube-dl"), "is-danger")
     return redirect(url_for("home"))
 
 
-# def update_youtube_dl():
-#     time.sleep(3)
-#     k.upgrade_youtubedl()
+@app.route("/force_audio_hdmi")
+def force_audio_hdmi():
+    if is_admin():
+        flash(
+            _("Forcing audio output through HDMI"),
+            "is-warning",
+        )
+        #   th = threading.Thread(target=update_pikaraoke)
+        #   th.start()
+        response = k.force_audio("0")
+        if response:
+            th = threading.Thread(target=delayed_halt, args=[2])
+            th.start()
+        else:
+            flash(_("Error trying to force audio output."), "is-danger")
+    else:
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    return redirect(url_for("home"))
+
+
+@app.route("/force_audio_jack")
+def force_audio_jack():
+    if is_admin():
+        flash(
+            _("Forcing audio output through 3.5 Jack"),
+            "is-warning",
+        )
+        #   th = threading.Thread(target=update_pikaraoke)
+        #   th.start()
+        response = k.force_audio("1")
+        if response:
+            th = threading.Thread(target=delayed_halt, args=[2])
+            th.start()
+    else:
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    return redirect(url_for("home"))
+
+
+@app.route("/change_prefs")
+def change_prefs():
+    if is_admin():
+        pref = request.args["pref"]
+        val = int(request.args["val"])
+        response = k.change_prefs(pref, val)
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    else:
+        flash(_("You don't have permission to define audio output"), "is-danger")
+    return redirect(url_for("home"))
 
 
 @app.route("/update_pikaraoke")
 def update_pikaraoke():
     if is_admin():
         flash(
-            "Updating pikaraoke. Just wait.",
+            _("Updating pikaraoke. Just wait."),
             "is-warning",
         )
         #   th = threading.Thread(target=update_pikaraoke)
         #   th.start()
         k.update_pikaraoke()
     else:
-        flash("You don't have permission to update PiKaraoke", "is-danger")
+        flash(_("You don't have permission to update PiKaraoke"), "is-danger")
     return redirect(url_for("home"))
 
 
@@ -604,7 +649,6 @@ def select_language():
     # if is_admin():
     lang = request.args.get("lang")
     k.change_language(lang)
-    logging.debug("MUDOU A LÍNGUA PARA " + lang)
     return redirect(url_for("info"))
 
 
@@ -637,53 +681,53 @@ def refresh():
     if is_admin():
         k.get_available_songs()
     else:
-        flash("You don't have permission to shut down", "is-danger")
+        flash(_("You don't have permission to shut down"), "is-danger")
     return redirect(url_for("browse"))
 
 
 @app.route("/quit")
 def quit():
     if is_admin():
-        flash("Quitting pikaraoke now!", "is-warning")
+        flash(_("Quitting pikaraoke now!"), "is-warning")
         th = threading.Thread(target=delayed_halt, args=[0])
         th.start()
     else:
-        flash("You don't have permission to quit", "is-danger")
+        flash(_("You don't have permission to quit"), "is-danger")
     return redirect(url_for("home"))
 
 
 @app.route("/shutdown")
 def shutdown():
     if is_admin():
-        flash("Shutting down system now!", "is-danger")
+        flash(_("Shutting down system now!"), "is-danger")
         th = threading.Thread(target=delayed_halt, args=[1])
         th.start()
     else:
-        flash("You don't have permission to shut down", "is-danger")
+        flash(_("You don't have permission to shut down"), "is-danger")
     return redirect(url_for("home"))
 
 
 @app.route("/reboot")
 def reboot():
     if is_admin():
-        flash("Rebooting system now!", "is-danger")
+        flash(_("Rebooting system now!"), "is-danger")
         th = threading.Thread(target=delayed_halt, args=[2])
         th.start()
     else:
-        flash("You don't have permission to Reboot", "is-danger")
+        flash(_("You don't have permission to Reboot"), "is-danger")
     return redirect(url_for("home"))
 
 
 @app.route("/expand_fs")
 def expand_fs():
     if is_admin() and platform == "raspberry_pi":
-        flash("Expanding filesystem and rebooting system now!", "is-danger")
+        flash(_("Expanding filesystem and rebooting system now!"), "is-danger")
         th = threading.Thread(target=delayed_halt, args=[3])
         th.start()
     elif platform != "raspberry_pi":
-        flash("Cannot expand fs on non-raspberry pi devices!", "is-danger")
+        flash(_("Cannot expand fs on non-raspberry pi devices!"), "is-danger")
     else:
-        flash("You don't have permission to resize the filesystem", "is-danger")
+        flash(_("You don't have permission to resize the filesystem"), "is-danger")
     return redirect(url_for("home"))
 
 
@@ -872,6 +916,7 @@ if __name__ == "__main__":
         "--show-overlay",
         action="store_true",
         help="Show overlay on top of video with pikaraoke QR code and IP",
+        default=None,
         required=False,
     ),
     parser.add_argument(
@@ -888,14 +933,16 @@ if __name__ == "__main__":
     ),
     parser.add_argument(
         "--disable-score",
-        help="Disable the score after each song",
+        help="Disable the score screen after each song",
         action="store_true",
+        default=None,
         required=False,
     ),
     parser.add_argument(
         "--disable-bg-music",
-        help="Disable the background music on splash screen",
+        help="Disable background music on splash screen",
         action="store_true",
+        default=None,
         required=False,
     ),
     parser.add_argument(
