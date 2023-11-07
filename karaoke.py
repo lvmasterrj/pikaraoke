@@ -327,8 +327,8 @@ class Karaoke:
 
             g = git.cmd.Git(self.base_path)
             g.fetch()
-            git.reset('--hard')
-            git.merge('@{u}')
+            g.reset('--hard')
+            g.merge('@{u}')
             # msg =  g.pull()
             # logging.debug(msg)
             # g.clone()
