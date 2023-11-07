@@ -326,7 +326,12 @@ class Karaoke:
             import git
 
             g = git.cmd.Git(self.base_path)
-            g.pull()
+            g.fetch()
+            git.reset('--hard')
+            git.merge('@{u}')
+            # msg =  g.pull()
+            # logging.debug(msg)
+            # g.clone()
             resultado = "PiKaraoke successfully updated!"
         except Exception as e:
             resultado = "Error trying to update PiKaraoke"
