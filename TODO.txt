@@ -1,6 +1,8 @@
 Mudar a pagina da música para diminuir e aumentar os semitons e diminuir e aumentar o delay.
 Adicionar bluetooth nas opções de configurações
 
+Adicionar opção de correção do tamanho do vídeo
+
 Create categories for the songs
 
 Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227

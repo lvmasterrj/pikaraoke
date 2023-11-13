@@ -329,9 +329,6 @@ class Karaoke:
             g.fetch()
             g.reset('--hard')
             g.merge('@{u}')
-            # msg =  g.pull()
-            # logging.debug(msg)
-            # g.clone()
             resultado = "PiKaraoke successfully updated!"
         except Exception as e:
             resultado = "Error trying to update PiKaraoke"
@@ -388,6 +385,7 @@ class Karaoke:
             self.font = pygame.font.SysFont(pygame.font.get_default_font(), 40)
             self.width = pygame.display.Info().current_w
             self.height = pygame.display.Info().current_h
+            logging.debug("Resolution = " + str(self.width) + "x" + str(self.height))
             # self.width = 800
             # self.height = 600
             logging.debug("Initializing screen mode")
