@@ -447,13 +447,14 @@ class Karaoke:
             logo_rect = logo.get_rect(center=self.screen.get_rect().center)
             self.screen.blit(logo, logo_rect)
 
-            blitY = self.screen.get_rect().bottomleft[1] - 80
+            #blitY = self.screen.get_rect().bottomleft[1] - 80
+            blitY = self.height - self.height // 13
 
             if not self.hide_ip:
                 p_dimension = self.width//12
                 p_image = pygame.image.load(self.qr_code_path)
                 p_image = pygame.transform.scale(p_image, (p_dimension, p_dimension))
-                self.screen.blit(p_image, (20, blitY - 125))
+                self.screen.blit(p_image, (self.width//96, blitY - self.height//9))
                 if not self.is_network_connected():
                     text = self.font.render(
                         self._("Wifi/Network not connected. Shutting down in 10s..."),
