@@ -382,10 +382,11 @@ class Karaoke:
             pygame.display.set_caption("pikaraoke")
             pygame.font.init()
             pygame.mouse.set_visible(0)
-            self.font = pygame.font.SysFont(pygame.font.get_default_font(), 40)
             self.width = pygame.display.Info().current_w
             self.height = pygame.display.Info().current_h
             logging.debug("Resolution = " + str(self.width) + "x" + str(self.height))
+            font_size = self.width//48
+            self.font = pygame.font.SysFont(pygame.font.get_default_font(), font_size)
             # self.width = 800
             # self.height = 600
             logging.debug("Initializing screen mode")
@@ -440,15 +441,18 @@ class Karaoke:
 
             self.screen.fill((18, 0, 20))
 
+            logo_dimension = self.width//4
             logo = pygame.image.load(self.logo_path)
+            logo = pygame.transform.scale(logo, (logo_dimension, logo_dimension))
             logo_rect = logo.get_rect(center=self.screen.get_rect().center)
             self.screen.blit(logo, logo_rect)
 
             blitY = self.screen.get_rect().bottomleft[1] - 80
 
             if not self.hide_ip:
+                p_dimension = self.width//12
                 p_image = pygame.image.load(self.qr_code_path)
-                p_image = pygame.transform.scale(p_image, (150, 150))
+                p_image = pygame.transform.scale(p_image, (p_dimension, p_dimension))
                 self.screen.blit(p_image, (20, blitY - 125))
                 if not self.is_network_connected():
                     text = self.font.render(
