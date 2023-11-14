@@ -686,7 +686,7 @@ class Karaoke:
                 if len(next_song) > max_length:
                     next_song = next_song[0:max_length] + "..."
                 next_user = self.queue[0]["user"]
-                font_next_song = pygame.font.SysFont(pygame.font.get_default_font(), 60)
+                font_next_song = pygame.font.SysFont(pygame.font.get_default_font(), self.width//32)
                 text = font_next_song.render(
                     self._("Up next: ") + "%s" % (unidecode(next_song)),
                     True,
@@ -695,16 +695,16 @@ class Karaoke:
                 up_next = font_next_song.render(
                     self._("Up next:  "), True, (255, 255, 0)
                 )
-                font_user_name = pygame.font.SysFont(pygame.font.get_default_font(), 50)
+                font_user_name = pygame.font.SysFont(pygame.font.get_default_font(), self.width//38)
                 user_name = font_user_name.render(
                     self._("Added by: ") + "%s" % next_user, True, (255, 120, 0)
                 )
-                x = self.width - text.get_width() - 10
-                y = 5
+                x = self.width - text.get_width() - self.width // 32
+                y = self.height // 27
                 self.screen.blit(text, (x, y))
                 self.screen.blit(up_next, (x, y))
                 self.screen.blit(
-                    user_name, (self.width - user_name.get_width() - 10, y + 50)
+                    user_name, (self.width - user_name.get_width() - self.width // 32, y + self.width//38)
                 )
                 return True
             else:
