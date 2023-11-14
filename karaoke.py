@@ -449,19 +449,20 @@ class Karaoke:
 
             #blitY = self.screen.get_rect().bottomleft[1] - 80
             blitY = self.height - self.height // 13
+            x_space = self.width//40
 
             if not self.hide_ip:
                 p_dimension = self.width//12
                 p_image = pygame.image.load(self.qr_code_path)
                 p_image = pygame.transform.scale(p_image, (p_dimension, p_dimension))
-                self.screen.blit(p_image, (self.width//96, blitY - self.height//9))
+                self.screen.blit(p_image, (x_space, blitY - self.height//9))
                 if not self.is_network_connected():
                     text = self.font.render(
                         self._("Wifi/Network not connected. Shutting down in 10s..."),
                         True,
                         (255, 255, 255),
                     )
-                    self.screen.blit(text, (p_image.get_width() + 35, blitY))
+                    self.screen.blit(text, (x_space + p_image.get_width() + 35, blitY))
                     time.sleep(10)
                     logging.info(
                         self._(
@@ -472,7 +473,7 @@ class Karaoke:
                 else:
                     text = self._("Connect at: ")
                     text = self.font.render(text + self.url, True, (255, 255, 255))
-                    self.screen.blit(text, (p_image.get_width() + 35, blitY))
+                    self.screen.blit(text, (x_space + p_image.get_width() + 35, blitY))
 
             if not self.hide_raspiwifi_instructions and (
                 self.raspi_wifi_config_installed
