@@ -78,6 +78,8 @@ class VLCClient:
             "--no-video-title",
             "--mouse-hide-timeout",
             "0",
+            "--audio-filter",
+            "karaoke",
         ]
         if self.platform == "osx":
             self.cmd_base += [
