@@ -39,7 +39,8 @@ class Karaoke:
     transposing = False
     remove_vocal = False
     is_paused = True
-    process = None
+    # process = None
+    user_intervention = False
     qr_code_path = None
     base_path = os.path.dirname(__file__)
     volume_offset = 0
@@ -862,8 +863,10 @@ class Karaoke:
 
         self.is_paused = False
         self.render_splash_screen()  # remove old previous track
+        self.user_intervention = False
 
     def transpose_current(self, semitones):
+        self.user_intervention = True
         if self.use_vlc:
             logging.info("Transposing song by %s semitones" % semitones)
             self.now_playing_transpose = semitones
@@ -872,6 +875,7 @@ class Karaoke:
             logging.error("Not using VLC. Can't transpose track.")
 
     def remove_current_vocal(self):
+        self.user_intervention = True
         params = []
         if self.use_vlc:
             logging.info("Removing vocal: " + str(not self.remove_vocal))
@@ -887,7 +891,6 @@ class Karaoke:
         delay = str(int(self.user_audio_delay) + delay)
         logging.debug("Setting an audio delay of " + delay + " on current video")
         if self.is_file_playing():
-            logging.debug("Está tocando, então, altera o video atual")
             if self.use_vlc:
                 status_xml = (
                     self.vlcclient.command().text
@@ -896,8 +899,6 @@ class Karaoke:
                 )
                 info = self.vlcclient.get_info_xml(status_xml)
                 posi = info["position"] * info["length"]
-                logging.debug("Posição atual: " + str(posi))
-                logging.debug("Filename atual: " + str(self.now_playing_filename))
                 self.play_file(
                     self.now_playing_filename,
                     [f"--start-time={posi}"]
@@ -913,6 +914,8 @@ class Karaoke:
         return False
 
     def is_file_playing(self):
+        if self.user_intervention == True:
+            return True
         if self.use_vlc:
             if self.vlcclient != None and self.vlcclient.is_running():
                 return True

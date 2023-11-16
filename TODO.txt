@@ -3,6 +3,8 @@ Adicionar bluetooth nas opções de configurações
 
 Create categories for the songs
 
+Download only hd videos
+
 Aumentar o QR que aparece sobre os videos no VLC
 
 Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227
