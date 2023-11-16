@@ -87,6 +87,7 @@ def home():
         title="Home",
         show_transpose=k.use_vlc,
         transpose_value=k.now_playing_transpose,
+        remove_vocal=k.remove_vocal,
         admin=is_admin(),
         #   volume=s["volume"],
         #   seektrack_value=s["time"],
@@ -247,6 +248,11 @@ def pause():
 def transpose(semitones):
     k.transpose_current(semitones)
     #  return redirect(url_for("home"))
+    return ""
+
+@app.route("/remove_vocal")
+def remove_vocal():
+    k.remove_current_vocal()
     return ""
 
 

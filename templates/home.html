@@ -117,9 +117,21 @@
       }
     });
 
+    $("#remove-vocal").click(function(){
+      $.get("/remove_vocal")
+    })
+
     $("#semitones-info").click(function () {
       showNotification(
         "A semitone is also known as a half-step. It is the smallest interval used in classical Western music, equal to a twelfth of an octave or half a tone.",
+        "is-info",
+        10000
+      );
+    });
+    
+    $("#remove-vocal-info").click(function () {
+      showNotification(
+        "Check this if you want to remove the vocals from a music that is not in karaoke style (without vocals). It's not 100% accurate, but help sometimes.",
         "is-info",
         10000
       );
@@ -228,6 +240,13 @@
         playing song. #} {% trans %}Change{% endtrans %}
       </button>
     </div>
+  </div>
+  <hr />
+  <div>
+    <label class="checkbox">
+      <input id="remove-vocal" type="checkbox" {% if remove_vocal == True %}checked{% endif %}>
+      Remove this song vocal<a id="remove-vocal-info"><i class="icon icon-info-circled-1" title="Info"></i></a>
+    </label>
   </div>
 </div>
 {% endif %} {% endif %}

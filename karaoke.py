@@ -37,6 +37,7 @@ class Karaoke:
     now_playing_user = None
     now_playing_transpose = 0
     transposing = False
+    remove_vocal = False
     is_paused = True
     process = None
     qr_code_path = None
@@ -866,21 +867,20 @@ class Karaoke:
         if self.use_vlc:
             logging.info("Transposing song by %s semitones" % semitones)
             self.now_playing_transpose = semitones
-            # status_xml = (
-            #     self.vlcclient.command().text
-            #     if self.is_paused
-            #     else self.vlcclient.pause(False).text
-            # )
-            # info = self.vlcclient.get_info_xml(status_xml)
-            # posi = info["position"] * info["length"]
-            # self.play_file(
-            #     self.now_playing_filename,
-            #     [f"--start-time={posi}"]
-            #     + (["--start-paused"] if self.is_paused else []),
-            # )
             self.play_file(self.now_playing_filename)
         else:
             logging.error("Not using VLC. Can't transpose track.")
+
+    def remove_current_vocal(self):
+        params = []
+        if self.use_vlc:
+            logging.info("Removing vocal: " + str(not self.remove_vocal))
+            self.remove_vocal = not self.remove_vocal
+            if self.remove_vocal == True:
+                params = ["--audio-filter", "karaoke"]
+            self.play_file(self.now_playing_filename, extra_params=params)
+        else:
+            logging.error("Not using VLC. Can't remove vocals")
 
     def set_audio_delay(self, delay=0):
 
@@ -1142,6 +1142,7 @@ class Karaoke:
         self.now_playing_user = None
         self.is_paused = True
         self.now_playing_transpose = 0
+        self.remove_vocal = False
         # self.transposing = False
 
     def change_language(self, language):
