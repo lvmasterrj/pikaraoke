@@ -23,6 +23,8 @@
             "<span>";
         }
 
+        // $("#transpose").val(obj.transpose_value);
+
         $("#now-playing").html(nowPlayingHtml);
         $(".control-box").show();
       } else {
@@ -83,7 +85,7 @@
       if (r) {
         $.get("/transpose/" + value);
       }
-      slider.value = 0;
+      // slider.value = 0;
       output.innerHTML = getSemitonesLabel(slider.value);
     });
 

@@ -867,12 +867,31 @@ class Karaoke:
 
     def transpose_current(self, semitones):
         self.user_intervention = True
+        # if self.use_vlc:
+        #     logging.info("Transposing song by %s semitones" % semitones)
+        #     self.now_playing_transpose = semitones
+        #     self.play_file(self.now_playing_filename)
+        # else:
+        #     logging.error("Not using VLC. Can't transpose track.")
         if self.use_vlc:
+            if self.now_playing_transpose == semitones:
+                return
             logging.info("Transposing song by %s semitones" % semitones)
             self.now_playing_transpose = semitones
-            self.play_file(self.now_playing_filename)
+            self.change_current_player()
         else:
             logging.error("Not using VLC. Can't transpose track.")
+
+    def change_current_player(self, params=[]):
+        status_xml = (
+            self.vlcclient.command().text
+            if self.is_paused
+            else self.vlcclient.pause(False).text
+        )
+        info = self.vlcclient.get_info_xml(status_xml)
+        posi = info["position"] * info["length"]
+        params +=[f"--start-time={posi}"] + (["--start-paused"] if self.is_paused else [])
+        self.play_file(self.now_playing_filename, params)
 
     def remove_current_vocal(self):
         self.user_intervention = True
@@ -882,7 +901,7 @@ class Karaoke:
             self.remove_vocal = not self.remove_vocal
             if self.remove_vocal == True:
                 params = ["--audio-filter", "karaoke"]
-            self.play_file(self.now_playing_filename, extra_params=params)
+            self.change_current_player(params)
         else:
             logging.error("Not using VLC. Can't remove vocals")
 
