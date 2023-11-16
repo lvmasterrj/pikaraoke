@@ -355,7 +355,7 @@ class Karaoke:
         logging.debug("Generating URL QR code")
         qr = qrcode.QRCode(
             version=1,
-            box_size=1,
+            box_size=3,
             border=4,
         )
         qr.add_data(self.url)
@@ -867,12 +867,6 @@ class Karaoke:
 
     def transpose_current(self, semitones):
         self.user_intervention = True
-        # if self.use_vlc:
-        #     logging.info("Transposing song by %s semitones" % semitones)
-        #     self.now_playing_transpose = semitones
-        #     self.play_file(self.now_playing_filename)
-        # else:
-        #     logging.error("Not using VLC. Can't transpose track.")
         if self.use_vlc:
             if self.now_playing_transpose == semitones:
                 return

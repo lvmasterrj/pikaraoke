@@ -23,8 +23,6 @@
             "<span>";
         }
 
-        // $("#transpose").val(obj.transpose_value);
-
         $("#now-playing").html(nowPlayingHtml);
         $(".control-box").show();
       } else {
@@ -81,11 +79,7 @@
       } else {
         value = 0;
       }
-      r = confirm("Transpose this song: " + getSemitonesLabel(value) + "?");
-      if (r) {
         $.get("/transpose/" + value);
-      }
-      // slider.value = 0;
       output.innerHTML = getSemitonesLabel(slider.value);
     });
 
