@@ -1,13 +1,8 @@
 Mudar a pagina da música para diminuir e aumentar os semitons e diminuir e aumentar o delay.
 Adicionar bluetooth nas opções de configurações
 
-Adicionar opção de correção do tamanho do vídeo
-
-TESTAR O RPI NO RCA (1. ATUALIZAR O RPI, 2. RODAR O PIKARAOKE, 3. VER NO LOG A RESOLUÇÃO DO RCA)
-
 Create categories for the songs
 
-Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227
+Aumentar o QR que aparece sobre os videos no VLC
 
-Ajeitar o auto update
-https://github.com/erfantkerfan/selfupdate
+Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227

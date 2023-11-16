@@ -99,7 +99,7 @@ class VLCClient:
     def get_marquee_cmd(self):
         return [
             "--sub-source",
-            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="%s%s",position=9,x=38,color=0xFFFFFF,size=11,opacity=200}'
+            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="%s%s",position=9,x=38,color=0xFFFFFF,size=20,opacity=200}'
             % (self.qrcode, self.connecttext, self.url),
         ]
 
