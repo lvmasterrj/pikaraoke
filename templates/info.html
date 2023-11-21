@@ -21,23 +21,23 @@
         $("#test-av-delay").click(function(e) {
             e.preventDefault();
             $("#stop-av-delay-test").toggleClass("is-inline")
-            $.get('teste_av_delay').done(function() {});
+            $.get('/teste_av_delay')
         })
         $("#stop-av-delay-test").click(function(e) {
             e.preventDefault();
-            $.get('stop_av_delay_test').done(function() {
+            $.get('/stop_av_delay_test').done(function() {
                 $("#stop-av-delay-test").toggleClass("is-inline")
             });
         })
         $("#delay-dec").click(function() {
-            $.get('decrease_pref_av_delay').done(function(data) {
-                $("#delay-val").text(data)
-            });
+            val = $("#delay-val").text() - 100
+            $.get('/set_pref_av_delay',{"val":val})
+            $("#delay-val").text(val)
         })
         $("#delay-inc").click(function() {
-            $.get('increase_pref_av_delay').done(function(data) {
-                $("#delay-val").text(data)
-            });
+            val = parseInt($("#delay-val").text()) + 100
+            $.get('/set_pref_av_delay',{"val":val})
+            $("#delay-val").text(val)
         })
         $("#pref-bg-music").click(function() {
             var val = $("#pref-bg-music").is(":checked") ? 1 : 0;

@@ -1,10 +1,9 @@
 Mudar a pagina da música para diminuir e aumentar os semitons e diminuir e aumentar o delay.
+
 Adicionar bluetooth nas opções de configurações
 
 Create categories for the songs
 
 Download only hd videos
-
-Aumentar o QR que aparece sobre os videos no VLC
 
 Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227

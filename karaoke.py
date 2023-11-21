@@ -36,6 +36,7 @@ class Karaoke:
     now_playing_filename = None
     now_playing_user = None
     now_playing_transpose = 0
+    now_playing_delay = 0
     transposing = False
     remove_vocal = False
     is_paused = True
@@ -841,8 +842,10 @@ class Karaoke:
         self.now_playing_filename = file_path
 
         if self.use_vlc:
+            
             logging.info("Playing video in VLC: " + self.now_playing)
-            extra_params += [f"--audio-desync={self.user_audio_delay}"]
+
+            extra_params += [f"--audio-desync={int(self.user_audio_delay) + int(self.now_playing_delay)}"]
 
             if self.now_playing_transpose == 0:
                 self.vlcclient.play_file(
@@ -877,6 +880,7 @@ class Karaoke:
             logging.error("Not using VLC. Can't transpose track.")
 
     def change_current_player(self, params=[]):
+        self.user_intervention = True
         status_xml = (
             self.vlcclient.command().text
             if self.is_paused
@@ -900,24 +904,13 @@ class Karaoke:
             logging.error("Not using VLC. Can't remove vocals")
 
     def set_audio_delay(self, delay=0):
-
-        delay = str(int(self.user_audio_delay) + delay)
-        logging.debug("Setting an audio delay of " + delay + " on current video")
         if self.is_file_playing():
             if self.use_vlc:
-                status_xml = (
-                    self.vlcclient.command().text
-                    if self.is_paused
-                    else self.vlcclient.pause(False).text
-                )
-                info = self.vlcclient.get_info_xml(status_xml)
-                posi = info["position"] * info["length"]
-                self.play_file(
-                    self.now_playing_filename,
-                    [f"--start-time={posi}"]
-                    + (["--start-paused"] if self.is_paused else []),
-                )
-
+                if self.now_playing_delay == delay:
+                    return
+                logging.debug("Setting an audio delay of " + str(delay) + "ms on current video")
+                self.now_playing_delay = delay
+                self.change_current_player()
             else:
                 logging.warning("OMXplayer cannot set audio delay!")
             return delay
@@ -1158,6 +1151,7 @@ class Karaoke:
         self.now_playing_user = None
         self.is_paused = True
         self.now_playing_transpose = 0
+        self.now_playing_delay = 0
         self.remove_vocal = False
         # self.transposing = False
 
@@ -1176,17 +1170,22 @@ class Karaoke:
         self.render_splash_screen()
 
     def update_pref_av_delay(self, delay):
-        if delay == "d":
-            self.user_audio_delay = str(int(self.user_audio_delay) - 100)
-        else:
-            self.user_audio_delay = str(int(self.user_audio_delay) + 100)
 
+
+        if self.user_audio_delay == str(delay):
+            return
+        
+        logging.debug("Updating user preference of audio delay to " + str(delay) + "ms")
+        self.user_audio_delay = str(delay)
         userprefs = self.config_obj["USERPREFERENCES"]
         userprefs["audio_delay"] = self.user_audio_delay
         with open("config.ini", "w") as conf:
             self.config_obj.write(conf)
 
-        self.set_audio_delay()
+        if self.is_file_playing():
+            if self.use_vlc:
+                logging.debug("Setting an audio delay of " + str(delay) + "ms on current video")
+                self.change_current_player()
 
         return self.user_audio_delay
 

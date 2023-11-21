@@ -250,6 +250,11 @@ def transpose(semitones):
     #  return redirect(url_for("home"))
     return ""
 
+@app.route("/set_audio_delay/<delay>", methods=["GET"])
+def set_audio_delay(delay):
+    k.set_audio_delay(int(delay))
+    return ""
+
 @app.route("/remove_vocal")
 def remove_vocal():
     k.remove_current_vocal()
@@ -670,16 +675,19 @@ def stop_av_delay_test():
     return ""
 
 
-@app.route("/decrease_pref_av_delay")
-def decrease_pref_delay():
-    audio_delay = k.update_pref_av_delay("d")
-    return audio_delay
+@app.route("/set_pref_av_delay", methods=["GET"])
+def set_pref_delay():
+    val = request.args.get("val")
+    k.update_pref_av_delay(val)
+    return ""
 
 
-@app.route("/increase_pref_av_delay")
-def increase_pref_delay():
-    audio_delay = k.update_pref_av_delay("i")
-    return audio_delay
+
+# @app.route("/transpose/<semitones>", methods=["GET"])
+# def transpose(semitones):
+#     k.transpose_current(semitones)
+#     #  return redirect(url_for("home"))
+#     return ""
 
 
 @app.route("/refresh")

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-11-07 18:06-0300\n"
+"POT-Creation-Date: 2023-11-21 15:47-0300\n"
 "PO-Revision-Date: 2022-12-22 08:34-0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -19,274 +19,274 @@ msgstr ""
 "Generated-By: Babel 2.9.1\n"
 
 #. Message shown after logging in as admin successfully
-#: app.py:108
+#: app.py:109
 msgid "Admin mode granted!"
 msgstr ""
 
 #. Message shown after failing to login as admin
-#: app.py:112
+#: app.py:113
 msgid "Incorrect admin password!"
 msgstr ""
 
-#: app.py:125
+#: app.py:126
 msgid "Logged out of admin mode!"
 msgstr ""
 
-#: app.py:149
+#: app.py:150
 msgid "Problem loading /nowplaying, pikaraoke may still be starting up: "
 msgstr ""
 
-#: app.py:179
+#: app.py:180
 #, python-format
 msgid "Added %s random tracks"
 msgstr ""
 
-#: app.py:181
+#: app.py:182
 msgid "Ran out of songs!"
 msgstr ""
 
-#: app.py:190
+#: app.py:191
 msgid "Cleared the queue!"
 msgstr ""
 
-#: app.py:198
+#: app.py:199
 msgid "Moved down in queue: "
 msgstr ""
 
-#: app.py:200
+#: app.py:201
 msgid "Error moving down in queue: "
 msgstr ""
 
-#: app.py:204
+#: app.py:205
 msgid "Moved up in queue: "
 msgstr ""
 
-#: app.py:206
+#: app.py:207
 msgid "Error moving up in queue: "
 msgstr ""
 
-#: app.py:210
+#: app.py:211
 msgid "Deleted from queue: "
 msgstr ""
 
-#: app.py:212
+#: app.py:213
 msgid "Error deleting from queue: "
 msgstr ""
 
 #. Title of the files page.
 #. Navigation link for the page where the user can add existing songs to the
 #. queue.
-#: app.py:362 templates/base.html:159
+#: app.py:373 templates/base.html:159
 msgid "Browse"
 msgstr ""
 
-#: app.py:383
+#: app.py:394
 msgid "Download started: ''. This may take a couple of minutes to complete. "
 msgstr ""
 
-#: app.py:390
+#: app.py:401
 msgid "Song will be added to queue."
 msgstr ""
 
-#: app.py:392
+#: app.py:403
 msgid "Song will appear in the \"available songs\" list."
 msgstr ""
 
-#: app.py:413
+#: app.py:424
 msgid "Error: Can't delete this song because it is in the current queue: "
 msgstr ""
 
-#: app.py:419
+#: app.py:430
 msgid "Song deleted: "
 msgstr ""
 
-#: app.py:421
+#: app.py:432
 msgid "Error: No song parameter specified!"
 msgstr ""
 
-#: app.py:427
+#: app.py:438
 msgid "Error: Can't edit this song because it is in the current queue: "
 msgstr ""
 
-#: app.py:458
+#: app.py:469
 #, python-format
 msgid "Error Renaming file: '%s' to '%s'. Filename already exists."
 msgstr ""
 
-#: app.py:465
+#: app.py:476
 #, python-format
 msgid "Renamed file: '%s' to '%s'."
 msgstr ""
 
-#: app.py:469
+#: app.py:480
 msgid "Error: No filename parameters were specified!"
 msgstr ""
 
-#: app.py:572
+#: app.py:583
 msgid "Updating youtube-dl! Should take a minute or two... "
 msgstr ""
 
-#: app.py:578
+#: app.py:589
 msgid "You don't have permission to update youtube-dl"
 msgstr ""
 
-#: app.py:586
+#: app.py:597
 msgid "Forcing audio output through HDMI"
 msgstr ""
 
-#: app.py:596
+#: app.py:607
 msgid "Error trying to force audio output."
 msgstr ""
 
-#: app.py:598 app.py:616 app.py:626 app.py:628
+#: app.py:609 app.py:627 app.py:637 app.py:639
 msgid "You don't have permission to define audio output"
 msgstr ""
 
-#: app.py:606
+#: app.py:617
 msgid "Forcing audio output through 3.5 Jack"
 msgstr ""
 
-#: app.py:636
+#: app.py:647
 msgid "Updating pikaraoke. Just wait."
 msgstr ""
 
-#: app.py:643
+#: app.py:654
 msgid "You don't have permission to update PiKaraoke"
 msgstr ""
 
-#: app.py:684 app.py:706
+#: app.py:698 app.py:720
 msgid "You don't have permission to shut down"
 msgstr ""
 
-#: app.py:691
+#: app.py:705
 msgid "Quitting pikaraoke now!"
 msgstr ""
 
-#: app.py:695
+#: app.py:709
 msgid "You don't have permission to quit"
 msgstr ""
 
-#: app.py:702
+#: app.py:716
 msgid "Shutting down system now!"
 msgstr ""
 
-#: app.py:713
+#: app.py:727
 msgid "Rebooting system now!"
 msgstr ""
 
-#: app.py:717
+#: app.py:731
 msgid "You don't have permission to Reboot"
 msgstr ""
 
-#: app.py:724
+#: app.py:738
 msgid "Expanding filesystem and rebooting system now!"
 msgstr ""
 
-#: app.py:728
+#: app.py:742
 msgid "Cannot expand fs on non-raspberry pi devices!"
 msgstr ""
 
-#: app.py:730
+#: app.py:744
 msgid "You don't have permission to resize the filesystem"
 msgstr ""
 
-#: karaoke.py:210
+#: karaoke.py:213
 msgid "Pikaraoke - Connect at: "
 msgstr ""
 
-#: karaoke.py:457
+#: karaoke.py:464
 msgid "Wifi/Network not connected. Shutting down in 10s..."
 msgstr ""
 
-#: karaoke.py:464
+#: karaoke.py:471
 msgid ""
 "No IP found. Network/Wifi configuration required. For wifi config, try: "
 "sudo raspi-config or the desktop GUI: startx"
 msgstr ""
 
-#: karaoke.py:470
+#: karaoke.py:477
 msgid "Connect at: "
 msgstr ""
 
-#: karaoke.py:485
+#: karaoke.py:492
 msgid "RaspiWifiConfig setup mode detected!"
 msgstr ""
 
-#: karaoke.py:490
+#: karaoke.py:497
 #, python-format
 msgid "Connect another device/smartphone to the Wifi AP: '%s'"
 msgstr ""
 
-#: karaoke.py:496
+#: karaoke.py:503
 #, python-format
 msgid "Then point its browser to: '%s://%s%s' and follow the instructions."
 msgstr ""
 
-#: karaoke.py:554
+#: karaoke.py:561
 msgid "Your Score"
 msgstr ""
 
-#: karaoke.py:618
+#: karaoke.py:625
 msgid "Never sing again... ever."
 msgstr ""
 
-#: karaoke.py:619
+#: karaoke.py:626
 msgid "I hope you don't do this for a living."
 msgstr ""
 
-#: karaoke.py:620
+#: karaoke.py:627
 msgid "Thank god it's over."
 msgstr ""
 
-#: karaoke.py:621
+#: karaoke.py:628
 msgid "Pass the mic for someone else, please!"
 msgstr ""
 
-#: karaoke.py:627
+#: karaoke.py:634
 msgid "I've seen better singers."
 msgstr ""
 
-#: karaoke.py:628
+#: karaoke.py:635
 msgid "Ok... just ok."
 msgstr ""
 
-#: karaoke.py:629
+#: karaoke.py:636
 msgid "Not bad for a beginner."
 msgstr ""
 
-#: karaoke.py:630
+#: karaoke.py:637
 msgid "You put up a nice show."
 msgstr ""
 
-#: karaoke.py:636
+#: karaoke.py:643
 msgid "Congratulations! Couldn't be better."
 msgstr ""
 
-#: karaoke.py:637
+#: karaoke.py:644
 msgid "Wow, have you tried The Voice?"
 msgstr ""
 
-#: karaoke.py:638
+#: karaoke.py:645
 msgid "Please, sing another one!"
 msgstr ""
 
-#: karaoke.py:639
+#: karaoke.py:646
 msgid "You rock! You know that?!"
 msgstr ""
 
-#: karaoke.py:640
+#: karaoke.py:647
 msgid "I wish more people could sing like this."
 msgstr ""
 
-#: karaoke.py:687
+#: karaoke.py:694
 msgid "Up next: "
 msgstr ""
 
-#: karaoke.py:692
+#: karaoke.py:699
 msgid "Up next:  "
 msgstr ""
 
-#: karaoke.py:696
+#: karaoke.py:703
 msgid "Added by: "
 msgstr ""
 
@@ -397,86 +397,110 @@ msgstr ""
 
 #. Message which shows in the "Now Playing" section when there is no song
 #. currently playing
-#: templates/home.html:30 templates/home_old.html:48
+#: templates/home.html:38 templates/home_old.html:48
 msgid "Nothing is playing right now."
 msgstr ""
 
 #. Title text for the icon marking the next person to sing.
-#: templates/home.html:38 templates/home_old.html:56
+#: templates/home.html:46 templates/home_old.html:56
 msgid "Next singer"
 msgstr ""
 
 #. Alternative text for the "Up next" section if no more songs are queued up.
 #. Message when the queue of songs is empty.  Shown instead of what the next
 #. song is.
-#: templates/home.html:41 templates/home_old.html:59 templates/splash.html:17
+#: templates/home.html:49 templates/home_old.html:59 templates/splash.html:17
 msgid "No song is queued."
 msgstr ""
 
 #. Confirmation message when clicking a button to skip a track.
-#: templates/home.html:113 templates/home_old.html:145
+#: templates/home.html:140 templates/home_old.html:145
 msgid ""
 "Are you sure you want to skip this track? If you didn't add this song, "
 "ask permission first!"
 msgstr ""
 
+#. Info message about semitones
+#. Semitone information.
+#: templates/home.html:154 templates/home_old.html:155
+msgid ""
+"A semitone is also known as a half-step. It is the smallest interval used"
+" in classical Western music, equal to a twelfth of an octave or half a "
+"tone."
+msgstr ""
+
+#. Info message about the function of removing vocals
+#: templates/home.html:163
+#, python-format
+msgid ""
+"Check this if you want to remove the vocals from a music that is not in "
+"karaoke style (without vocals). Although is not 100%% accurate, it helps "
+"sometimes."
+msgstr ""
+
+#. Info message about the function of delaying audio
+#: templates/home.html:172
+msgid ""
+"Use this slider if the audio is not in sync with the video. If the audio "
+"is ahead of the video, increase the audio delay."
+msgstr ""
+
 #. Header showing the currently playing song.
-#: templates/home.html:145 templates/home_old.html:177
+#: templates/home.html:195 templates/home_old.html:177
 msgid "Now Playing"
 msgstr ""
 
 #. Title for the section displaying the next song to be played.
-#: templates/home.html:159 templates/home_old.html:186
+#: templates/home.html:209 templates/home_old.html:186
 msgid "Next Song"
 msgstr ""
 
 #. Title of the box with controls such as pause and skip.
-#: templates/home.html:167 templates/home_old.html:192
+#: templates/home.html:217 templates/home_old.html:192
 msgid "Player Control"
 msgstr ""
 
 #. Title attribute on the button to restart the current song.
-#: templates/home.html:170 templates/home_old.html:195
+#: templates/home.html:220 templates/home_old.html:195
 msgid "Restart Song"
 msgstr ""
 
 #. Title attribute on the button to play or pause the     current song.
-#: templates/home.html:174 templates/home_old.html:198
+#: templates/home.html:224 templates/home_old.html:198
 msgid "Play/Pause"
 msgstr ""
 
 #. Title attribute on the button to skip to the next     song.
-#: templates/home.html:178 templates/home_old.html:202
+#: templates/home.html:228 templates/home_old.html:202
 msgid "Stop Current Song"
 msgstr ""
 
 #. Title attribute on the button to adjust volume down.
-#: templates/home.html:183 templates/home_old.html:207
+#: templates/home.html:233 templates/home_old.html:207
 msgid "Volume Down"
 msgstr ""
 
 #. Title attribute on the button to adjust volume up.
-#: templates/home.html:187 templates/home_old.html:211
+#: templates/home.html:237 templates/home_old.html:211
 msgid "Volume Up"
 msgstr ""
 
 #. Title of a control to change the key/pitch of the playing song.
-#: templates/home.html:200 templates/home_old.html:222
+#: templates/home.html:250 templates/home_old.html:222
 msgid "Change Key"
 msgstr ""
 
 #. Label on the button to confirm the change in key/pitch of the
 #. playing song.
-#: templates/home.html:228
+#. Label on the button to confirm the change of the delay of the audio of the
+#: templates/home.html:278 templates/home.html:315
 msgid "Change"
 msgstr ""
 
-#. Semitone information.
-#: templates/home_old.html:155
-msgid ""
-"A semitone is also known as a half-step. It is the smallest interval used"
-" in classical Western music, equal to a twelfth of an octave or half a "
-"tone."
+#. Title of a control to change the delay of the audio of the playing song.
+#. Title of the section for configuring the default audio delay
+#: templates/home.html:286 templates/info.html:210
+msgid "Audio delay"
 msgstr ""
 
 #. Confirmation text whe the user starts to turn off the machine running
@@ -658,11 +682,6 @@ msgstr ""
 #. Text to inform about language switching
 #: templates/info.html:201 templates/info.html:232
 msgid "Select the languages that you want to display."
-msgstr ""
-
-#. Title of the section for configuring the default audio delay
-#: templates/info.html:210
-msgid "Audio delay"
 msgstr ""
 
 #. Instructions on configuring audio delay
@@ -1036,5 +1055,28 @@ msgstr ""
 #~ "irreversible. Do it with caution, at "
 #~ "your own risk!\\nAfter updating, the "
 #~ "system will reboot."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Use this slider if the audio is"
+#~ " not in sync with the video. If"
+#~ " the audio is ahead of the "
+#~ "video, decrease the audio delay."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check this if you want to remove"
+#~ " the vocals from a music that "
+#~ "is not in karaoke style (without "
+#~ "vocals). It's not 100% accurate, but "
+#~ "help sometimes."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Check this if you want to remove"
+#~ " the vocals from a music that "
+#~ "is not in karaoke style (without "
+#~ "vocals). Although is not 100% accurate,"
+#~ " it helps sometimes."
 #~ msgstr ""
 
