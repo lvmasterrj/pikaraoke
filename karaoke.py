@@ -40,7 +40,6 @@ class Karaoke:
     transposing = False
     remove_vocal = False
     is_paused = True
-    # process = None
     user_intervention = False
     qr_code_path = None
     base_path = os.path.dirname(__file__)
@@ -81,7 +80,6 @@ class Karaoke:
         self.vlcclient = None
         self.omxclient = None
         self.screen = None
-        self.player_state = {}
 
         self.config_obj = configparser.ConfigParser()
         # This is for the autostart script to work properly
@@ -1095,24 +1093,6 @@ class Karaoke:
             logging.warning("Tried to volume down, but no file is playing!")
             return False
 
-    # def get_state(self):
-    #     logging.debug("Getting state")
-    #     if self.use_vlc and self.vlcclient.is_transposing:
-    #         return defaultdict(lambda: None, self.player_state)
-    #     if not self.is_file_playing():
-    #         self.player_state["now_playing"] = None
-    #         return defaultdict(lambda: None, self.player_state)
-    #     new_state = (
-    #         self.vlcclient.get_info_xml()
-    #         if self.use_vlc
-    #         else {
-    #             "volume": self.omxclient.volume_offset,
-    #             "state": ("paused" if self.omxclient.paused else "playing"),
-    #         }
-    #     )
-    #     self.player_state.update(new_state)
-    #     return defaultdict(lambda: None, self.player_state)
-
     def restart(self):
         logging.debug("Restarting")
         if self.is_file_playing():
@@ -1235,21 +1215,6 @@ class Karaoke:
                         self.scored = False
                         self.queue.pop(0)
 
-                #  if not self.is_file_playing() and self.now_playing != None:
-                #      self.reset_now_playing()
-                #  if len(self.queue) > 0:
-                #      if not self.is_file_playing():
-                #          self.reset_now_playing()
-                #          if not pygame.display.get_active():
-                #              self.pygame_reset_screen()
-                #          self.render_next_song_to_splash_screen()
-                #          i = 0
-                #          while i < (self.splash_delay * 1000):
-                #              self.handle_run_loop()
-                #              i += self.loop_interval
-                #          self.play_file(self.queue[0]["file"])
-                #          self.now_playing_user = self.queue[0]["user"]
-                #          self.queue.pop(0)
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     logging.debug(
                         "Routine: Pygame display innactive and no file playing"
