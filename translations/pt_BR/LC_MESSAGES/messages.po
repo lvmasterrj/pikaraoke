@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: mawkee@gmail.com\n"
-"POT-Creation-Date: 2023-11-21 15:47-0300\n"
+"POT-Creation-Date: 2023-11-28 16:42-0300\n"
 "PO-Revision-Date: 2022-06-28 18:57-0300\n"
 "Last-Translator: FULL NAME <mawkee@gmail.com>\n"
 "Language: pt_BR\n"
@@ -198,15 +198,15 @@ msgstr ""
 msgid "You don't have permission to resize the filesystem"
 msgstr "Você não tem permissão para redimensionar o sistema de arquivos."
 
-#: karaoke.py:213
+#: karaoke.py:220
 msgid "Pikaraoke - Connect at: "
 msgstr "Pikaraoke - Conecte-se em: "
 
-#: karaoke.py:464
+#: karaoke.py:471
 msgid "Wifi/Network not connected. Shutting down in 10s..."
 msgstr "Nenhuma Wifi/Rede conectada. Desligando em 10s..."
 
-#: karaoke.py:471
+#: karaoke.py:478
 msgid ""
 "No IP found. Network/Wifi configuration required. For wifi config, try: "
 "sudo raspi-config or the desktop GUI: startx"
@@ -214,91 +214,100 @@ msgstr ""
 "Nenhum IP encontrado. É necessário a configuração de uma Rede/Wifi. "
 "Experimente: sudo raspi-config ou entrar na interface de desktop: startx"
 
-#: karaoke.py:477
+#: karaoke.py:484
 msgid "Connect at: "
 msgstr "Conecte-se em: "
 
-#: karaoke.py:492
+#: karaoke.py:499
 msgid "RaspiWifiConfig setup mode detected!"
 msgstr "Modo de configuração do RaspiWofo detectado!"
 
-#: karaoke.py:497
+#: karaoke.py:504
 #, python-format
 msgid "Connect another device/smartphone to the Wifi AP: '%s'"
 msgstr "Connect algum dispositivo/smartfone no seguinte Wifi: '%s'"
 
-#: karaoke.py:503
+#: karaoke.py:510
 #, python-format
 msgid "Then point its browser to: '%s://%s%s' and follow the instructions."
 msgstr "No navegador, acesse: '%s://%s%s' e siga as instruções."
 
-#: karaoke.py:561
+#: karaoke.py:568
 msgid "Your Score"
 msgstr "Pontuação"
 
-#: karaoke.py:625
+#: karaoke.py:632
 msgid "Never sing again... ever."
 msgstr "Nunca mais volte a cantar... nunca."
 
-#: karaoke.py:626
+#: karaoke.py:633
 msgid "I hope you don't do this for a living."
 msgstr "Espero que você não faça isso para viver."
 
-#: karaoke.py:627
+#: karaoke.py:634
 msgid "Thank god it's over."
 msgstr "Graças a Deus acabou."
 
-#: karaoke.py:628
+#: karaoke.py:635
 msgid "Pass the mic for someone else, please!"
 msgstr "Passe o microfone para alguém, por favor!"
 
-#: karaoke.py:634
+#: karaoke.py:641
 msgid "I've seen better singers."
 msgstr "Já vi cantores melhores."
 
-#: karaoke.py:635
+#: karaoke.py:642
 msgid "Ok... just ok."
 msgstr "Ok... simplesmente ok."
 
-#: karaoke.py:636
+#: karaoke.py:643
 msgid "Not bad for a beginner."
 msgstr "Nada mal para quem está começando."
 
-#: karaoke.py:637
+#: karaoke.py:644
 msgid "You put up a nice show."
 msgstr "Você mandou bem."
 
-#: karaoke.py:643
+#: karaoke.py:650
 msgid "Congratulations! Couldn't be better."
 msgstr "Parabéns! Não poderia ser melhor."
 
-#: karaoke.py:644
+#: karaoke.py:651
 msgid "Wow, have you tried The Voice?"
 msgstr "Wow, já tentou se inscrever no The Voice?"
 
-#: karaoke.py:645
+#: karaoke.py:652
 msgid "Please, sing another one!"
 msgstr "Por favor, cante mais uma!"
 
-#: karaoke.py:646
+#: karaoke.py:653
 msgid "You rock! You know that?!"
 msgstr "Você arrasou! Sabia disso?!"
 
-#: karaoke.py:647
+#: karaoke.py:654
 msgid "I wish more people could sing like this."
 msgstr "Gostaria que mais pessoas pudessem cantar assim."
 
-#: karaoke.py:694
+#: karaoke.py:701
 msgid "Up next: "
 msgstr "A seguir: "
 
-#: karaoke.py:699
+#: karaoke.py:706
 msgid "Up next:  "
 msgstr "A seguir: "
 
-#: karaoke.py:703
+#: karaoke.py:710
 msgid "Added by: "
 msgstr "Adicionado por: "
+
+#: karaoke.py:958
+msgid "Song is already in queue, will not add: "
+msgstr "A Música já está na fila: "
+
+#: karaoke.py:960
+#, python-format
+msgid "You reached the limit of %s song(s) from an user in queue!"
+msgstr "Você atingiu o limite de %s música(s) por usuário na fila!"
 
 #. Prompt when changing the current profile name.
 #: templates/base.html:80
@@ -382,30 +391,24 @@ msgstr ""
 msgid "Song added to the queue: "
 msgstr "Música adicionada na fila: "
 
-#. Notification when a song does not get added to the queue.  The song name
-#. comes after this string.
-#: templates/files.html:41
-msgid "Song already in the queue: "
-msgstr "Música já está na fila: "
-
 #. Label which displays that the songs are currently sorted by alphabetical
 #. order.
-#: templates/files.html:98
+#: templates/files.html:97
 msgid "Sorted Alphabetically"
 msgstr "Ordenar alfabeticamente"
 
 #. Button which changes how the songs are sorted so they become sorted by date.
-#: templates/files.html:101
+#: templates/files.html:100
 msgid "Sort by Date"
 msgstr "Ordenar por data"
 
 #. Label which displays that the songs are currently sorted by date.
-#: templates/files.html:106
+#: templates/files.html:105
 msgid "Sorted by date"
 msgstr "Ordenado por data"
 
 #. Button which changes how the songs are sorted so they become sorted by name.
-#: templates/files.html:109
+#: templates/files.html:108
 msgid "Sort by Alphabetical"
 msgstr "Ordenar por nome"
 
@@ -449,7 +452,7 @@ msgstr ""
 
 #. Info message about the function of removing vocals
 #: templates/home.html:163
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Check this if you want to remove the vocals from a music that is not in "
 "karaoke style (without vocals). Although is not 100%% accurate, it helps "

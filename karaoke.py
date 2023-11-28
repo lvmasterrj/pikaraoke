@@ -104,6 +104,11 @@ class Karaoke:
             args.show_overlay if not args.show_overlay is None
             else self.config_obj.get("USERPREFERENCES", "show_overlay")
         )
+        
+        self.limit_user = (
+            args.limit_user if not args.limit_user is None
+            else self.config_obj.get("USERPREFERENCES", "limit_user")
+        )
 
         trans = gettext.translation(
             "messages", localedir="translations", languages=[self.user_lng]
@@ -146,6 +151,7 @@ class Karaoke:
     user pref audio delay: %s
     user pref disable score: %s
     user pref disable background music: %s
+    user pref limit user: %s
     Base Path: %s"""
             % (
                 self.port,
@@ -171,6 +177,7 @@ class Karaoke:
                 self.user_audio_delay,
                 self.disable_score,
                 self.disable_bg_music,
+                self.limit_user,
                 self.base_path,
             )
         )
@@ -940,13 +947,18 @@ class Karaoke:
             if each["file"] == song_path:
                 return True
         return False
-
+    
+    def is_user_limited(self, user):
+        cont = len([i for i in self.queue if i['user'] == user]) + (1 if self.now_playing_user == user else 0)
+        return True if cont >= int(self.limit_user) else False
+    
     def enqueue(self, song_path, user="Pikaraoke"):
+        response = []
         if self.is_song_in_queue(song_path):
-            logging.warn("Song is already in queue, will not add: " + song_path)
-            return False
+            response = [False, self._("Song is already in queue, will not add: ") + song_path]
+        elif self.limit_user != 0 and user != "Pikaraoke" and self.is_user_limited(user):
+            response = [False, self._("You reached the limit of %s song(s) from an user in queue!") % (str(self.limit_user))]
         else:
-            logging.info("'%s' is adding song to queue: %s" % (user, song_path))
             self.queue.append(
                 {
                     "user": user,
@@ -954,7 +966,9 @@ class Karaoke:
                     "title": self.filename_from_path(song_path),
                 }
             )
-            return True
+            response = [True, "'%s' is adding song to queue: %s" % (user, song_path)]
+        logging.info(response[1])
+        return response
 
     def queue_add_random(self, amount):
         logging.info("Adding %d random songs to queue" % amount)

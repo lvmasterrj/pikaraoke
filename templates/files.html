@@ -37,8 +37,7 @@
           showNotification("{{ _('Song added to the queue: ') }}" + obj.song, "is-success")
         }
         else {
-          // {# MSG: Notification when a song does not get added to the queue.  The song name comes after this string. #}
-          showNotification("{{ _('Song already in the queue: ') }}" + obj.song, "is-danger")
+          showNotification(obj.msg, "is-danger")
         }
       })
       

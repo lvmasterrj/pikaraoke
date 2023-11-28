@@ -229,7 +229,7 @@ def enqueue():
     rc = k.enqueue(song, user)
     song_title = filename_from_path(song)
 
-    return json.dumps({"song": song_title, "success": rc})
+    return json.dumps({"song": song_title, "success": rc[0], "msg": rc[1]})
 
 
 @app.route("/skip")
@@ -795,7 +795,6 @@ if __name__ == "__main__":
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
-    default_rw_prefs = 0
     default_dl_dir = get_default_dl_dir(platform)
     default_omxplayer_path = "/usr/bin/omxplayer"
     default_omxplayer_adev = "both"
@@ -960,10 +959,9 @@ if __name__ == "__main__":
         required=False,
     ),
     parser.add_argument(
-        "--rw-prefs",
-        help="Reset or write preferences to be allways used (Default: %s)"
-        % default_rw_prefs,
-        default=default_rw_prefs,
+        "--limit-user",
+        help="Limit the number of songs a user can add to queue (0 = illimited)",
+        default=None,
         required=False,
     ),
     args = parser.parse_args()
