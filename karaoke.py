@@ -548,7 +548,7 @@ class Karaoke:
                 self.screen.blit(text3, (10, 90))
 
     def transform_scale_keep_ratio(self, image):
-        """Utilized to scale an image to full screen"""
+        """Used to scale an image to full screen"""
 
         iwidth, iheight = image.get_size()
         scale = min(self.width / iwidth, self.height / iheight)
@@ -927,6 +927,7 @@ class Karaoke:
             logging.error("Not using VLC. Can't transpose track.")
 
     def change_current_player(self, params=[]):
+        """Used to change the current VLC player, passing params to it and starting over where it was"""
         self.user_intervention = True
         status_xml = (
             self.vlcclient.command().text
@@ -939,6 +940,7 @@ class Karaoke:
         self.play_file(self.now_playing_filename, params)
 
     def remove_current_vocal(self):
+        """Uses a filter from VLC to remove the vocal from a song or video"""
         self.user_intervention = True
         params = []
         if self.use_vlc:
@@ -951,6 +953,7 @@ class Karaoke:
             logging.error("Not using VLC. Can't remove vocals")
 
     def set_audio_delay(self, delay=0):
+        """Changes the audio delay from the current audio video"""
         if self.is_file_playing():
             if self.use_vlc:
                 if self.now_playing_delay == delay:
@@ -967,6 +970,7 @@ class Karaoke:
         return False
 
     def is_file_playing(self):
+        """Returns if a file is being played or not"""
         if self.user_intervention == True:
             return True
         if self.use_vlc:
@@ -989,10 +993,12 @@ class Karaoke:
         return False
     
     def is_user_limited(self, user):
+        """Returns if a user needs to be limited or not if the limitation is on and if the user reached the limit of songs in queue"""
         cont = len([i for i in self.queue if i['user'] == user]) + (1 if self.now_playing_user == user else 0)
         return True if cont >= int(self.limit_user) else False
     
     def enqueue(self, song_path, user="Pikaraoke"):
+        """Adds the song to the queue if it's not already there"""
         response = []
         if self.is_song_in_queue(song_path):
             response = [False, self._("Song is already in queue, will not add: ") + song_path]
@@ -1189,7 +1195,6 @@ class Karaoke:
         self.now_playing_transpose = 0
         self.now_playing_delay = 0
         self.remove_vocal = False
-        # self.transposing = False
 
     def change_language(self, language):
         logging.debug("Changing language to: " + str(language))
@@ -1206,8 +1211,6 @@ class Karaoke:
         self.render_splash_screen()
 
     def update_pref_av_delay(self, delay):
-
-
         if self.user_audio_delay == str(delay):
             return
         
