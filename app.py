@@ -526,10 +526,6 @@ def info():
     is_pi = get_platform() == "raspberry_pi"
 
     languages = LANGUAGES
-    audio_delay = k.user_audio_delay
-
-    #  disable_bg_music = k.disable_bg_music
-    #  disable_score = k.disable_score
 
     return render_template(
         "info.html",
@@ -543,7 +539,8 @@ def info():
         is_pi=is_pi,
         pikaraoke_version=VERSION,
         languages=languages,
-        audio_delay=audio_delay,
+        audio_delay=k.user_audio_delay,
+        limit_user=k.limit_user,
         disable_bg_music=k.disable_bg_music,
         disable_score=k.disable_score,
         show_overlay=k.show_overlay,
@@ -633,11 +630,15 @@ def change_prefs():
     if is_admin():
         pref = request.args["pref"]
         val = int(request.args["val"])
-        response = k.change_prefs(pref, val)
-        flash(_("You don't have permission to define audio output"), "is-danger")
+        rc = k.change_prefs(pref, val)
+
+        return json.dumps({"success": rc[0], "msg": rc[1]})
+        
     else:
         flash(_("You don't have permission to define audio output"), "is-danger")
     return redirect(url_for("home"))
+
+
 
 
 @app.route("/update_pikaraoke")
@@ -663,8 +664,8 @@ def select_language():
     return redirect(url_for("info"))
 
 
-@app.route("/teste_av_delay")
-def teste_av_delay():
+@app.route("/av_delay_test")
+def av_delay_test():
     k.start_audio_delay_test()
     return ""
 

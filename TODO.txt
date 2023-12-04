@@ -4,4 +4,6 @@ Adicionar bluetooth nas opções de configurações
 
 Create categories for the songs
 
+Test WIFI configuration
+
 Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227

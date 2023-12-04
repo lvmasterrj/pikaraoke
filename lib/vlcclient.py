@@ -69,12 +69,12 @@ class VLCClient:
             "%s" % self.port,
             "--http-password",
             self.http_password,
-            # "--no-embedded-video",
+            "--no-embedded-video",
             "--no-keyboard-events",
             "--no-mouse-events",
             "--mouse-hide-timeout",
             "0",
-            # "--video-on-top",
+            "--video-on-top",
             "--no-video-title",
             "--mouse-hide-timeout",
             "0",
@@ -88,20 +88,17 @@ class VLCClient:
                 "--macosx-continue-playback",
                 "0",
             ]
-        if self.qrcode and self.url and self.connecttext:
-            self.cmd_base += self.get_marquee_cmd()
+            
+        self.cmd_base += [
+            "--sub-source",
+            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="%s%s",position=9,x=103,color=0xFFFFFF,size=20,opacity=200}'
+            % (self.qrcode, self.connecttext, self.url),
+        ]
 
         logging.info("VLC command base: " + " ".join(self.cmd_base))
 
         self.volume_offset = 10
         self.process = None
-
-    def get_marquee_cmd(self):
-        return [
-            "--sub-source",
-            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="%s%s",position=9,x=103,color=0xFFFFFF,size=20,opacity=200}'
-            % (self.qrcode, self.connecttext, self.url),
-        ]
 
     def handle_zipped_cdg(self, file_path):
         extracted_dir = os.path.join(self.tmp_dir, "extracted")

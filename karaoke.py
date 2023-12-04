@@ -50,6 +50,7 @@ class Karaoke:
     score = None
     critic = None
 
+    # Karaoke object
     def __init__(self, args):
 
         # override with supplied constructor args if provided
@@ -72,7 +73,6 @@ class Karaoke:
         self.logo_path = (
             self.default_logo_path if args.logo_path == None else args.logo_path
         )
-        # self.show_overlay = args.show_overlay
         self.log_level = int(args.log_level)
 
         # other initializations
@@ -81,12 +81,13 @@ class Karaoke:
         self.omxclient = None
         self.screen = None
 
-        self.config_obj = configparser.ConfigParser()
         # This is for the autostart script to work properly
         if self.platform != "windows":
             # os.chdir(os.path.dirname(sys.argv[0]))
             os.chdir(self.base_path)
 
+        # Start populating user preferences from "Config" file
+        self.config_obj = configparser.ConfigParser()
         self.config_obj.read("config.ini")
         self.user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
@@ -102,22 +103,24 @@ class Karaoke:
             args.show_overlay if not args.show_overlay is None
             else self.config_obj.get("USERPREFERENCES", "show_overlay")
         )
-        
         self.limit_user = (
             args.limit_user if not args.limit_user is None
             else self.config_obj.get("USERPREFERENCES", "limit_user")
         )
 
+        # Initiate strings translation
         trans = gettext.translation(
             "messages", localedir="translations", languages=[self.user_lng]
         )
         trans.install()
         self._ = trans.gettext
 
+        # Initiate Pygame
         pygame.mixer.init()
         pygame.mixer.music.load("sound-effects/saloon-piano-music.ogg")
         pygame.mixer.music.set_volume(0.2)
 
+        # Set the logging configuration
         logging.basicConfig(
             format="[%(asctime)s] %(levelname)s: %(message)s",
             datefmt="%Y-%m-%d %H:%M:%S",
@@ -126,31 +129,31 @@ class Karaoke:
 
         logging.debug(
             """
-    http port: %s
-    hide IP: %s
-    hide RaspiWiFi instructions: %s,
-    hide splash: %s
-    splash_delay: %s
-    omx audio device: %s
-    dual screen: %s
-    high quality video: %s
-    download path: %s
-    default volume: %s
-    youtube-dl path: %s
-    omxplayer path: %s
-    logo path: %s
-    Use OMXPlayer: %s
-    Use VLC: %s
-    VLC path: %s
-    VLC port: %s
-    log_level: %s
-    show overlay: %s
-    user pref language: %s
-    user pref audio delay: %s
-    user pref disable score: %s
-    user pref disable background music: %s
-    user pref limit user: %s
-    Base Path: %s"""
+            http port: %s
+            hide IP: %s
+            hide RaspiWiFi instructions: %s,
+            hide splash: %s
+            splash_delay: %s
+            omx audio device: %s
+            dual screen: %s
+            high quality video: %s
+            download path: %s
+            default volume: %s
+            youtube-dl path: %s
+            omxplayer path: %s
+            logo path: %s
+            Use OMXPlayer: %s
+            Use VLC: %s
+            VLC path: %s
+            VLC port: %s
+            log_level: %s
+            show overlay: %s
+            user pref language: %s
+            user pref audio delay: %s
+            user pref disable score: %s
+            user pref disable background music: %s
+            user pref limit user: %s
+            Base Path: %s"""
             % (
                 self.port,
                 self.hide_ip,
@@ -200,29 +203,27 @@ class Karaoke:
 
         self.url = "http://%s:%s" % (self.ip, self.port)
 
-        # get songs from download_path
+        # Get songs from download_path
         self.get_available_songs()
 
+        # Populate youtubedl version
         self.get_youtubedl_version()
 
-        # clean up old sessions
+        # Clean up old sessions
         self.kill_player()
 
+        # Generate the QR Code
         self.generate_qr_code()
 
+        # Set the player configuration
         if self.use_vlc:
-            if not self.show_overlay == str(0):
-                self.vlcclient = vlcclient.VLCClient(
-                    port=self.vlc_port,
-                    path=self.vlc_path,
-                    connecttext=self._("Pikaraoke - Connect at: "),
-                    qrcode=self.qr_code_path,
-                    url=self.url,
-                )
-            else:
-                self.vlcclient = vlcclient.VLCClient(
-                    port=self.vlc_port, path=self.vlc_path
-                )
+            self.vlcclient = vlcclient.VLCClient(
+                port=self.vlc_port,
+                path=self.vlc_path,
+                connecttext=self._("Pikaraoke - Connect at: ") if not self.show_overlay == str(0) else "",
+                qrcode=self.qr_code_path if not self.show_overlay == str(0) else "",
+                url=self.url if not self.show_overlay == str(0) else "",
+            )
         else:
             self.omxclient = omxclient.OMXClient(
                 path=self.omxplayer_path,
@@ -231,13 +232,15 @@ class Karaoke:
                 volume_offset=self.volume_offset,
             )
 
+        # Initialize the Splash Screen
         if not self.hide_splash_screen:
             self.initialize_screen()
             self.render_splash_screen()
 
-    # Other ip-getting methods are unreliable and sometimes return 127.0.0.1
-    # https://stackoverflow.com/a/28950776
+    
     def get_ip(self):
+        """Other ip-getting methods are unreliable and sometimes return 127.0.0.1
+           https://stackoverflow.com/a/28950776"""
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             # doesn't even have to be reachable
@@ -274,6 +277,7 @@ class Karaoke:
 
         return (server_port, ssid_prefix, ssl_enabled)
 
+
     def get_youtubedl_version(self):
         self.youtubedl_version = (
             check_output([self.youtubedl_path, "--version"]).strip().decode("utf8")
@@ -309,6 +313,9 @@ class Karaoke:
         logging.info("Done. New version: %s" % self.youtubedl_version)
 
     def force_audio(self, output):
+        """For Raspberry Pi, force audio throught jack or HDMI
+        adding/changing some lines on a rPi file"""
+
         logging.debug("Forcing audio output through: " + output)
 
         try:
@@ -328,6 +335,9 @@ class Karaoke:
         return resultado
 
     def update_pikaraoke(self):
+        """Utilizes git to update Pikaraoke.
+        If any changes were made locally they will be overwritten by the update (like user preferences)"""
+
         logging.debug("Updating system...")
 
         try:
@@ -347,17 +357,31 @@ class Karaoke:
         return resultado
 
     def change_prefs(self, pref, val):
+        """ Makes changes in the config.ini file that stores the user preferences.
+        Receives the preference and it's new value"""
+
         logging.debug("Changing Preferences")
-        userprefs = self.config_obj["USERPREFERENCES"]
-        userprefs[pref] = str(val)
-        with open("config.ini", "w") as conf:
-            self.config_obj.write(conf)
-        setattr(self, pref, str(val))
+        try:
+            userprefs = self.config_obj["USERPREFERENCES"]
+            userprefs[pref] = str(val)
+            with open("config.ini", "w") as conf:
+                self.config_obj.write(conf)
+            setattr(self, pref, str(val))
+            return [True, "Your preferences were changed successfully"] 
+        except Exception as e:
+            logging.debug(e)
+            return [False, "Something went wrong! Your preferences were not changed"]
 
     def is_network_connected(self):
         return not len(self.ip) < 7
 
     def generate_qr_code(self):
+        """Generates the QR Code for users to login.
+        The QR parameters are:
+            - version: an integer from 1 to 40 that controls the size of the QR Code
+            - box_size: controls how many pixels each “box” of the QR code is
+            - border: controls how many boxes thick the border should be"""
+        
         logging.debug("Generating URL QR code")
         qr = qrcode.QRCode(
             version=1,
@@ -383,47 +407,48 @@ class Karaoke:
             return pygame.FULLSCREEN
 
     def initialize_screen(self):
-        if not self.hide_splash_screen:
-            logging.debug("Initializing pygame")
-            self.full_screen = True
-            pygame.display.init()
-            pygame.display.set_caption("pikaraoke")
-            pygame.font.init()
-            pygame.mouse.set_visible(0)
-            self.width = pygame.display.Info().current_w
-            self.height = pygame.display.Info().current_h
-            logging.debug("Resolution = " + str(self.width) + "x" + str(self.height))
-            font_size = self.width//48
-            self.font = pygame.font.SysFont(pygame.font.get_default_font(), font_size)
-            # self.width = 800
-            # self.height = 600
-            logging.debug("Initializing screen mode")
-            # if self.platform == "windows":
-            #     self.screen = pygame.display.set_mode(
-            #         [self.width, self.height], self.get_default_display_mode()
-            #     )
-            if self.platform == "windows":
-                self.screen = pygame.display.set_mode([self.width, self.height])
-            else:
-                # this section is an unbelievable nasty hack - for some reason Pygame
-                # needs a keyboardinterrupt to initialise in some limited circumstances
-                # source: https://stackoverflow.com/questions/17035699/pygame-requires-keyboard-interrupt-to-init-display
-                class Alarm(Exception):
-                    pass
+        """Initializes the PyGame screen. It's used to render the Splash Screen and the Score Screen"""
+        
+        logging.debug("Initializing pygame")
+        self.full_screen = True
+        pygame.display.init()
+        pygame.display.set_caption("pikaraoke")
+        pygame.font.init()
+        pygame.mouse.set_visible(0)
+        self.width = pygame.display.Info().current_w
+        self.height = pygame.display.Info().current_h
+        logging.debug("Resolution = " + str(self.width) + "x" + str(self.height))
+        font_size = self.width//48
+        self.font = pygame.font.SysFont(pygame.font.get_default_font(), font_size)
+        # self.width = 800
+        # self.height = 600
+        logging.debug("Initializing screen mode")
+        # if self.platform == "windows":
+        #     self.screen = pygame.display.set_mode(
+        #         [self.width, self.height], self.get_default_display_mode()
+        #     )
+        if self.platform == "windows":
+            self.screen = pygame.display.set_mode([self.width, self.height])
+        else:
+            # this section is an unbelievable nasty hack - for some reason Pygame
+            # needs a keyboardinterrupt to initialise in some limited circumstances
+            # source: https://stackoverflow.com/questions/17035699/pygame-requires-keyboard-interrupt-to-init-display
+            class Alarm(Exception):
+                pass
 
-                def alarm_handler(signum, frame):
-                    raise Alarm
+            def alarm_handler(signum, frame):
+                raise Alarm
 
-                signal(SIGALRM, alarm_handler)
-                alarm(3)
-                try:
-                    self.screen = pygame.display.set_mode(
-                        [self.width, self.height], self.get_default_display_mode()
-                    )
-                    alarm(0)
-                except Alarm:
-                    raise KeyboardInterrupt
-            logging.debug("Done initializing splash screen")
+            signal(SIGALRM, alarm_handler)
+            alarm(3)
+            try:
+                self.screen = pygame.display.set_mode(
+                    [self.width, self.height], self.get_default_display_mode()
+                )
+                alarm(0)
+            except Alarm:
+                raise KeyboardInterrupt
+        logging.debug("Done initializing splash screen")
 
     def toggle_full_screen(self):
         if not self.hide_splash_screen:
@@ -440,6 +465,8 @@ class Karaoke:
                 self.full_screen = True
 
     def render_splash_screen(self):
+        """Initializes the Splash Screen if it's not setted to be hidden"""
+
         if not self.hide_splash_screen:
             logging.debug("Rendering splash screen")
 
@@ -520,8 +547,9 @@ class Karaoke:
                 self.screen.blit(text2, (10, 50))
                 self.screen.blit(text3, (10, 90))
 
-    # Function that scales an image to the full screen
     def transform_scale_keep_ratio(self, image):
+        """Utilized to scale an image to full screen"""
+
         iwidth, iheight = image.get_size()
         scale = min(self.width / iwidth, self.height / iheight)
         new_size = (round(iwidth * scale), round(iheight * scale))
@@ -530,6 +558,7 @@ class Karaoke:
         return scaled_image, image_rect
 
     def refresh_score_screen(self, scaled_bg, bg_rect):
+        """Refreshes the Score Screen """
 
         surface1 = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
         surface2 = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
@@ -600,6 +629,10 @@ class Karaoke:
         pygame.display.update()
 
     def render_score_screen(self):
+        """Renders the score screen if it's not setted to be hidden"""
+
+        self.initialize_screen()
+
         if self.disable_score == str(0):
             logging.debug("Rendering score screen")
 
@@ -621,8 +654,10 @@ class Karaoke:
             score_sound2.set_volume(0.2)
             channel = score_sound1.play()
 
+            # Random create the score number biasing it to 99
             scoreNum = str(math.ceil(random.triangular(0, 100, 99))).zfill(2)
 
+            # Configurate, based on the scoreNum, the critic text, applause sound and text color
             if int(scoreNum) < 30:
                 sel_color = (255, 50, 50)
                 applause = pygame.mixer.Sound("sound-effects/applause-l.ogg")
@@ -652,6 +687,7 @@ class Karaoke:
                     self._("I wish more people could sing like this."),
                 ]
 
+            # While the channel (sound1 - drums) are played, roll the numbers on screen
             while channel.get_busy():
                 scoreRnd = str(random.randint(0, 99)).zfill(2)
                 self.score = score_number_font.render(
@@ -660,7 +696,7 @@ class Karaoke:
                     (150, 0, 150),
                 )
                 self.refresh_score_screen(scaled_bg, bg_rect)
-                pygame.time.wait(100)
+                pygame.time.wait(500)
 
             score_sound2.play()
 
@@ -682,9 +718,15 @@ class Karaoke:
             self.score = None
             self.critic = None
 
-        self.render_splash_screen()
+        # If it's setted to hide splash screen, just close the pygame window
+        if not self.hide_splash_screen:
+            self.render_splash_screen()
+        else:
+            pygame.display.quit()
+        
 
     def render_next_song_to_splash_screen(self):
+        """Render the next song on queue and the user that will sing into the Splash Screen"""
         if not self.hide_splash_screen:
             self.render_splash_screen()
             if len(self.queue) >= 1:
@@ -954,7 +996,7 @@ class Karaoke:
         response = []
         if self.is_song_in_queue(song_path):
             response = [False, self._("Song is already in queue, will not add: ") + song_path]
-        elif self.limit_user != 0 and user != "Pikaraoke" and self.is_user_limited(user):
+        elif self.limit_user != "0" and user != "Pikaraoke" and self.is_user_limited(user):
             response = [False, self._("You reached the limit of %s song(s) from an user in queue!") % (str(self.limit_user))]
         else:
             self.queue.append(

@@ -21,7 +21,7 @@
         $("#test-av-delay").click(function(e) {
             e.preventDefault();
             $("#stop-av-delay-test").toggleClass("is-inline")
-            $.get('/teste_av_delay')
+            $.get('/av_delay_test')
         })
         $("#stop-av-delay-test").click(function(e) {
             e.preventDefault();
@@ -44,13 +44,13 @@
             $.get('change_prefs', {
                     "pref": "disable_bg_music",
                     "val": val
-                })
-                // .done(function(data) {
-                //     showNotification(
-                //         "{{ _('Background music preference successfully changed')}}",
-                //         "is-info"
-                //     );
-                // });
+            })
+            .done(function(data) {
+                var obj = JSON.parse(data);
+                
+                if (obj.success) showNotification(obj.msg, "is-info");
+                else showNotification(obj.msg, "is-danger")
+            });
         })
         $("#pref-score").click(function() {
             var val = $("#pref-score").is(":checked") ? 1 : 0;
@@ -58,6 +58,12 @@
                 "pref": "disable_score",
                 "val": val
             })
+            .done(function(data) {
+                var obj = JSON.parse(data);
+                
+                if (obj.success) showNotification(obj.msg, "is-info");
+                else showNotification(obj.msg, "is-danger")
+            });
         })
         $("#pref-overlay").click(function() {
             var val = $("#pref-overlay").is(":checked") ? 1 : 0;
@@ -65,6 +71,25 @@
                 "pref": "show_overlay",
                 "val": val
             })
+            .done(function(data) {
+                var obj = JSON.parse(data);
+                
+                if (obj.success) showNotification(obj.msg, "is-info");
+                else showNotification(obj.msg, "is-danger")
+            });
+        })
+        $("#pref-limit").on("input", function() {
+            var val = $(this).val()
+            $.get('change_prefs', {
+                "pref": "limit_user",
+                "val": val
+            })
+            .done(function(data) {
+                var obj = JSON.parse(data);
+                
+                if (obj.success) showNotification(obj.msg, "is-info");
+                else showNotification(obj.msg, "is-danger")
+            });
         })
         $("#update-link").click(function(e) {
             e.preventDefault();
@@ -228,9 +253,7 @@
 
 {# MSG: Title of the section for setting preferences #}
 <h1>{% trans %}Preferences{% endtrans %}</h1>
-<p>
-    {# MSG: Text to inform about language switching #} {% trans %}Select the languages that you want to display.{% endtrans %}
-</p>
+
 <ul>
     <li>
         <label class="checkbox">
@@ -248,6 +271,12 @@
         <label class="checkbox">
 				<input id="pref-overlay" type="checkbox" {% if show_overlay == "1" %}checked{% endif %}>
 				Enable to show the QR code on top of the videos
+			</label>
+    </li>
+    <li>
+        <label class="checkbox">
+            <input id="pref-limit" type="number" min="0" max="99" value="{{ limit_user }}" />
+            Limit of songs for each user in queue (0 = illimited)
 			</label>
     </li>
 </ul>
