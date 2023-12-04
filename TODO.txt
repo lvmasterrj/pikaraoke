@@ -6,4 +6,9 @@ Create categories for the songs
 
 Test WIFI configuration
 
+Update README:
+
+- https://archive.org/download/KaraokeVocalStarsPartyHits
+- Included support to .ogg files
+
 Limit songs by user: https://github.com/vicwomg/pikaraoke/issues/227

@@ -91,8 +91,8 @@ class VLCClient:
             
         self.cmd_base += [
             "--sub-source",
-            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="%s%s",position=9,x=103,color=0xFFFFFF,size=20,opacity=200}'
-            % (self.qrcode, self.connecttext, self.url),
+            'logo{file=%s,position=9,x=2,opacity=200}:marq{marquee="%s%s",position=9,x=103,color=0xFFFFFF,size=20,opacity=%s}'
+            % (self.qrcode, self.connecttext, self.url, 200 if self.url != "" else 0),
         ]
 
         logging.info("VLC command base: " + " ".join(self.cmd_base))
@@ -107,27 +107,27 @@ class VLCClient:
         with zipfile.ZipFile(file_path, "r") as zip_ref:
             zip_ref.extractall(extracted_dir)
 
-        mp3_file = None
+        audio_file = None
         cdg_file = None
         files = os.listdir(extracted_dir)
         for file in files:
             ext = os.path.splitext(file)[1]
-            if ext.casefold() == ".mp3":
-                mp3_file = file
+            if ext.casefold() == ".mp3" or ext.casefold() == ".ogg":
+                audio_file = file
             elif ext.casefold() == ".cdg":
                 cdg_file = file
 
-        if (mp3_file is not None) and (cdg_file is not None):
-            if os.path.splitext(mp3_file)[0] == os.path.splitext(cdg_file)[0]:
-                return os.path.join(extracted_dir, mp3_file)
+        if (audio_file is not None) and (cdg_file is not None):
+            if os.path.splitext(audio_file)[0] == os.path.splitext(cdg_file)[0]:
+                return os.path.join(extracted_dir, audio_file)
             else:
                 raise Exception(
-                    "Zipped .mp3 file did not have a matching .cdg file: " + files
+                    "Zipped .mp3/.ogg file did not have a matching .cdg file: " + files
                 )
         else:
-            raise Exception("No .mp3 or .cdg was found in the zip file: " + file_path)
+            raise Exception("No .mp3/.ogg or .cdg was found in the zip file: " + file_path)
 
-    def handle_mp3_cdg(self, file_path):
+    def handle_audio_cdg(self, file_path):
         f = os.path.splitext(os.path.basename(file_path))[0]
         pattern = f + ".cdg"
         rule = re.compile(re.escape(pattern), re.IGNORECASE)
@@ -143,8 +143,8 @@ class VLCClient:
         file_extension = os.path.splitext(file_path)[1]
         if file_extension.casefold() == ".zip":
             return self.handle_zipped_cdg(file_path)
-        elif file_extension.casefold() == ".mp3":
-            return self.handle_mp3_cdg(file_path)
+        elif file_extension.casefold() == ".mp3" or file_extension.casefold() == ".ogg":
+            return self.handle_audio_cdg(file_path)
         else:
             return file_path
 
