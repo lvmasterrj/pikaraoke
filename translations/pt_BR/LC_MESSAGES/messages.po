@@ -225,7 +225,7 @@ msgstr "Modo de configuração do RaspiWofo detectado!"
 #: karaoke.py:504
 #, python-format
 msgid "Connect another device/smartphone to the Wifi AP: '%s'"
-msgstr "Connect algum dispositivo/smartfone no seguinte Wifi: '%s'"
+msgstr "Conecte algum dispositivo/smartfone no seguinte Wifi: '%s'"
 
 #: karaoke.py:510
 #, python-format

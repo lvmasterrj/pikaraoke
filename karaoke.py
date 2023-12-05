@@ -365,10 +365,10 @@ class Karaoke:
             with open("config.ini", "w") as conf:
                 self.config_obj.write(conf)
             setattr(self, pref, str(val))
-            return [True, "Your preferences were changed successfully"] 
+            return [True, self._("Your preferences were changed successfully")] 
         except Exception as e:
             logging.debug(e)
-            return [False, "Something went wrong! Your preferences were not changed"]
+            return [False, self._("Something went wrong! Your preferences were not changed")]
 
     def is_network_connected(self):
         return not len(self.ip) < 7
