@@ -203,16 +203,12 @@ class Karaoke:
 
         self.url = "http://%s:%s" % (self.ip, self.port)
 
-        # Get songs from download_path
         self.get_available_songs()
 
-        # Populate youtubedl version
         self.get_youtubedl_version()
 
-        # Clean up old sessions
         self.kill_player()
 
-        # Generate the QR Code
         self.generate_qr_code()
 
         # Set the player configuration
@@ -256,12 +252,12 @@ class Karaoke:
         """Extract values from the RaspiWiFi configuration file."""
         f = open(self.raspi_wifi_conf_file, "r")
 
-        # Define default values.
-        #
-        # References:
-        # - https://github.com/jasbur/RaspiWiFi/blob/master/initial_setup.py (see defaults in input prompts)
-        # - https://github.com/jasbur/RaspiWiFi/blob/master/libs/reset_device/static_files/raspiwifi.conf
-        #
+        """
+        Define default values.
+        References:
+        - https://github.com/jasbur/RaspiWiFi/blob/master/initial_setup.py (see defaults in input prompts)
+        - https://github.com/jasbur/RaspiWiFi/blob/master/libs/reset_device/static_files/raspiwifi.conf
+        """
         server_port = "80"
         ssid_prefix = "RaspiWiFi Setup"
         ssl_enabled = "0"
@@ -313,7 +309,7 @@ class Karaoke:
         logging.info("Done. New version: %s" % self.youtubedl_version)
 
     def force_audio(self, output):
-        """For Raspberry Pi, force audio throught jack or HDMI
+        """For Raspberry Pi only, force audio throught jack or HDMI
         adding/changing some lines on a rPi file"""
 
         logging.debug("Forcing audio output through: " + output)
@@ -357,7 +353,7 @@ class Karaoke:
         return resultado
 
     def change_prefs(self, pref, val):
-        """ Makes changes in the config.ini file that stores the user preferences.
+        """Makes changes in the config.ini file that stores the user preferences.
         Receives the preference and it's new value"""
 
         logging.debug("Changing Preferences")
@@ -454,7 +450,7 @@ class Karaoke:
         if not self.hide_splash_screen:
             logging.debug("Toggling fullscreen...")
             if self.full_screen:
-                self.screen = pygame.display.set_mode([1280, 720])
+                self.screen = pygame.display.set_mode([self.width/2, self.height/2])
                 self.render_splash_screen()
                 self.full_screen = False
             else:
@@ -814,6 +810,8 @@ class Karaoke:
         return rc
 
     def get_available_songs(self):
+        """Get the songs from the donload path"""
+
         logging.info("Fetching available songs in: " + self.download_path)
         types = [".mp4", ".mp3", ".ogg", ".zip", ".mkv", ".avi", ".webm", ".mov"]
         files_grabbed = []
@@ -875,6 +873,7 @@ class Karaoke:
             return None
 
     def kill_player(self):
+        """Clean up old sessions"""
         if self.use_vlc:
             logging.debug("Killing old VLC processes")
             if self.vlcclient != None:
