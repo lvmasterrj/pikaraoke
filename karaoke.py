@@ -93,22 +93,31 @@ class Karaoke:
         self.config_obj.read("config.ini")
         self.user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
-        self.disable_score = (
+
+        self.disable_score = eval(str(
             args.disable_score if not args.disable_score is None
             else self.config_obj.get("USERPREFERENCES", "disable_score")
-        )
-        self.disable_bg_music = (
+        ))
+
+        self.disable_bg_music = eval(str(
             args.disable_bg_music if not args.disable_bg_music is None
             else self.config_obj.get("USERPREFERENCES", "disable_bg_music")
-        )
-        self.show_overlay = (
+        ))
+
+        self.show_overlay = eval(str(
             args.show_overlay if not args.show_overlay is None
             else self.config_obj.get("USERPREFERENCES", "show_overlay")
-        )
+        ))
+
         self.limit_user = (
             args.limit_user if not args.limit_user is None
             else self.config_obj.get("USERPREFERENCES", "limit_user")
         )
+
+        self.e_admin = eval(str(
+            args.e_admin if not args.e_admin is None
+            else self.config_obj.get("USERPREFERENCES", "e_admin")
+        ))
 
         # Initiate strings translation
         trans = gettext.translation(
@@ -155,6 +164,7 @@ class Karaoke:
             user pref disable score: %s
             user pref disable background music: %s
             user pref limit user: %s
+            user pref everyone admin: %s
             Base Path: %s"""
             % (
                 self.port,
@@ -181,6 +191,7 @@ class Karaoke:
                 self.disable_score,
                 self.disable_bg_music,
                 self.limit_user,
+                self.e_admin,
                 self.base_path,
             )
         )
@@ -218,9 +229,9 @@ class Karaoke:
             self.vlcclient = vlcclient.VLCClient(
                 port=self.vlc_port,
                 path=self.vlc_path,
-                connecttext=self._("Pikaraoke - Connect at: ") if not self.show_overlay == str(0) else "",
-                qrcode=self.qr_code_path if not self.show_overlay == str(0) else "",
-                url=self.url if not self.show_overlay == str(0) else "",
+                connecttext=self._("Pikaraoke - Connect at: ") if not self.show_overlay else "",
+                qrcode=self.qr_code_path if not self.show_overlay else "",
+                url=self.url if not self.show_overlay else "",
             )
         else:
             self.omxclient = omxclient.OMXClient(
@@ -358,7 +369,7 @@ class Karaoke:
         """Makes changes in the config.ini file that stores the user preferences.
         Receives the preference and it's new value"""
 
-        logging.debug("Changing Preferences")
+        logging.debug("Changing user preference << %s >> to %s" % (pref, val))
         try:
             userprefs = self.config_obj["USERPREFERENCES"]
             userprefs[pref] = str(val)
@@ -468,7 +479,7 @@ class Karaoke:
         if not self.hide_splash_screen:
             logging.debug("Rendering splash screen")
 
-            if self.disable_bg_music == str(0):
+            if not self.disable_bg_music:
                 if len(self.queue) == 0 and not self.is_file_playing():
                     pygame.mixer.music.play(-1)
 
@@ -631,7 +642,7 @@ class Karaoke:
 
         self.initialize_screen()
 
-        if self.disable_score == str(0):
+        if not self.disable_score:
             logging.debug("Rendering score screen")
 
             background = pygame.image.load("stage.jpg").convert()

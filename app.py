@@ -63,6 +63,8 @@ def url_escape(filename):
 
 
 def is_admin():
+    if k.e_admin == True:
+        return True
     if admin_password == None:
         return True
     if "admin" in request.cookies:
@@ -544,6 +546,7 @@ def info():
         disable_bg_music=k.disable_bg_music,
         disable_score=k.disable_score,
         show_overlay=k.show_overlay,
+        e_admin = k.e_admin,
         admin=is_admin(),
         admin_enabled=admin_password != None,
     )
@@ -629,7 +632,7 @@ def force_audio_jack():
 def change_prefs():
     if is_admin():
         pref = request.args["pref"]
-        val = int(request.args["val"])
+        val = request.args["val"]
         rc = k.change_prefs(pref, val)
 
         return json.dumps({"success": rc[0], "msg": rc[1]})
@@ -681,14 +684,6 @@ def set_pref_delay():
     val = request.args.get("val")
     k.update_pref_av_delay(val)
     return ""
-
-
-
-# @app.route("/transpose/<semitones>", methods=["GET"])
-# def transpose(semitones):
-#     k.transpose_current(semitones)
-#     #  return redirect(url_for("home"))
-#     return ""
 
 
 @app.route("/refresh")
@@ -962,6 +957,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--limit-user",
         help="Limit the number of songs a user can add to queue (0 = illimited)",
+        default=None,
+        required=False,
+    ),
+    parser.add_argument(
+        "--e-admin",
+        help="Marks everyone as admin, even if there is the --admin-password argument",
+        action="store_true",
         default=None,
         required=False,
     ),

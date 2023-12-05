@@ -2,6 +2,8 @@ Adicionar bluetooth nas opções de configurações
 
 Create categories for the songs
 
+Rerun when change preferences
+
 Update README:
 
 - https://archive.org/download/KaraokeVocalStarsPartyHits

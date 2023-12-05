@@ -40,7 +40,7 @@
             $("#delay-val").text(val)
         })
         $("#pref-bg-music").click(function() {
-            var val = $("#pref-bg-music").is(":checked") ? 1 : 0;
+            var val = $("#pref-bg-music").is(":checked") ? "True" : "False";
             $.get('change_prefs', {
                     "pref": "disable_bg_music",
                     "val": val
@@ -53,7 +53,7 @@
             });
         })
         $("#pref-score").click(function() {
-            var val = $("#pref-score").is(":checked") ? 1 : 0;
+            var val = $("#pref-score").is(":checked") ? "True" : "False";
             $.get('change_prefs', {
                 "pref": "disable_score",
                 "val": val
@@ -66,9 +66,22 @@
             });
         })
         $("#pref-overlay").click(function() {
-            var val = $("#pref-overlay").is(":checked") ? 1 : 0;
+            var val = $("#pref-overlay").is(":checked") ? "True" : "False";
             $.get('change_prefs', {
                 "pref": "show_overlay",
+                "val": val
+            })
+            .done(function(data) {
+                var obj = JSON.parse(data);
+                
+                if (obj.success) showNotification(obj.msg, "is-info");
+                else showNotification(obj.msg, "is-danger")
+            });
+        })
+        $("#pref-e-admin").click(function() {
+            var val = $("#pref-e-admin").is(":checked") ? "True" : "False";
+            $.get('change_prefs', {
+                "pref": "e_admin",
                 "val": val
             })
             .done(function(data) {
@@ -257,19 +270,19 @@
 <ul>
     <li>
         <label class="checkbox">
-				<input id="pref-bg-music" type="checkbox" {% if disable_bg_music == "1" %}checked{% endif %}>
+				<input id="pref-bg-music" type="checkbox" {% if disable_bg_music %}checked{% endif %}>
 				Disable background music on splash screen
 			</label>
     </li>
     <li>
         <label class="checkbox">
-				<input id="pref-score" type="checkbox" {% if disable_score == "1" %}checked{% endif %}>
+				<input id="pref-score" type="checkbox" {% if disable_score %}checked{% endif %}>
 				Disable the score screen after each song
 			</label>
     </li>
     <li>
         <label class="checkbox">
-				<input id="pref-overlay" type="checkbox" {% if show_overlay == "1" %}checked{% endif %}>
+				<input id="pref-overlay" type="checkbox" {% if show_overlay %}checked{% endif %}>
 				Enable to show the QR code on top of the videos
 			</label>
     </li>
@@ -277,7 +290,13 @@
         <label class="checkbox">
             <input id="pref-limit" type="number" min="0" max="99" value="{{ limit_user }}" />
             Limit of songs for each user in queue (0 = illimited)
-			</label>
+        </label>
+    </li>
+    <li>
+        <label class="checkbox">
+                <input id="pref-e-admin" type="checkbox" {% if e_admin %}checked{% endif %}>
+                Enable to let everyone have admin rights
+            </label>
     </li>
 </ul>
 
@@ -326,7 +345,7 @@
 <p class="help">{% trans %} If you just installed the pre-built pikaraoke pi image and your SD card is larger than 4GB, you may want to expand the filesystem to utilize the remaining space. You only need to do this once. This will reboot the system. {% endtrans %}</p>
 {% endif %}
 
-<hr/> {% if admin_enabled %} {# MSG: Link which will log out the user from admin mode. #}
+<hr/> {% if (admin_enabled and not e_admin) %} {# MSG: Link which will log out the user from admin mode. #}
 <p>{% trans logout_url=url_for('logout') -%} Disable admin mode: <a href="{{ logout_url }}">Log out</a> {% endtrans %}</p>
 {% endif %} {% else %} {# from if admin #} {# MSG: Link which will let the user log into admin mode. #}
 <p>{% trans login_url=url_for('login') %} Enable admin mode: <a href="{{ login_url }}">Log in</a> {% endtrans %}</p>
