@@ -23,6 +23,8 @@ from lib.get_platform import get_platform
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
 
+# Hack for if the user toggle full screen off, the display be in the center of the screen
+os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 class Karaoke:
 
