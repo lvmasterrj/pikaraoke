@@ -51,6 +51,7 @@ class Karaoke:
     scored = True
     score = None
     critic = None
+    changed_preferences = False
 
     # Karaoke object
     def __init__(self, args):
@@ -375,7 +376,8 @@ class Karaoke:
             userprefs[pref] = str(val)
             with open("config.ini", "w") as conf:
                 self.config_obj.write(conf)
-            setattr(self, pref, str(val))
+                setattr(self,pref,eval(str(val)))
+                self.changed_preferences = True
             return [True, self._("Your preferences were changed successfully")] 
         except Exception as e:
             logging.debug(e)
@@ -479,9 +481,11 @@ class Karaoke:
         if not self.hide_splash_screen:
             logging.debug("Rendering splash screen")
 
-            if not self.disable_bg_music:
+            if not eval(str(self.disable_bg_music)):
                 if len(self.queue) == 0 and not self.is_file_playing():
                     pygame.mixer.music.play(-1)
+            else:
+                pygame.mixer.music.stop()
 
             self.screen.fill((18, 0, 20))
 
@@ -1271,6 +1275,13 @@ class Karaoke:
                         self.now_playing_user = self.queue[0]["user"]
                         self.scored = False
                         self.queue.pop(0)
+                    
+                    elif self.changed_preferences:
+                        self.changed_preferences = False
+                        if not self.hide_splash_screen:
+
+                            self.render_splash_screen()
+                        logging.debug("***")
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     logging.debug(
