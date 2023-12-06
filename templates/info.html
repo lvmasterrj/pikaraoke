@@ -271,31 +271,31 @@
     <li>
         <label class="checkbox">
 				<input id="pref-bg-music" type="checkbox" {% if disable_bg_music %}checked{% endif %}>
-				Disable background music on splash screen
+				{# MSG: Checkbox label which enable/disable background music on the Splash Screen #} {% trans %}Disable background music on splash screen{% endtrans %}
 			</label>
     </li>
     <li>
         <label class="checkbox">
 				<input id="pref-score" type="checkbox" {% if disable_score %}checked{% endif %}>
-				Disable the score screen after each song
+				{# MSG: Checkbox label which enable/disable the Score Screen #} {% trans %}Disable the score screen after each song{% endtrans %}
 			</label>
     </li>
     <li>
         <label class="checkbox">
 				<input id="pref-overlay" type="checkbox" {% if show_overlay %}checked{% endif %}>
-				Enable to show the QR code on top of the videos
+				{# MSG: Checkbox label which enable/disable showing the qr code on top of the videos #} {% trans %}Show the QR code on top of the videos{% endtrans %}
 			</label>
     </li>
     <li>
         <label class="checkbox">
             <input id="pref-limit" type="number" min="0" max="99" value="{{ limit_user }}" />
-            Limit of songs for each user in queue (0 = illimited)
+            {# MSG: Numberbox label for limitting the number of songs for each player #} {% trans %}Limit of songs for each user in queue (0 = illimited){% endtrans %}
         </label>
     </li>
     <li>
         <label class="checkbox">
                 <input id="pref-e-admin" type="checkbox" {% if e_admin %}checked{% endif %}>
-                Enable to let everyone have admin rights
+                {# MSG: Checkbox label which let everyone to have admin rights #} {% trans %}Let everyone have admin rights{% endtrans %}
             </label>
     </li>
 </ul>
