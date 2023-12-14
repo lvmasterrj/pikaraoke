@@ -1,8 +1,8 @@
-Adicionar bluetooth nas opções de configurações
+Add Bluetooth in the config options
 
 Create categories for the songs
 
-Rerun when change preferences
+Add possibility of creating score phrases
 
 Update README:
 

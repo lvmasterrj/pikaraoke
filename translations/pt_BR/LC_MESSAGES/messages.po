@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: mawkee@gmail.com\n"
-"POT-Creation-Date: 2023-12-14 14:54-0300\n"
+"POT-Creation-Date: 2023-12-14 15:09-0300\n"
 "PO-Revision-Date: 2022-06-28 18:57-0300\n"
 "Last-Translator: FULL NAME <mawkee@gmail.com>\n"
 "Language: pt_BR\n"
@@ -330,7 +330,7 @@ msgid ""
 " show up on queued songs. Current: %(currentUser)s"
 msgstr ""
 "Você quer mudar o nome da pessoa que usa este dispositivo? Isto aparecerá"
-" em músicas em fila de espera. Atual: %(currentUser)s"
+" nas músicas da fila de espera. Atual: %(currentUser)s"
 
 #. Navigation link for the home page.
 #: templates/base.html:143
@@ -424,6 +424,17 @@ msgstr "Ordenado por data"
 #: templates/files.html:108
 msgid "Sort by Alphabetical"
 msgstr "Ordenar por nome"
+
+#. Link to add the song to queue
+#: templates/files.html:132
+#, python-format
+msgid " Add %(song_name)s to queue "
+msgstr " Adicionar %(song_name)s na fila"
+
+#. Link to edit the song name
+#: templates/files.html:142
+msgid "Edit song"
+msgstr "Editar música"
 
 #. Message which shows in the "Now Playing" section when there is no song
 #. currently playing

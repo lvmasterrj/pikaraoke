@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-12-06 17:07-0300\n"
+"POT-Creation-Date: 2023-12-14 15:09-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -72,120 +72,125 @@ msgstr ""
 msgid "Error deleting from queue: "
 msgstr ""
 
+#: app.py:373
+#, python-format
+msgid "Displaying <b>%s - %s</b> songs in total <b>%s</b>"
+msgstr ""
+
 #. Title of the files page.
 #. Navigation link for the page where the user can add existing songs to the
 #. queue.
-#: app.py:375 templates/base.html:159
+#: app.py:383 templates/base.html:159
 msgid "Browse"
 msgstr ""
 
-#: app.py:396
+#: app.py:404
 msgid "Download started: ''. This may take a couple of minutes to complete. "
 msgstr ""
 
-#: app.py:403
+#: app.py:411
 msgid "Song will be added to queue."
 msgstr ""
 
-#: app.py:405
+#: app.py:413
 msgid "Song will appear in the \"available songs\" list."
 msgstr ""
 
-#: app.py:426
+#: app.py:434
 msgid "Error: Can't delete this song because it is in the current queue: "
 msgstr ""
 
-#: app.py:432
+#: app.py:440
 msgid "Song deleted: "
 msgstr ""
 
-#: app.py:434
+#: app.py:442
 msgid "Error: No song parameter specified!"
 msgstr ""
 
-#: app.py:440
+#: app.py:448
 msgid "Error: Can't edit this song because it is in the current queue: "
 msgstr ""
 
-#: app.py:471
+#: app.py:479
 #, python-format
 msgid "Error Renaming file: '%s' to '%s'. Filename already exists."
 msgstr ""
 
-#: app.py:478
+#: app.py:486
 #, python-format
 msgid "Renamed file: '%s' to '%s'."
 msgstr ""
 
-#: app.py:482
+#: app.py:490
 msgid "Error: No filename parameters were specified!"
 msgstr ""
 
-#: app.py:583
+#: app.py:591
 msgid "Updating youtube-dl! Should take a minute or two... "
 msgstr ""
 
-#: app.py:589
+#: app.py:597
 msgid "You don't have permission to update youtube-dl"
 msgstr ""
 
-#: app.py:597
+#: app.py:605
 msgid "Forcing audio output through HDMI"
 msgstr ""
 
-#: app.py:607
+#: app.py:615
 msgid "Error trying to force audio output."
 msgstr ""
 
-#: app.py:609 app.py:627 app.py:641
+#: app.py:617 app.py:635 app.py:649
 msgid "You don't have permission to define audio output"
 msgstr ""
 
-#: app.py:617
+#: app.py:625
 msgid "Forcing audio output through 3.5 Jack"
 msgstr ""
 
-#: app.py:651
+#: app.py:659
 msgid "Updating pikaraoke. Just wait."
 msgstr ""
 
-#: app.py:658
+#: app.py:666
 msgid "You don't have permission to update PiKaraoke"
 msgstr ""
 
-#: app.py:694 app.py:716
+#: app.py:702 app.py:724
 msgid "You don't have permission to shut down"
 msgstr ""
 
-#: app.py:701
+#: app.py:709
 msgid "Quitting pikaraoke now!"
 msgstr ""
 
-#: app.py:705
+#: app.py:713
 msgid "You don't have permission to quit"
 msgstr ""
 
-#: app.py:712
+#: app.py:720
 msgid "Shutting down system now!"
 msgstr ""
 
-#: app.py:723
+#: app.py:731
 msgid "Rebooting system now!"
 msgstr ""
 
-#: app.py:727
+#: app.py:735
 msgid "You don't have permission to Reboot"
 msgstr ""
 
-#: app.py:734
+#: app.py:742
 msgid "Expanding filesystem and rebooting system now!"
 msgstr ""
 
-#: app.py:738
+#: app.py:746
 msgid "Cannot expand fs on non-raspberry pi devices!"
 msgstr ""
 
-#: app.py:740
+#: app.py:748
 msgid "You don't have permission to resize the filesystem"
 msgstr ""
 
@@ -403,6 +408,17 @@ msgstr ""
 #. Button which changes how the songs are sorted so they become sorted by name.
 #: templates/files.html:108
 msgid "Sort by Alphabetical"
+msgstr ""
+
+#. Link to add the song to queue
+#: templates/files.html:132
+#, python-format
+msgid " Add %(song_name)s to queue "
+msgstr ""
+
+#. Link to edit the song name
+#: templates/files.html:142
+msgid "Edit song"
 msgstr ""
 
 #. Message which shows in the "Now Playing" section when there is no song

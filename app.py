@@ -355,7 +355,8 @@ def browse():
         songs = available_songs
         sort_order = "Alphabetical"
 
-    results_per_page = 500
+    results_per_page = 5
+    
     pagination = Pagination(
         css_framework="bulma",
         page=page,
@@ -364,16 +365,23 @@ def browse():
         record_name="songs",
         per_page=results_per_page,
     )
-    start_index = (page - 1) * (results_per_page - 1)
+
+    start_index = (page - 1) * (results_per_page)
+
+    songs = songs[start_index : start_index + results_per_page]
+    
+    pagination_info_text = (_("Displaying <b>%s - %s</b> songs in total <b>%s</b>") %(start_index + 1, start_index + len(songs), pagination.total))
+    
     return render_template(
         "files.html",
         pagination=pagination,
+        pagination_info_text = pagination_info_text,
         sort_order=sort_order,
         site_title=site_name,
         letter=letter,
         # MSG: Title of the files page.
         title=_("Browse"),
-        songs=songs[start_index : start_index + results_per_page],
+        songs=songs,
         admin=is_admin(),
     )
 

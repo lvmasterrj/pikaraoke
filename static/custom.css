@@ -45,7 +45,7 @@
 .pagination-page-info b {
   color: black;
   background: #6aa6ed;
-  padding-right: 5px;
+  padding: 0px 3px;
   font-size: 150%;
 }
 .pagination-list {
