@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: mawkee@gmail.com\n"
-"POT-Creation-Date: 2023-12-06 17:07-0300\n"
+"POT-Creation-Date: 2023-12-14 14:54-0300\n"
 "PO-Revision-Date: 2022-06-28 18:57-0300\n"
 "Last-Translator: FULL NAME <mawkee@gmail.com>\n"
 "Language: pt_BR\n"
@@ -75,126 +75,131 @@ msgstr "Removida da fila: "
 msgid "Error deleting from queue: "
 msgstr "Erro ao remover da fila: "
 
+#: app.py:373
+#, python-format
+msgid "Displaying <b>%s - %s</b> songs in total <b>%s</b>"
+msgstr "Mostrando <b>%s - %s</b> músicas no total de <b>%s</b>"
+
 #. Title of the files page.
 #. Navigation link for the page where the user can add existing songs to the
 #. queue.
-#: app.py:375 templates/base.html:159
+#: app.py:383 templates/base.html:159
 msgid "Browse"
 msgstr "Navegar"
 
-#: app.py:396
+#: app.py:404
 msgid "Download started: ''. This may take a couple of minutes to complete. "
 msgstr "Download iniciado: ''. Isso pode demorar alguns minutos. "
 
-#: app.py:403
+#: app.py:411
 msgid "Song will be added to queue."
 msgstr "A música será adicionada à fila."
 
-#: app.py:405
+#: app.py:413
 msgid "Song will appear in the \"available songs\" list."
 msgstr "A música aparecerá na lista \"músicas disponíveis\"."
 
-#: app.py:426
+#: app.py:434
 msgid "Error: Can't delete this song because it is in the current queue: "
 msgstr ""
 "Erro: Não foi possível deletar essa música pois ela está atualmente na "
 "fila: "
 
-#: app.py:432
+#: app.py:440
 msgid "Song deleted: "
 msgstr "Música deletada"
 
-#: app.py:434
+#: app.py:442
 msgid "Error: No song parameter specified!"
 msgstr "Erro: Nenhum parametro de som especificado!"
 
-#: app.py:440
+#: app.py:448
 msgid "Error: Can't edit this song because it is in the current queue: "
 msgstr ""
 "Erro: Não foi possível editar essa música pois ela está atualmente na "
 "fila: "
 
-#: app.py:471
+#: app.py:479
 #, python-format
 msgid "Error Renaming file: '%s' to '%s'. Filename already exists."
 msgstr "Erro ao renomear o arquivo: '%s' para '%s'. Esse nome já existe."
 
-#: app.py:478
+#: app.py:486
 #, python-format
 msgid "Renamed file: '%s' to '%s'."
 msgstr "Arquivo renomeado: '%s' para '%s'."
 
-#: app.py:482
+#: app.py:490
 msgid "Error: No filename parameters were specified!"
 msgstr "Erro: Nenhum nome ffoi especificado!"
 
-#: app.py:583
+#: app.py:591
 msgid "Updating youtube-dl! Should take a minute or two... "
 msgstr "Atualizando o youtube-dl! Deve demorar um minuto ou dois... "
 
-#: app.py:589
+#: app.py:597
 msgid "You don't have permission to update youtube-dl"
 msgstr "Você não tem permissão para atualizar o youtube-dl"
 
-#: app.py:597
+#: app.py:605
 msgid "Forcing audio output through HDMI"
 msgstr "Forçando o áudio através do HDMI"
 
-#: app.py:607
+#: app.py:615
 msgid "Error trying to force audio output."
 msgstr "Erro ao tentar forçar a saída de áudio"
 
-#: app.py:609 app.py:627 app.py:641
+#: app.py:617 app.py:635 app.py:649
 msgid "You don't have permission to define audio output"
 msgstr "Você não tem permissão para definir a saída de áudio"
 
-#: app.py:617
+#: app.py:625
 msgid "Forcing audio output through 3.5 Jack"
 msgstr "Forçando o áudio através do conector 3.5"
 
-#: app.py:651
+#: app.py:659
 msgid "Updating pikaraoke. Just wait."
 msgstr "Atualizando o pikaraoke. Aguarde um momento."
 
-#: app.py:658
+#: app.py:666
 msgid "You don't have permission to update PiKaraoke"
 msgstr "Você não tem permissão para atualizar o PiKaraoke"
 
-#: app.py:694 app.py:716
+#: app.py:702 app.py:724
 msgid "You don't have permission to shut down"
 msgstr "Você não tem permissão para desligar o sistema"
 
-#: app.py:701
+#: app.py:709
 msgid "Quitting pikaraoke now!"
 msgstr "Saindo do PiKaraoke"
 
-#: app.py:705
+#: app.py:713
 msgid "You don't have permission to quit"
 msgstr "Você não tem permissão para sair do PiKaraoke"
 
-#: app.py:712
+#: app.py:720
 msgid "Shutting down system now!"
 msgstr "Desligando o sistema"
 
-#: app.py:723
+#: app.py:731
 msgid "Rebooting system now!"
 msgstr "Reiniciando o sistema"
 
-#: app.py:727
+#: app.py:735
 msgid "You don't have permission to Reboot"
 msgstr "Você não tem permissão para reiniciar o sistema"
 
-#: app.py:734
+#: app.py:742
 msgid "Expanding filesystem and rebooting system now!"
 msgstr "Expandindo o sistema de arquivos e reiniciando o sistema"
 
-#: app.py:738
+#: app.py:746
 msgid "Cannot expand fs on non-raspberry pi devices!"
 msgstr ""
 "Não foi possível expandir o sistema de arquivos, o dispositivo não é um "
 "raspberry pi!"
 
-#: app.py:740
+#: app.py:748
 msgid "You don't have permission to resize the filesystem"
 msgstr "Você não tem permissão para redimensionar o sistema de arquivos."
 
@@ -204,11 +209,11 @@ msgstr "Pikaraoke - Conecte-se em: "
 
 #: karaoke.py:381
 msgid "Your preferences were changed successfully"
-msgstr ""
+msgstr "Suas preferências foram alteradas com sucesso"
 
 #: karaoke.py:384
 msgid "Something went wrong! Your preferences were not changed"
-msgstr ""
+msgstr "Algo deu errado! Suas preferências não foram alteradas"
 
 #: karaoke.py:509
 msgid "Wifi/Network not connected. Shutting down in 10s..."
@@ -403,7 +408,7 @@ msgstr "Música adicionada na fila: "
 #. order.
 #: templates/files.html:97
 msgid "Sorted Alphabetically"
-msgstr "Ordenar alfabeticamente"
+msgstr "Ordenado por nome"
 
 #. Button which changes how the songs are sorted so they become sorted by date.
 #: templates/files.html:100
@@ -1017,22 +1022,4 @@ msgstr "A seguir:"
 #: templates/splash.html:10
 msgid "Next singer:"
 msgstr "Próxima pessoa a cantar:"
-
-#~ msgid "Background music preference successfully changed"
-#~ msgstr "Preferência de música de fundo alterada"
-
-#~ msgid " Disable background music on splash screen"
-#~ msgstr ""
-
-#~ msgid " Disable the score screen after each song"
-#~ msgstr ""
-
-#~ msgid " Show the QR code on top of the videos"
-#~ msgstr ""
-
-#~ msgid " Limit of songs for each user in queue (0 = illimited)"
-#~ msgstr ""
-
-#~ msgid " Let everyone have admin rights"
-#~ msgstr ""
 
