@@ -40,8 +40,8 @@
 
   function clean_title(search_str, title_case = false) {
     var new_name = $('#new_file_name').val();
-    new_name = new_name.replace(/\[+([^\][]+)]+/g, "($1)"); //replace brackets with parenthesis	
-    new_name = new_name.replace(/[^\x20-\x7E]+/g, "");//Remove all non printable and all non ASCII characters
+    new_name = new_name.replace(/\[+([^\][]+)]+/g, "($1)"); //replace brackets with parenthesis
+    new_name = new_name.replace(/[^\p{L}\p{N}\x20-\x7E]+/gu, ""); //Remove all non printable and all non ASCII characters
     new_name = new_name.replace(/\\|\//g, " ");//remove slashes
 
     //source: https://stackoverflow.com/questions/49655135/javascript-regex-remove-multiple-words-from-string
@@ -49,10 +49,11 @@
       [
         "as popularized by", "lyrics", "karafun", "instrumental", "minus one", "minusone", "made famous by", " by ",
         "karaoke version", "karaoke", "hd", "hq", "coversph", "singkaraoke", "in the style of",
-        "no lead vocal", "with lyrics", "cc"
+        "no lead vocal", "with lyrics", "cc", "karaokê", "lyric video", "letra"
       ];
     var expStr = uselessWordsArray.join("|");
-    new_name = new_name.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), ' ').replace(/\s{2,}/g, ' ');
+    new_name = new_name.replace(new RegExp('(?<!\p{L})(' + expStr + ')(?!\p{L})', 'gi'), ' ').replace(/\s{2,}/g, ' ');
+    // new_name = new_name.replace(new RegExp('\\b(' + expStr + ')\\b', 'gi'), ' ').replace(/\s{2,}/g, ' ');
 
     if (title_case == true) {
       new_name = new_name.toLowerCase().replace(/\b[a-z]/g, function (letter) {
