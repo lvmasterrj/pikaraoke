@@ -26,7 +26,7 @@ from flask_paginate import Pagination, get_page_parameter
 
 import karaoke
 from constants import VERSION, LANGUAGES
-from lib.get_platform import get_platform
+from lib.get_platform import get_platform, is_raspberry_pi
 from lib.vlcclient import get_default_vlc_path
 
 try:
@@ -44,6 +44,8 @@ app.config["BABEL_TRANSLATION_DIRECTORIES"] = "translations"
 babel = Babel(app)
 site_name = "PiKaraoke"
 admin_password = None
+raspberry_pi = is_raspberry_pi()
+linux = get_platform() == "linux"
 
 
 def filename_from_path(file_path, remove_youtube_id=True):
@@ -789,20 +791,34 @@ def get_default_youtube_dl_path(platform):
 
 
 def get_default_dl_dir(platform):
-    if platform == "raspberry_pi":
-        return "/usr/lib/pikaraoke/songs"
+    if raspberry_pi:
+        return "~/pikaraoke-songs"
     elif platform == "windows":
-        legacy_directory = os.path.expanduser("~\pikaraoke-songs")
+        legacy_directory = os.path.expanduser("~\\pikaraoke\\songs")
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
-            return "~\pikaraoke-songs"
+            return "~\\pikaraoke-songs"
     else:
         legacy_directory = "~/pikaraoke/songs"
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
             return "~/pikaraoke-songs"
+    # if platform == "raspberry_pi":
+    #     return "/usr/lib/pikaraoke/songs"
+    # elif platform == "windows":
+    #     legacy_directory = os.path.expanduser("~\pikaraoke-songs")
+    #     if os.path.exists(legacy_directory):
+    #         return legacy_directory
+    #     else:
+    #         return "~\pikaraoke-songs"
+    # else:
+    #     legacy_directory = "~/pikaraoke/songs"
+    #     if os.path.exists(legacy_directory):
+    #         return legacy_directory
+    #     else:
+    #         return "~/pikaraoke-songs"
 
 
 if __name__ == "__main__":
