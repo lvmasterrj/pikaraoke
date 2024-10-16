@@ -370,7 +370,7 @@ def browse():
         songs = available_songs
         sort_order = "Alphabetical"
 
-    results_per_page = 300
+    results_per_page = 500
     
     pagination = Pagination(
         css_framework="bulma",
