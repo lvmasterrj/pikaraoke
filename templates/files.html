@@ -95,6 +95,10 @@
   {% if sort_order == "Alphabetical" %}
     {# MSG: Label which displays that the songs are currently sorted by alphabetical order. #}
     {% trans %}Sorted Alphabetically{% endtrans %} |
+    <a href="{{ url_for('browse') }}?sort=singer">
+      {# MSG: Button which changes how the songs are sorted so they become sorted by singer. #}
+      {% trans %}Sort by Singer{% endtrans %}
+    </a> | 
     <a href="{{ url_for('browse') }}?sort=date">
       {# MSG: Button which changes how the songs are sorted so they become sorted by date. #}
       {% trans %}Sort by Date{% endtrans %}
@@ -106,6 +110,22 @@
     <a href="{{ url_for('browse') }}">
       {# MSG: Button which changes how the songs are sorted so they become sorted by name. #}
       {% trans %}Sort by Alphabetical{% endtrans %}
+    </a> |
+    <a href="{{ url_for('browse') }}?sort=singer">
+      {# MSG: Button which changes how the songs are sorted so they become sorted by singer. #}
+      {% trans %}Sort by Singer{% endtrans %}
+    </a>
+  {% endif %}
+  {% if sort_order == "Singer" %}    
+    {# MSG: Label which displays that the songs are currently sorted by Singer. #}
+    {% trans %}Sorted by singer{% endtrans %} |
+    <a href="{{ url_for('browse') }}">
+      {# MSG: Button which changes how the songs are sorted so they become sorted by name. #}
+      {% trans %}Sort by Song{% endtrans %}
+    </a> |
+    <a href="{{ url_for('browse') }}?sort=date">
+      {# MSG: Button which changes how the songs are sorted so they become sorted by date. #}
+      {% trans %}Sort by Date{% endtrans %}
     </a>
   {% endif %}
 </p>
@@ -123,6 +143,29 @@
   {{ pagination_info_text | safe }}
 </div>
 
+
+
+{% if sort_order == "Singer" %}
+
+function transformarCaminhos(array) {
+  // Primeiro, transforme cada caminho no formato desejado
+  const caminhosTransformados = array.map(caminho => {
+      const partes = caminho.split(" - ");
+      const nomeMusica = partes[1].split(".")[0];
+      const nomeCantor = partes[0];
+      const extensao = partes[1].split(".")[1];
+      return `${caminho.split(" - ")[0]}/${nomeMusica} - ${nomeCantor}.${extensao}`;
+  });
+
+  // Em seguida, ordene os caminhos em ordem alfabética
+  caminhosTransformados.sort();
+
+  return caminhosTransformados;
+}
+
+songs = transformarCaminhos(songs)
+
+{% endif %}
 <table>
   {% for song in songs %}
   <tr value='{{ song }}'>
