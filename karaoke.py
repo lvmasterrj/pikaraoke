@@ -331,7 +331,7 @@ class Karaoke:
         # subprocess.run(['bluetoothctl', 'agent on'])
         # output = subprocess.check_output(cmd).decode("utf-8")
         #     logging.debug("Search results: " + output)
-        jj = subprocess.run(['bluetoothctl','agent', 'on', 'scan', 'on']).decode("utf-8")
+        jj = subprocess.run(['bluetoothctl','agent', 'on', 'scan', 'on'])
         # jj = check_output(['bluetoothctl','agent', 'on', 'scan', 'on']).strip().decode("utf-8")
         logging.info("=============JJ=============")
         logging.info(jj)
