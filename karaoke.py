@@ -357,7 +357,8 @@ class Karaoke:
                 devices.append(line[name_index:].strip())
 
         for device in devices:
-            print
+            logging.info(device)
+            # print
 
 
         # subprocess.run(['bluetoothctl', 'agent on'])
