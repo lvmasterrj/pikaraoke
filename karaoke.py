@@ -328,12 +328,12 @@ class Karaoke:
         logging.info("Done. New version: %s" % self.youtubedl_version)
 
     def get_bluetooth_devices(self):
-        subprocess.run(['bluetoothctl', 'agent on'])
+        # subprocess.run(['bluetoothctl', 'agent on'])
         # output = subprocess.check_output(cmd).decode("utf-8")
         #     logging.debug("Search results: " + output)
-        # jj = check_output(['bluetoothctl', 'scan on']).strip().decode("utf-8")
+        jj = check_output(['bluetoothctl','agent on', 'scan on']).strip().decode("utf-8")
         logging.info("=============JJ=============")
-        # logging.info(jj)
+        logging.info(jj)
         return ('jj')
         
 
