@@ -348,16 +348,16 @@ class Karaoke:
         output, error = process.communicate()
         
         # Processar a saída para listar os nomes dos dispositivos
-        lines = output.decode().split('\n')
-        devices = []
-        for line in lines:
-            if 'Device' in line and 'Name:' in line:
-                parts = line.split(' ')
-                name_index = line.index('Name:') + len('Name:')
-                devices.append(line[name_index:].strip())
+        # lines = output.decode().split('\n')
+        # devices = []
+        # for line in lines:
+        #     if 'Device' in line and 'Name:' in line:
+        #         parts = line.split(' ')
+        #         name_index = line.index('Name:') + len('Name:')
+        #         devices.append(line[name_index:].strip())
 
-        for device in devices:
-            logging.info(device)
+        # for device in devices:
+        #     logging.info(device)
             # print
 
 
@@ -367,7 +367,7 @@ class Karaoke:
         # jj = subprocess.run(['bluetoothctl','agent', 'on', 'scan', 'on'])
         # jj = check_output(['bluetoothctl','agent', 'on', 'scan', 'on']).strip().decode("utf-8")
         logging.info("=============JJ=============")
-        # logging.info(output)
+        logging.info(output)
         return ('jj')
         
 
