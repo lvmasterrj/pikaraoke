@@ -52,6 +52,7 @@ class Karaoke:
     score = None
     critic = None
     changed_preferences = False
+    # blutoothdevices = get_bluetooth_devices()
 
     # Karaoke object
     def __init__(self, args):
@@ -138,6 +139,8 @@ class Karaoke:
             datefmt="%Y-%m-%d %H:%M:%S",
             level=int(self.log_level),
         )
+
+        jj = self.get_bluetooth_devices()
 
         logging.debug(
             """
@@ -323,6 +326,14 @@ class Karaoke:
             logging.info(output)
         self.get_youtubedl_version()
         logging.info("Done. New version: %s" % self.youtubedl_version)
+
+    def get_bluetooth_devices(self):
+        subprocess.run('bluetoothctl', 'agent on')
+        jj = check_output('bluetoothctl', 'scan on').strip().decode("utf-8")
+        logging.info("=============JJ=============")
+        logging.info(jj)
+        return ('jj')
+        
 
     def force_audio(self, output):
         """For Raspberry Pi only, force audio throught jack or HDMI

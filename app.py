@@ -765,6 +765,28 @@ def expand_fs():
         flash(_("You don't have permission to resize the filesystem"), "is-danger")
     return redirect(url_for("home"))
 
+@app.route("/set_bluetooth", methods=["GET"])
+def set_bluetooth():
+    return
+
+    # if is_admin() and platform == "raspberry_pi":
+    #     flash(_("Expanding filesystem and rebooting system now!"), "is-danger")
+    #     th = threading.Thread(target=delayed_halt, args=[3])
+    #     th.start()
+    # elif platform != "raspberry_pi":
+    #     flash(_("Cannot expand fs on non-raspberry pi devices!"), "is-danger")
+    # else:
+    #     flash(_("You don't have permission to resize the filesystem"), "is-danger")
+    # return redirect(url_for("home"))
+
+# @app.route("/files/edit", methods=["GET", "POST"])
+# def edit_file():
+#     queue_error_msg = _(
+#         "Error: Can't edit this song because it is in the current queue: "
+#     )
+#     if "song" in request.args:
+#         song_path = request.args["song"]
+
 
 # Handle sigterm, apparently cherrypy won't shut down without explicit handling
 signal.signal(signal.SIGTERM, lambda signum, stack_frame: k.stop())
@@ -805,21 +827,6 @@ def get_default_dl_dir(platform):
             return legacy_directory
         else:
             return "~/pikaraoke-songs"
-    # if platform == "raspberry_pi":
-    #     return "/usr/lib/pikaraoke/songs"
-    # elif platform == "windows":
-    #     legacy_directory = os.path.expanduser("~\pikaraoke-songs")
-    #     if os.path.exists(legacy_directory):
-    #         return legacy_directory
-    #     else:
-    #         return "~\pikaraoke-songs"
-    # else:
-    #     legacy_directory = "~/pikaraoke/songs"
-    #     if os.path.exists(legacy_directory):
-    #         return legacy_directory
-    #     else:
-    #         return "~/pikaraoke-songs"
-
 
 if __name__ == "__main__":
 
