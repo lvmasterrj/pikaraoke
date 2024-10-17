@@ -140,7 +140,7 @@ class Karaoke:
             level=int(self.log_level),
         )
 
-        jj = self.get_bluetooth_devices()
+        # jj = self.get_bluetooth_devices()
 
         logging.debug(
             """
