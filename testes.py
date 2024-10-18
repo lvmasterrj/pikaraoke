@@ -10,7 +10,7 @@ def scan_and_get_devices_only():
     process.stdin.flush()
 
     # Aguarda por 5 segundos para realizar a varredura
-    time.sleep(5)
+    time.sleep(10)
 
     # Envia o comando 'scan off' para parar a varredura
     process.stdin.write('scan off\n')
@@ -27,8 +27,9 @@ def scan_and_get_devices_only():
     devices = []
     for line in devices_output.splitlines():
         if 'Device' in line:
-            # line = line.split()
-            devices.append(line)
+            line = line.split()
+            print(line)
+            # devices.append(line)
             # if line[0] == '[NEW]':
 
 
