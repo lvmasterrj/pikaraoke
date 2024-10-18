@@ -5,8 +5,8 @@ def scan_and_get_devices_only():
     # Inicia o processo bluetoothctl
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    # Envia o comando 'scan bderd' para iniciar a busca por dispositivos Bluetooth
-    process.stdin.write('scan bderd\n')
+    # Envia o comando 'scan bredr' para iniciar a busca por dispositivos Bluetooth
+    process.stdin.write('scan bredr\n')
     process.stdin.flush()
 
     # Aguarda por 5 segundos para realizar a varredura
