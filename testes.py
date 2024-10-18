@@ -24,11 +24,22 @@ def scan_and_get_devices_only():
     devices_output, _ = process.communicate()
 
     # Filtra e captura apenas as linhas que contenham 'Device', ou seja, os dispositivos reais
-    devices = []
-    for line in devices_output.splitlines():
-        line = line.split()
-        if line[0] == 'Device':
-            devices.append(line)
+    new_devices = []
+    nown_devices = []
+
+    lines = devices_output.splitlines()
+
+    for line in lines:
+        if 'Device' in line:
+            line = line.split()
+            if line[0] == '[NEW]':
+                if line[2] != line[3]:
+                    new_devices.append(line)
+
+            if line[0] == 'Device':
+                if line[1] != line[2]:
+                    nown_devices.append(line)
+
         #     print(line)
 
 
@@ -54,9 +65,15 @@ def scan_and_get_devices_only():
             #         devices.append(line)
 
     # Retorna a lista de dispositivos
-    return devices
+    return (new_devices, nown_devices)
 
 # Executa a função e imprime os dispositivos encontrados
-devices_found = scan_and_get_devices_only()
-for device in devices_found:
+new_devices, nown_devices = scan_and_get_devices_only()
+
+print("Novos")
+for device in new_devices:
+    print(device)
+
+print("Conhecidos")
+for device in nown_devices:
     print(device)
