@@ -27,9 +27,9 @@ def scan_and_get_devices_only():
     devices = []
     for line in devices_output.splitlines():
         if 'Device' in line:
-            line = line.split()
-            if line[0] == '[NEW]':
-                devices.append(line)
+            # line = line.split()
+            devices.append(line)
+            # if line[0] == '[NEW]':
 
 
 
