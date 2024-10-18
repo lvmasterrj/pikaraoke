@@ -107,7 +107,7 @@ def scan_and_get_devices_only():
             #         devices.append(line)
 
     # Retorna a lista de dispositivos
-    return devices_new + devices_nown
+    return devices_new + devices_known
 
 # Executa a função e imprime os dispositivos encontrados
 devices = scan_and_get_devices_only()
