@@ -37,6 +37,7 @@ def scan_and_get_devices_only():
             # print(line)
             if line[0] == '\x1b[K[\x01\x1b[0;92m\x02NEW\x01\x1b[0m\x02]':
                 if line[2] != line[3].replace('-', ':'):
+                    print(line)
                     # line = line.remove[0]
                     new_devices.append(line)
 
@@ -47,9 +48,9 @@ def scan_and_get_devices_only():
     print("Nown==============")
     print(type(nown_devices))
     print(nown_devices)
-    print("New==============")
-    print(type(new_devices))
-    print(new_devices)
+    # print("New==============")
+    # print(type(new_devices))
+    # print(new_devices)
     
     # for device in nown_devices:
     #     if 
