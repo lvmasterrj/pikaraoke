@@ -29,7 +29,8 @@ def scan_and_get_devices_only():
         if 'Device' in line:
             line = line.split()
             if line[0] == 'Device':
-                line = line.remove('Device')
+                line = line.remove[0]
+                print(line)
                 if line[0] != line[1]:
                     devices.append(line)
 
