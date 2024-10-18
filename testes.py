@@ -9,8 +9,8 @@ def run_bluetoothctl_command(command):
     return output.decode().split('\n')
 
 # Iniciar scan por 5 segundos
-output = run_bluetoothctl_command(b'scan on\n')
-time.sleep(5)
+output = run_bluetoothctl_command(b'scan bredr\n')
+time.sleep(10)
 output += run_bluetoothctl_command(b'scan off\n')
 
 # Obter dispositivos já conhecidos
