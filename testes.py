@@ -15,7 +15,7 @@ def run_commands(commands):
         time.sleep(2)
     return output
 
-def scan_and_get_devices(time=10):
+def scan_and_get_devices(time):
 
     run_commands(['power on', 'agent on', 'default-agent', 'scan bredr\n'])
 
@@ -90,7 +90,7 @@ def scan_and_get_devices(time=10):
 
 # def connect_to_device(mac_number):
 
-devices = scan_and_get_devices()
+devices = scan_and_get_devices(10)
 
 for device in devices:
     print(device)
