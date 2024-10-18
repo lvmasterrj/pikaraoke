@@ -28,9 +28,10 @@ def scan_and_get_devices_only():
     for line in devices_output.splitlines():
         if 'Device' in line:
             line = line.split()
-            line = line.remove('Device')
-            if line[0] != line[1]:
-                devices.append(line)
+            if line[0] == 'Device':
+                line = line.remove('Device')
+                if line[0] != line[1]:
+                    devices.append(line)
 
     # Retorna a lista de dispositivos
     return devices
