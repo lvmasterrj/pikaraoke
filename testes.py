@@ -49,7 +49,7 @@ def scan_and_get_devices_only():
                     devices_nown.append(newline)
 
     for device in devices_nown:
-        if not any(device[1] in sublist for sublist in new_devices):
+        if not any(device[1] in sublist for sublist in devices_new):
             device[0] = "nown_off"
 
     
