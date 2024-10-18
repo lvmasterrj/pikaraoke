@@ -886,7 +886,7 @@ class Karaoke:
             base, ext = os.path.splitext(file.as_posix())
             if ext.lower() in types:
                 if os.path.isfile(file.as_posix()):
-                    logging.debug("adding song: " + file.name)
+                    # logging.debug("adding song: " + file.name) ############# DESCOMENTAR!!!!!!
                     files_grabbed.append(file.as_posix())
 
         self.available_songs = sorted(
