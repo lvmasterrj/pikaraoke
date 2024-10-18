@@ -26,12 +26,9 @@ def scan_and_get_devices_only():
     # Filtra e captura apenas as linhas que contenham 'Device', ou seja, os dispositivos reais
     devices = []
     for line in devices_output.splitlines():
-        # print(type(line))
-        # print(line)
         line = line.split()
-        # print(line)
-        devices.append(line[0])
-        # if line[0] == 'Device':
+        if line[0] == 'Device':
+            devices.append(line)
         #     print(line)
 
 
