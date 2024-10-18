@@ -24,10 +24,8 @@ def scan_and_get_devices_only():
     devices_output, _ = process.communicate()
 
     # Filtra e captura apenas as linhas que contenham 'Device', ou seja, os dispositivos reais
-    new_devices = []
-    nown_devices = []
-    nown_off_devices = []
-
+    devices_new = []
+    devices_nown = []
 
     lines = devices_output.splitlines()
 
@@ -37,13 +35,25 @@ def scan_and_get_devices_only():
             print(line)
             if line[0] == '\x1b[K[\x01\x1b[0;92m\x02NEW\x01\x1b[0m\x02]':
                 if line[2] != line[3].replace('-', ':'):
-                    # print(line)
-                    del line[0]
-                    new_devices.append(line)
+                    newline = ['new', line[1], ' '.join(line[2:])]
+                    # # print(line)
+                    # del line[0]
+                    # line[0] = 'new'
+                    # line[2] = ' '.join(line[2:])
+                    
+                    devices_new.append(newline)
 
-            if line[0] == 'Device':
+            elif line[0] == 'Device':
                 if line[1] != line[2].replace('-', ':'):
-                    nown_devices.append(line)
+                    newline = ['nown', line[1], ' '.join(line[2:])]
+                    devices_nown.append(newline)
+
+    for device in devices_nown:
+        if not any(device[1] in sublist for sublist in new_devices):
+            device[0] = "nown_off"
+
+    
+
 
     # print("Nown==============")
     # print(type(nown_devices))
@@ -80,15 +90,11 @@ def scan_and_get_devices_only():
             #         devices.append(line)
 
     # Retorna a lista de dispositivos
-    return (new_devices, nown_devices)
+    return devices_new + devices_nown
 
 # Executa a função e imprime os dispositivos encontrados
-new_devices, nown_devices = scan_and_get_devices_only()
+devices = scan_and_get_devices_only()
 
-print("Novos")
-for device in new_devices:
-    print(device)
-
-print("Conhecidos")
-for device in nown_devices:
+print("Devices")
+for device in devices:
     print(device)
