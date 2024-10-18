@@ -33,7 +33,7 @@ def scan_and_get_devices_only():
         if 'Device' in line:
             line = line.split()
             print(line)
-            if line[0] == '[NEW]':
+            if line[0] == '\x1b[K[\x01\x1b[0;92m\x02NEW\x01\x1b[0m\x02]':
                 if line[2] != line[3]:
                     new_devices.append(line)
 
