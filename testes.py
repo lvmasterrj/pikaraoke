@@ -1,34 +1,41 @@
 import subprocess
 import time
 
-def scan_bluetooth_devices():
+def scan_and_get_devices_only():
     # Inicia o processo bluetoothctl
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    # Envia o comando 'scan on' para iniciar a busca por dispositivos
-    process.stdin.write('scan on\n')
+    # Envia o comando 'scan bderd' para iniciar a busca por dispositivos Bluetooth
+    process.stdin.write('scan bderd\n')
     process.stdin.flush()
 
     # Aguarda por 5 segundos para realizar a varredura
     time.sleep(5)
 
-    # Envia o comando 'devices' para listar os dispositivos encontrados
+    # Envia o comando 'scan off' para parar a varredura
+    process.stdin.write('scan off\n')
+    process.stdin.flush()
+
+    # Agora, limpar o buffer de stdout para descartar qualquer saída anterior
+    process.stdout.read()  # Descartar toda a saída acumulada até agora
+
+    # Envia o comando 'devices' para listar os dispositivos conhecidos
     process.stdin.write('devices\n')
     process.stdin.flush()
 
-    # Captura a saída do comando
-    output, _ = process.communicate()
+    # Coleta apenas a saída do comando 'devices'
+    devices_output, _ = process.communicate()
 
-    # Filtra as linhas que contenham dispositivos reais (baseado na saída do comando 'devices')
+    # Filtra e captura apenas as linhas que contenham 'Device', ou seja, os dispositivos reais
     devices = []
-    for line in output.splitlines():
+    for line in devices_output.splitlines():
         if 'Device' in line:
             devices.append(line)
 
-    # Retorna a lista de dispositivos encontrados
+    # Retorna a lista de dispositivos
     return devices
 
 # Executa a função e imprime os dispositivos encontrados
-devices_found = scan_bluetooth_devices()
+devices_found = scan_and_get_devices_only()
 for device in devices_found:
     print(device)
