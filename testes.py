@@ -16,9 +16,6 @@ def scan_and_get_devices_only():
     process.stdin.write('scan off\n')
     process.stdin.flush()
 
-    # Agora, limpar o buffer de stdout para descartar qualquer saída anterior
-    process.stdout.read()  # Descartar toda a saída acumulada até agora
-
     # Envia o comando 'devices' para listar os dispositivos conhecidos
     process.stdin.write('devices\n')
     process.stdin.flush()
@@ -30,7 +27,9 @@ def scan_and_get_devices_only():
     devices = []
     for line in devices_output.splitlines():
         if 'Device' in line:
-            devices.append(line)
+            line = line.split().remove('Device')
+            if line[0] != line[1]:
+                devices.append(line)
 
     # Retorna a lista de dispositivos
     return devices
