@@ -48,12 +48,14 @@ def scan_and_get_devices_only():
                     newline = ['nown', line[1], ' '.join(line[2:])]
                     devices_nown.append(newline)
 
+    temp_devices = []
     for device in devices_nown:
         if not any(device[1] in sublist for sublist in devices_new):
             device[0] = "nown_off"
+            temp_devices.append(device)
 
-    
-
+    # Atualizando a lista de dispositivos conhecidos
+    devices_nown = [device for device in devices_nown if device not in temp_devices]
 
     # print("Nown==============")
     # print(type(nown_devices))
