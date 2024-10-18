@@ -25,7 +25,7 @@ def scan_and_get_devices_only():
 
     # Filtra e captura apenas as linhas que contenham 'Device', ou seja, os dispositivos reais
     devices_new = []
-    devices_nown = []
+    devices_known = []
 
     lines = devices_output.splitlines()
 
@@ -46,16 +46,31 @@ def scan_and_get_devices_only():
             elif line[0] == 'Device':
                 if line[1] != line[2].replace('-', ':'):
                     newline = ['nown', line[1], ' '.join(line[2:])]
-                    devices_nown.append(newline)
+                    devices_known.append(newline)
 
-    temp_devices = []
-    for device in devices_nown:
-        if not any(device[1] in sublist for sublist in devices_new):
-            device[0] = "nown_off"
-            temp_devices.append(device)
+    # temp_devices = []
+    # for device in devices_nown:
+    #     if not any(device[1] in sublist for sublist in devices_new):
+    #         device[0] = "nown_off"
+    #         temp_devices.append(device)
 
     # Atualizando a lista de dispositivos conhecidos
-    devices_nown = [device for device in devices_nown if device not in temp_devices]
+    # devices_nown = [device for device in devices_nown if device not in temp_devices]
+
+    # Itera sobre a lista de dispositivos conhecidos
+    for device in devices_known[:]:  # Usando [:] para fazer uma cópia da lista durante a iteração
+        found = False
+        # Verifica se o dispositivo conhecido está na lista de dispositivos novos
+        for new_device in devices_new:
+            if device[1] == new_device[1]:  # Compara o endereço MAC
+                # Se o dispositivo estiver na lista de dispositivos novos, remova-o de 'devices_nown'
+                devices_known.remove(device)
+                found = True
+                break
+        
+        # Se não encontrado, muda 'nown' para 'nown_off'
+        if not found:
+            device[0] = 'nown_off'
 
     # print("Nown==============")
     # print(type(nown_devices))
