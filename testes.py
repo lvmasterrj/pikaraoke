@@ -144,6 +144,7 @@ def connect_to_device(device):
 
         process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
         process.stdin.write('scan on\n')
+        process.stdin.flush()
         time.sleep(10)
         process.stdin.write(f'pair {device[0]}\n')
         process.stdin.flush()
