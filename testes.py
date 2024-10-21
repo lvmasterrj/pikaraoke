@@ -28,8 +28,8 @@ def scan_and_get_devices(scan_time=10):
 
     devices_output, _ = process.communicate()
 
-    print("====== Devices Output==========")
-    print(devices_output)
+    # print("====== Devices Output==========")
+    # print(devices_output)
    
    
    
@@ -63,8 +63,8 @@ def scan_and_get_devices(scan_time=10):
     for line in lines:
         if 'Device' in line:
             line = line.split()
-            print("====== Line ======")
-            print(line)
+            # print("====== Line ======")
+            # print(line)
             if line[0] == '\x1b[K[\x01\x1b[0;92m\x02NEW\x01\x1b[0m\x02]':
                 if line[2] != line[3].replace('-', ':'):
                     newline = ['new', line[2], ' '.join(line[3:])]
@@ -107,4 +107,5 @@ def scan_and_get_devices(scan_time=10):
 devices = scan_and_get_devices(10)
 
 for device in devices:
+    print("===== Devices =====")
     print(device)
