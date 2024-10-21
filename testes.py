@@ -7,13 +7,14 @@ import time
 def run_bluetoothctl_command(command):
     # Inicia o processo bluetoothctl
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    process.stdin.flush()
     output, error = process.communicate(command.encode())
     return output.decode()
 
 def run_commands(commands):
     for command in commands:
         output = run_bluetoothctl_command(command)
-        time.sleep(2)
+        # time.sleep(2)
     return output
 
 def scan_and_get_devices(sleep_time=10):
