@@ -19,11 +19,11 @@ def run_commands(commands):
 
 def scan_and_get_devices(sleep_time=10):
 
-    run_commands(['power on', 'agent on', 'default-agent', 'scan bredr\n'])
+    run_commands(['power on', 'agent on', 'default-agent', 'scan bredr'])
 
     time.sleep(sleep_time)
 
-    devices_output = run_commands(['scan off\n', 'devices\n'])
+    devices_output = run_commands(['scan off', 'devices\n'])
 
     print("====== Devices Output==========")
     print(devices_output)
