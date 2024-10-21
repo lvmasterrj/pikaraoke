@@ -87,8 +87,9 @@ def scan_and_get_devices(scan_time=10):
             #         newline = ['known', line[1], ' '.join(line[2:])]
             #         devices_known.append(newline)
 
-    print("===== New Devices =====")
-    print(devices_new)
+    # print("===== New Devices =====")
+    # print(devices_new)
+    return devices_new
     # print("===== Known Devices =====")
     # print(devices_known)               
 
@@ -117,9 +118,16 @@ def scan_and_get_devices(scan_time=10):
 #     print("===== Devices =====")
 #     print(device)
 
+
+def show_devices():
+    print("===== Devices =====")
+    print(scan_and_get_devices())
+
+
 def connect_to_device(device, trust_device=False):
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    # command = f'pair {device}\n'
+    process.stdin.write('scan on\n')
+    time.sleep(10)
     process.stdin.write(f'pair {device}\n')
     process.stdin.flush()
     time.sleep(2)
