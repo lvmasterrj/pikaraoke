@@ -10,6 +10,7 @@ def run_bluetoothctl_command(command):
     process.stdin.write(command)
     process.stdin.flush()
     devices_output, _ = process.communicate()
+
     return devices_output
 
 def run_commands(commands):
@@ -20,7 +21,7 @@ def run_commands(commands):
 
 def scan_and_get_devices(scan_time=10):
 
-    run_commands(['power on\n', 'agent on\n', 'default-agent\n', 'scan bredr\n'])
+    run_commands(['scan bredr\n'])
 
     time.sleep(scan_time)
 
