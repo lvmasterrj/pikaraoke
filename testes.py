@@ -138,3 +138,7 @@ def connect_to_device(device, trust_device=False):
         process.stdin.flush()
     result, _ = process.communicate()
     print(result)
+
+def remove_device(device):
+    process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
+    process.stdin.write(f'remove {device}\n')
