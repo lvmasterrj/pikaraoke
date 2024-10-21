@@ -11,6 +11,12 @@ def get_known_devices():
     known_devices = config_obj.get("DEVICES", "known")
     return known_devices
 
+# def add_known_device(device):
+    # config_obj = configparser.ConfigParser()
+    # devices = get_known_devices()
+    # devices.append(device)
+
+
 def run_bluetoothctl_command(process, command):
     # Inicia o processo bluetoothctl
     process.stdin.write(command)
@@ -124,23 +130,33 @@ def show_devices():
     print(scan_and_get_devices())
 
 
-def connect_to_device(device, trust_device=False):
+def connect_to_device(device):
     scan_and_get_devices(20)
     # show_devices()
 
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
     # process.stdin.write('scan on\n')
     # time.sleep(10)
-    process.stdin.write(f'pair {device}\n')
+    process.stdin.write(f'pair {device[0]}\n')
     process.stdin.flush()
     time.sleep(2)
-    process.stdin.write(f'connect {device}\n')
+    process.stdin.write(f'connect {device[0]}\n')
     process.stdin.flush()
-    if trust_device:
-        process.stdin.write(f'trust {device}\n')
-        process.stdin.flush()
+    process.stdin.write(f'trust {device[0]}\n')
+    process.stdin.flush()
     result, _ = process.communicate()
-    print(result)
+
+    success = False
+    for line in result:
+        if 'Pairing successful' in line:
+            success = True
+            break
+
+    if success:
+        print("===== Conectado com sucesso!!! =====")
+    else:
+        print(f'===== Falha ao conectar a {device[1]}')
+    # print(result)
 
 def remove_device(device):
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
