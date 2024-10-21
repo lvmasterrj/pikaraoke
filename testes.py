@@ -1,4 +1,5 @@
-# TODO: fazer uma lista de dispositivos já pareados para comparar com a lista de devices, porque se fizer pesquisas rápido, a lista de devices contém dispositivos novos
+# TODO: fazer uma lista de dispositivos já pareados para comparar com a lista de 
+# devices, porque se fizer pesquisas rápido, a lista de devices contém dispositivos novos
 
 import subprocess
 import time
@@ -15,7 +16,7 @@ def run_commands(commands):
         time.sleep(2)
     return output
 
-def scan_and_get_devices(time):
+def scan_and_get_devices(time=10):
 
     run_commands(['power on', 'agent on', 'default-agent', 'scan bredr\n'])
 
