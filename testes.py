@@ -131,32 +131,42 @@ def show_devices():
 
 
 def connect_to_device(device):
-    scan_and_get_devices(20)
-    # show_devices()
 
-    process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    # process.stdin.write('scan on\n')
-    # time.sleep(10)
-    process.stdin.write(f'pair {device[0]}\n')
-    process.stdin.flush()
-    time.sleep(2)
-    process.stdin.write(f'connect {device[0]}\n')
-    process.stdin.flush()
-    process.stdin.write(f'trust {device[0]}\n')
-    process.stdin.flush()
-    result, _ = process.communicate()
-
+    tries = 0
     success = False
-    for line in result:
-        if 'Pairing successful' in line:
-            success = True
-            break
+    
+    while tries != 5:
+        tries += 1
+        print(f'==== Tentativa {tries} =====')
+
+        scan_and_get_devices(5)
+        # show_devices()
+
+        process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
+        # process.stdin.write('scan on\n')
+        # time.sleep(10)
+        process.stdin.write(f'pair {device[0]}\n')
+        process.stdin.flush()
+        time.sleep(2)
+        process.stdin.write(f'connect {device[0]}\n')
+        process.stdin.flush()
+        process.stdin.write(f'trust {device[0]}\n')
+        process.stdin.flush()
+        result, _ = process.communicate()
+
+        for line in result:
+            if 'Pairing successful' in line:
+                success = True
+                tries = 5
+                break
+        
+
+    # print(result)
 
     if success:
         print("===== Conectado com sucesso!!! =====")
     else:
-        print(f'===== Falha ao conectar a {device[1]}')
-    # print(result)
+        print(f'===== Falha ao conectar a {device[1]} =====')
 
 def remove_device(device):
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
