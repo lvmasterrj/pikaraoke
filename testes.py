@@ -24,7 +24,7 @@ def scan_and_get_devices(scan_time=10):
 
     time.sleep(scan_time)
 
-    run_commands(['scan off\n', 'devices\n'])
+    run_commands(process, ['scan off\n', 'devices\n'])
 
     devices_output, _ = process.communicate()
 
