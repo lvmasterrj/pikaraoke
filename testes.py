@@ -139,7 +139,7 @@ def connect_to_device(device):
         tries += 1
         print(f'==== Tentativa {tries} =====')
 
-        scan_and_get_devices(5)
+        scan_and_get_devices(10)
         # show_devices()
 
         process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
