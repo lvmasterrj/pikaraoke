@@ -23,7 +23,7 @@ def scan_and_get_devices(sleep_time=10):
 
     time.sleep(sleep_time)
 
-    devices_output = run_commands(['scan off', 'devices\n'])
+    devices_output = run_commands(['scan off', 'devices'])
 
     print("====== Devices Output==========")
     print(devices_output)
