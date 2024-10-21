@@ -3,6 +3,13 @@
 
 import subprocess
 import time
+import configparser
+
+def get_known_devices():
+    config_obj = configparser.ConfigParser()
+    config_obj.read("btdevices.txt")
+    known_devices = config_obj.get("DEVICES", "known")
+    return known_devices
 
 def run_bluetoothctl_command(process, command):
     # Inicia o processo bluetoothctl
@@ -75,37 +82,47 @@ def scan_and_get_devices(scan_time=10):
                     
                     devices_new.append(newline)
 
-            elif line[0] == 'Device':
-                if line[1] != line[2].replace('-', ':'):
-                    newline = ['known', line[1], ' '.join(line[2:])]
-                    devices_known.append(newline)
+            # elif line[0] == 'Device':
+            #     if line[1] != line[2].replace('-', ':'):
+            #         newline = ['known', line[1], ' '.join(line[2:])]
+            #         devices_known.append(newline)
 
     print("===== New Devices =====")
     print(devices_new)
-    print("===== Known Devices =====")
-    print(devices_known)               
+    # print("===== Known Devices =====")
+    # print(devices_known)               
 
     # Itera sobre a lista de dispositivos conhecidos
-    for known_device in devices_known[:]:  # Usando [:] para fazer uma cópia da lista durante a iteração
-        found = False
-        # Verifica se o dispositivo conhecido está na lista de dispositivos novos
-        for new_device in devices_new:
-            if known_device[1] == new_device[1]:  # Compara o endereço MAC
-                # Se o dispositivo estiver na lista de dispositivos novos, remova-o de 'devices_nown'
-                devices_known.remove(known_device)
-                found = True
-                break
+    # for known_device in devices_known[:]:  # Usando [:] para fazer uma cópia da lista durante a iteração
+    #     found = False
+    #     # Verifica se o dispositivo conhecido está na lista de dispositivos novos
+    #     for new_device in devices_new:
+    #         if known_device[1] == new_device[1]:  # Compara o endereço MAC
+    #             # Se o dispositivo estiver na lista de dispositivos novos, remova-o de 'devices_nown'
+    #             devices_known.remove(known_device)
+    #             found = True
+    #             break
         
-        # Se não encontrado, muda 'known' para 'known_off'
-        if not found:
-            known_device[0] = 'known_off'
+    #     # Se não encontrado, muda 'known' para 'known_off'
+    #     if not found:
+    #         known_device[0] = 'known_off'
 
-    return devices_new + devices_known
+    # return devices_new + devices_known
 
 # def connect_to_device(mac_number):
 
-devices = scan_and_get_devices(10)
+# devices = scan_and_get_devices(10)
 
-for device in devices:
-    print("===== Devices =====")
-    print(device)
+# for device in devices:
+#     print("===== Devices =====")
+#     print(device)
+
+def connect_to_device(device, trust_device=False):
+    process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
+    process.stdin.write('pair', device)
+    process.stdin.flush()
+    if trust_device:
+        process.stdin.write('trust', device)
+        process.stdin.flush()
+    result, _ = process.communicate()
+    print(result)
