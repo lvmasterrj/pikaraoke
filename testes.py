@@ -153,6 +153,8 @@ def connect_to_device(device):
         process.stdin.write(f'trust {device[0]}\n')
         process.stdin.flush()
         result, _ = process.communicate()
+        
+        print(result)
 
         for line in result:
             if 'Pairing successful' in line:
@@ -160,8 +162,8 @@ def connect_to_device(device):
                 tries = 5
                 break
         
+        
 
-    # print(result)
 
     if success:
         print("===== Conectado com sucesso!!! =====")
