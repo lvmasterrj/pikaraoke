@@ -156,10 +156,12 @@ def connect_to_device(device):
         process.stdin.flush()
         result, _ = process.communicate()
         
-        print(result)
+        lines = result.splitlines()
 
-        for line in result:
-            if 'Pairing successful' in line:
+        for line in lines:
+            print("--- Linha")
+            print(line)
+            if 'Pairing successful' or 'Connection successful' in line:
                 success = True
                 tries = 5
                 break
