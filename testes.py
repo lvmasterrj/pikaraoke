@@ -23,6 +23,9 @@ def scan_and_get_devices(sleep_time=10):
     time.sleep(sleep_time)
 
     devices_output = run_commands(['scan off\n', 'devices\n'])
+
+    print("====== Devices Output==========")
+    print(devices_output)
    
    
    
@@ -56,6 +59,7 @@ def scan_and_get_devices(sleep_time=10):
     for line in lines:
         if 'Device' in line:
             line = line.split()
+            print("====== Line ======")
             print(line)
             if line[0] == '\x1b[K[\x01\x1b[0;92m\x02NEW\x01\x1b[0m\x02]':
                 if line[2] != line[3].replace('-', ':'):
@@ -69,8 +73,13 @@ def scan_and_get_devices(sleep_time=10):
 
             elif line[0] == 'Device':
                 if line[1] != line[2].replace('-', ':'):
-                    newline = ['nown', line[1], ' '.join(line[2:])]
+                    newline = ['known', line[1], ' '.join(line[2:])]
                     devices_known.append(newline)
+
+    print("===== New Devices =====")
+    print(devices_new)
+    print("===== Known Devices =====")
+    print(devices_known)               
 
     # Itera sobre a lista de dispositivos conhecidos
     for known_device in devices_known[:]:  # Usando [:] para fazer uma cópia da lista durante a iteração
@@ -83,9 +92,9 @@ def scan_and_get_devices(sleep_time=10):
                 found = True
                 break
         
-        # Se não encontrado, muda 'nown' para 'nown_off'
+        # Se não encontrado, muda 'known' para 'known_off'
         if not found:
-            known_device[0] = 'nown_off'
+            known_device[0] = 'known_off'
 
     return devices_new + devices_known
 
