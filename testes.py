@@ -151,6 +151,7 @@ def connect_to_device(device):
         time.sleep(2)
         process.stdin.write(f'connect {device[0]}\n')
         process.stdin.flush()
+        time.sleep(2)
         process.stdin.write(f'trust {device[0]}\n')
         process.stdin.flush()
         result, _ = process.communicate()
