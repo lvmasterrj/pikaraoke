@@ -161,7 +161,7 @@ def connect_to_device(device):
         for line in lines:
             print("--- Linha")
             print(line)
-            if 'Pairing successful' or 'Connection successful' in line:
+            if 'Connection successful' in line:
                 success = True
                 tries = 5
                 break
