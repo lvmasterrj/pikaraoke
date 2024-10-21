@@ -7,7 +7,7 @@ import time
 def run_bluetoothctl_command(command):
     # Inicia o processo bluetoothctl
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    process.write(command)
+    process.stdin.write(command)
     process.stdin.flush()
     devices_output, _ = process.communicate()
     return devices_output
