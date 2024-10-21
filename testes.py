@@ -16,11 +16,11 @@ def run_commands(commands):
         time.sleep(2)
     return output
 
-def scan_and_get_devices(time=10):
+def scan_and_get_devices(sleep_time=10):
 
     run_commands(['power on', 'agent on', 'default-agent', 'scan bredr\n'])
 
-    time.sleep(time)
+    time.sleep(sleep_time)
 
     devices_output = run_commands(['scan off\n', 'devices\n'])
    
