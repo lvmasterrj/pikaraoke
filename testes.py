@@ -119,13 +119,14 @@ def scan_and_get_devices(scan_time=10):
 
 def connect_to_device(device, trust_device=False):
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    process.stdin.write('pair', device)
+    # command = f'pair {device}\n'
+    process.stdin.write(f'pair {device}\n')
     process.stdin.flush()
     time.sleep(2)
-    process.stdin.write('connect', device)
+    process.stdin.write(f'connect {device}\n')
     process.stdin.flush()
     if trust_device:
-        process.stdin.write('trust', device)
+        process.stdin.write(f'trust {device}\n')
         process.stdin.flush()
     result, _ = process.communicate()
     print(result)
