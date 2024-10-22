@@ -30,6 +30,7 @@ def add_known_device(device):
     devices = get_known_devices()
 
     if devices[0] != "ok":
+        devices[1]=[]
         config_obj.add_section(section)
 
     devices[1].append(device)
