@@ -41,10 +41,12 @@ def add_known_device(device):
     
     
 def remove_known_device(device):
+    print("==== Removing device=====")
+    print(device)
     if os.path.exists(file):
         devices = get_known_devices()
         if devices[0] == "ok":
-            devices[1] = [item for item in devices[1] if item[1] != device[0]]
+            devices[1] = [item for item in devices[1] if item[1] != device]
             config_obj[section][key] = str(devices[1])
             with open(file, 'w') as configfile:
                 config_obj.write(configfile)
