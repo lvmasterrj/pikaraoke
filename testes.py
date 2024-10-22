@@ -188,13 +188,13 @@ def connect_to_device(device):
         process.stdin.write('scan on\n')
         process.stdin.flush()
         time.sleep(10)
-        process.stdin.write(f'pair {device[0]}\n')
+        process.stdin.write(f'pair {device[1]}\n')
         process.stdin.flush()
         time.sleep(2)
-        process.stdin.write(f'connect {device[0]}\n')
+        process.stdin.write(f'connect {device[1]}\n')
         process.stdin.flush()
         time.sleep(2)
-        process.stdin.write(f'trust {device[0]}\n')
+        process.stdin.write(f'trust {device[1]}\n')
         process.stdin.flush()
         result, _ = process.communicate()
         
@@ -214,11 +214,11 @@ def connect_to_device(device):
     if success:
         print("===== Conectado com sucesso!!! =====")
     else:
-        print(f'===== Falha ao conectar a {device[1]} =====')
+        print(f'===== Falha ao conectar a {device[2]} =====')
 
 def remove_device(device):
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    process.stdin.write(f'remove {device[0]}\n')
+    process.stdin.write(f'remove {device[1]}\n')
     process.stdin.flush()
     result, _ = process.communicate()
     print(result)
