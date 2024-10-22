@@ -5,27 +5,47 @@ import subprocess
 import time
 import configparser
 import os
+import ast
 from time import localtime, strftime
 
 now = strftime("%Y-%m-%d %H:%M:%S", localtime())
+file = "btdevices.txt"
+section = "DEVICES"
+key = "known"
+config_obj = configparser.ConfigParser()
 
 def get_known_devices():
-    file = "btdevices.txt"
     if os.path.exists(file):
-        config_obj = configparser.ConfigParser()
         config_obj.read(file)
-        if "Devices" in config_obj:
-            known_devices = config_obj.get("DEVICES", "known")
+        if section in config_obj:
+            known_devices = ast.literal_eval(config_obj[section][key])
             return ['ok', known_devices]
         else:
             return ['error', 'no_section']
     else:
         return [ 'error' , 'no_file']
 
-# def add_known_device(device):
-    # config_obj = configparser.ConfigParser()
-    # devices = get_known_devices()
-    # devices.append(device)
+def add_known_device(device):
+    if os.path.exists(file):
+        devices = get_known_devices()
+        if devices[0] == "ok":
+            devices[1].append(device)
+            config_obj[section][key] = str(devices[1])
+            with open(file, 'w') as configfile:
+                config_obj.write(configfile)
+            return "ok"
+        return "error"
+    
+def remove_known_device(device):
+    if os.path.exists(file):
+        devices = get_known_devices()
+        if devices[0] == "ok":
+            devices[1] = [item for item in devices[1] if item[1] != device[0]]
+            config_obj[section][key] = str(devices[1])
+            with open(file, 'w') as configfile:
+                config_obj.write(configfile)
+            return "ok"
+    return "error"
 
 
 def run_bluetoothctl_command(process, command):
