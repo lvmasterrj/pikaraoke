@@ -26,6 +26,7 @@ def get_known_devices():
         return [ 'error' , 'no_file']
 
 def add_known_device(device):
+    device[0] = 'known'
     if os.path.exists(file):
         devices = get_known_devices()
         if devices[0] == "ok":
@@ -129,10 +130,14 @@ def scan_and_get_devices(scan_time=10):
 
     devices_known = get_known_devices()
 
-    print("===== Known Devices =====")
-    print(devices_known)
+    if devices_known[0] == "ok":
+        print("===== Known Devices =====")
+        print(devices_known)
 
-    return devices_new
+    if devices_new:
+        print("===== New Devices =====")
+        return devices_new
+    
     # print("===== Known Devices =====")
     # print(devices_known)               
 
