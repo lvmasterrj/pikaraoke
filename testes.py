@@ -98,6 +98,12 @@ def scan_and_get_devices(scan_time=10):
 
     # print("===== New Devices =====")
     # print(devices_new)
+
+    devices_known = get_known_devices()
+
+    print("===== Known Devices =====")
+    print(devices_known)
+
     return devices_new
     # print("===== Known Devices =====")
     # print(devices_known)               
