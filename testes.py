@@ -29,11 +29,10 @@ def add_known_device(device):
     device[0] = 'known'
     devices = get_known_devices()
 
-    if devices[0] == "ok":
-        devices[1].append(device)
-    else:
+    if devices[0] != "ok":
         config_obj.add_section(section)
 
+    devices[1].append(device)
     config_obj[section][key] = str(devices[1])
     with open(file, 'w') as configfile:
         config_obj.write(configfile)
