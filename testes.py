@@ -226,4 +226,4 @@ def remove_device(device):
     process.stdin.flush()
     result, _ = process.communicate()
     print(result)
-    remove_known_device(device(1))
+    remove_known_device(device[1])
