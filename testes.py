@@ -4,6 +4,9 @@
 import subprocess
 import time
 import configparser
+from time import localtime, strftime
+
+now = strftime("%Y-%m-%d %H:%M:%S", localtime())
 
 def get_known_devices():
     config_obj = configparser.ConfigParser()
@@ -80,7 +83,7 @@ def scan_and_get_devices(scan_time=10):
             # print(line)
             if line[0] == '\x1b[K[\x01\x1b[0;92m\x02NEW\x01\x1b[0m\x02]':
                 if line[2] != line[3].replace('-', ':'):
-                    newline = ['new', line[2], ' '.join(line[3:])]
+                    newline = ['new', line[2], ' '.join(line[3:]), now]
                     # # print(line)
                     # del line[0]
                     # line[0] = 'new'
@@ -176,7 +179,7 @@ def connect_to_device(device):
 
 def remove_device(device):
     process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,text=True)
-    process.stdin.write(f'remove {device}\n')
+    process.stdin.write(f'remove {device[0]}\n')
     process.stdin.flush()
     result, _ = process.communicate()
     print(result)
