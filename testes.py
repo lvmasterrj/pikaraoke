@@ -213,6 +213,7 @@ def connect_to_device(device):
 
     if success:
         print("===== Conectado com sucesso!!! =====")
+        add_known_device(device)
     else:
         print(f'===== Falha ao conectar a {device[2]} =====')
 
@@ -222,3 +223,4 @@ def remove_device(device):
     process.stdin.flush()
     result, _ = process.communicate()
     print(result)
+    remove_known_device(device(1))
