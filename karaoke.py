@@ -426,9 +426,13 @@ class Karaoke:
         logging.debug("Initializing pygame")
         self.full_screen = True
         pygame.display.init()
+        logging.debug("1")
         pygame.display.set_caption("pikaraoke")
+        logging.debug("2")
         pygame.font.init()
+        logging.debug("3")
         pygame.mouse.set_visible(0)
+        logging.debug("4")
         self.width = pygame.display.Info().current_w
         self.height = pygame.display.Info().current_h
         logging.debug("Resolution = " + str(self.width) + "x" + str(self.height))
