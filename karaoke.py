@@ -52,7 +52,6 @@ class Karaoke:
     score = None
     critic = None
     changed_preferences = False
-    # blutoothdevices = get_bluetooth_devices()
 
     # Karaoke object
     def __init__(self, args):
@@ -139,8 +138,6 @@ class Karaoke:
             datefmt="%Y-%m-%d %H:%M:%S",
             level=int(self.log_level),
         )
-
-        jj = self.get_bluetooth_devices()
 
         logging.debug(
             """
@@ -326,50 +323,7 @@ class Karaoke:
             logging.info(output)
         self.get_youtubedl_version()
         logging.info("Done. New version: %s" % self.youtubedl_version)
-
-    def get_bluetooth_devices(self):
-
-        # Iniciar o bluetoothctl
-        process = subprocess.Popen(['bluetoothctl'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        # Enviar comando para buscar dispositivos
-        process.stdin.write(b'scan on\n')
-        process.stdin.flush()
-
-        # Esperar um pouco para permitir a pesquisa de dispositivos
-        import time
-        time.sleep(10)  # tempo de espera em segundos
-
-        # Parar a busca
-        process.stdin.write(b'scan off\n')
-        process.stdin.flush()
-
-        # Ler a saída
-        output, error = process.communicate()
-        
-        # Processar a saída para listar os nomes dos dispositivos
-        lines = output.decode().split('\n')
-        # devices = []
-        # for line in lines:
-        #     if 'Device' in line and 'Name:' in line:
-        #         parts = line.split(' ')
-        #         name_index = line.index('Name:') + len('Name:')
-        #         devices.append(line[name_index:].strip())
-
-        # for device in devices:
-        #     logging.info(device)
-            # print
-
-
-        # subprocess.run(['bluetoothctl', 'agent on'])
-        # output = subprocess.check_output(cmd).decode("utf-8")
-        #     logging.debug("Search results: " + output)
-        # jj = subprocess.run(['bluetoothctl','agent', 'on', 'scan', 'on'])
-        # jj = check_output(['bluetoothctl','agent', 'on', 'scan', 'on']).strip().decode("utf-8")
-        logging.info("=============JJ=============")
-        logging.info(lines)
-        return ('jj')
-        
+      
 
     def force_audio(self, output):
         """For Raspberry Pi only, force audio throught jack or HDMI
