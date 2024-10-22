@@ -18,7 +18,7 @@ import gettext
 from collections import *
 
 from lib import omxclient, vlcclient
-from lib.get_platform import get_platform
+from lib.get_platform import get_platform, is_raspberry_pi
 
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
@@ -203,7 +203,7 @@ class Karaoke:
         # and doesn't have an IP yet (occurs when launched from /etc/rc.local)
         end_time = int(time.time()) + 30
 
-        if self.platform == "raspberry_pi":
+        if is_raspberry_pi:
             while int(time.time()) < end_time:
                 addresses_str = check_output(["hostname", "-I"]).strip().decode("utf-8")
                 addresses = addresses_str.split(" ")
@@ -365,7 +365,7 @@ class Karaoke:
             resultado = "Error trying to update PiKaraoke"
             logging.debug(e)
 
-        if self.platform == "raspberry_pi":
+        if is_raspberry_pi:
             os.system("reboot")
         return resultado
 
@@ -410,7 +410,7 @@ class Karaoke:
 
     def get_default_display_mode(self):
         if self.use_vlc:
-            if self.platform == "raspberry_pi":
+            if is_raspberry_pi:
                 os.environ[
                     "SDL_VIDEO_CENTERED"
                 ] = "1"  # HACK apparently if display mode is fullscreen the vlc window will be at the bottom of pygame

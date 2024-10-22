@@ -300,7 +300,9 @@
     </li>
 </ul>
 
-{% if is_pi %} {# MSG: Title of the section for configuring the rPi audio output #}
+{% if is_pi %}
+
+{# MSG: Title of the section for configuring the rPi audio output #}
 <h1>{% trans %}Force audio output (experimental){% endtrans %}</h1>
 <p>
     {# MSG: Instructions on configuring audio output #} {% trans %}Here you can force the rPi to output the audio through HDMI or the 3.5 jack.{% endtrans %}
@@ -318,7 +320,25 @@
 			{# MSG: Text for the link that will force the audio output through jack #} {% trans %}Force audio output through 3.5 Jack{% endtrans %}</a>
     </li>
 </ul>
-{% endif %} {# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
+
+<h1>{% trans %}Bluetooth (experimental){% endtrans %}</h1>
+<ul>
+    <li>
+        <a id="force-audio-hdmi" href="{{ url_for('force_audio_hdmi') }}">
+			{# MSG: Text for the link that will force audio output through hdmi #} {% trans %}Force audio output through HDMI{% endtrans %}</a>
+    </li>
+    <li>
+        <a id="force-audio-jack" href="{{ url_for('force_audio_jack') }}">
+			{# MSG: Text for the link that will force the audio output through jack #} {% trans %}Force audio output through 3.5 Jack{% endtrans %}</a>
+    </li>
+</ul>
+
+
+{% endif %}
+
+
+{# MSG: Title of the section on shutting down / turning off the machine running Pikaraoke. #}
+
 <h1>{% trans %}Shutdown{% endtrans %}</h1>
 <p>
     {# MSG: Explainitory text which explains why to use the shutdown link. #} {% trans %} Don't just pull the plug! Always shut down your server properly to avoid data corruption. {% endtrans %}
