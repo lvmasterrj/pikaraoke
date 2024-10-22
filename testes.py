@@ -4,15 +4,23 @@
 import subprocess
 import time
 import configparser
+import os
 from time import localtime, strftime
 
 now = strftime("%Y-%m-%d %H:%M:%S", localtime())
 
 def get_known_devices():
-    config_obj = configparser.ConfigParser()
-    config_obj.read("btdevices.txt")
-    known_devices = config_obj.get("DEVICES", "known")
-    return known_devices
+    file = "btdevices.txt"
+    if os.path.exists(file):
+        config_obj = configparser.ConfigParser()
+        config_obj.read(file)
+        if "Devices" in config_obj:
+            known_devices = config_obj.get("DEVICES", "known")
+            return ['ok', known_devices]
+        else:
+            return ['error', 'no_section']
+    else:
+        return [ 'error' , 'no_file']
 
 # def add_known_device(device):
     # config_obj = configparser.ConfigParser()
