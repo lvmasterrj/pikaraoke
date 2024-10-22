@@ -27,15 +27,18 @@ def get_known_devices():
 
 def add_known_device(device):
     device[0] = 'known'
-    if os.path.exists(file):
-        devices = get_known_devices()
-        if devices[0] == "ok":
-            devices[1].append(device)
-            config_obj[section][key] = str(devices[1])
-            with open(file, 'w') as configfile:
-                config_obj.write(configfile)
-            return "ok"
-        return "error"
+    devices = get_known_devices()
+
+    if devices[0] == "ok":
+        devices[1].append(device)
+    else:
+        config_obj.add_section(section)
+
+    config_obj[section][key] = str(devices[1])
+    with open(file, 'w') as configfile:
+        config_obj.write(configfile)
+    return
+    
     
 def remove_known_device(device):
     if os.path.exists(file):
