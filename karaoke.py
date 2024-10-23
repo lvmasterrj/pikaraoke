@@ -426,13 +426,9 @@ class Karaoke:
         logging.debug("Initializing pygame")
         self.full_screen = True
         pygame.display.init()
-        logging.debug("1")
         pygame.display.set_caption("pikaraoke")
-        logging.debug("2")
         pygame.font.init()
-        logging.debug("3")
         pygame.mouse.set_visible(0)
-        logging.debug("4")
         self.width = pygame.display.Info().current_w
         self.height = pygame.display.Info().current_h
         logging.debug("Resolution = " + str(self.width) + "x" + str(self.height))
@@ -1183,10 +1179,8 @@ class Karaoke:
 
     def handle_run_loop(self):
         if self.hide_splash_screen:
-            logging.debug("12")
             time.sleep(self.loop_interval / 1000)
         else:
-            logging.debug("13")
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     logging.warn("Window closed: Exiting pikaraoke...")
@@ -1265,17 +1259,13 @@ class Karaoke:
         while self.running:
             try:
                 if not self.is_file_playing():
-                    logging.debug("5")
                     if self.scored != True:
-                        logging.debug("6")
                         self.render_score_screen()
                         self.scored = True
 
                     elif len(self.queue) > 0:
-                        logging.debug("7")
                         self.reset_now_playing()
                         if not pygame.display.get_active():
-                            logging.debug("8")
                             self.pygame_reset_screen()
 
                         self.render_next_song_to_splash_screen()
@@ -1290,16 +1280,13 @@ class Karaoke:
                         self.queue.pop(0)
                     
                     elif self.changed_preferences:
-                        logging.debug("9")
                         self.changed_preferences = False
                         if not self.hide_splash_screen:
-                            logging.debug("10")
 
                             self.render_splash_screen()
                         logging.debug("***")
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
-                    logging.debug("11")
                     logging.debug(
                         "Routine: Pygame display innactive and no file playing"
                     )
