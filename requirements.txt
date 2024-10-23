@@ -5,7 +5,7 @@ CherryPy==18.10.0
 Flask
 pillow
 qrcode
-pygame==2.1.2
+pygame==2.1.2 --pre
 # futures
 psutil
 unidecode
