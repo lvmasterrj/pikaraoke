@@ -1263,13 +1263,17 @@ class Karaoke:
         while self.running:
             try:
                 if not self.is_file_playing():
+                    logging.debug("5")
                     if self.scored != True:
+                        logging.debug("6")
                         self.render_score_screen()
                         self.scored = True
 
                     elif len(self.queue) > 0:
+                        logging.debug("7")
                         self.reset_now_playing()
                         if not pygame.display.get_active():
+                            logging.debug("8")
                             self.pygame_reset_screen()
 
                         self.render_next_song_to_splash_screen()
@@ -1284,13 +1288,16 @@ class Karaoke:
                         self.queue.pop(0)
                     
                     elif self.changed_preferences:
+                        logging.debug("9")
                         self.changed_preferences = False
                         if not self.hide_splash_screen:
+                            logging.debug("10")
 
                             self.render_splash_screen()
                         logging.debug("***")
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
+                    logging.debug("11")
                     logging.debug(
                         "Routine: Pygame display innactive and no file playing"
                     )
