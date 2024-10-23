@@ -834,15 +834,16 @@ if __name__ == "__main__":
     download_path = ("/usr/lib/pikaraoke/songs",)
 
     default_port = 5555
+    default_vlc_port = 5002
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
-    default_dl_dir = get_default_dl_dir(platform)
     default_omxplayer_path = "/usr/bin/omxplayer"
     default_omxplayer_adev = "both"
+
+    default_vlc_path = get_default_vlc_path(platform)
+    default_dl_dir = get_default_dl_dir(platform)
     default_youtubedl_path = "yt-dlp"
-    default_vlc_path = "get_default_vlc_path(platform)"
-    default_vlc_port = 5002
 
     # parse CLI args
     parser = argparse.ArgumentParser()
