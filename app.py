@@ -1029,19 +1029,19 @@ if __name__ == "__main__":
         args.use_vlc = True
 
     # check if required binaries exist
-    if not os.path.isfile(args.youtubedl_path):
-        print("Youtube-dl path not found! " + args.youtubedl_path)
-        sys.exit(1)
-    if args.use_vlc and not os.path.isfile(args.vlc_path):
-        print("VLC path not found! " + args.vlc_path)
-        sys.exit(1)
-    if (
-        platform == "raspberry_pi"
-        and not args.use_vlc
-        and not os.path.isfile(args.omxplayer_path)
-    ):
-        print("omxplayer path not found! " + args.omxplayer_path)
-        sys.exit(1)
+    # if not os.path.isfile(args.youtubedl_path):
+    #     print("Youtube-dl path not found! " + args.youtubedl_path)
+    #     sys.exit(1)
+    # if args.use_vlc and not os.path.isfile(args.vlc_path):
+    #     print("VLC path not found! " + args.vlc_path)
+    #     sys.exit(1)
+    # if (
+    #     platform == "raspberry_pi"
+    #     and not args.use_vlc
+    #     and not os.path.isfile(args.omxplayer_path)
+    # ):
+    #     print("omxplayer path not found! " + args.omxplayer_path)
+    #     sys.exit(1)
 
     # setup/create download directory if necessary
     dl_path = os.path.expanduser(args.download_path)
