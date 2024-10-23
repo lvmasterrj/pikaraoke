@@ -1183,8 +1183,10 @@ class Karaoke:
 
     def handle_run_loop(self):
         if self.hide_splash_screen:
+            logging.debug("12")
             time.sleep(self.loop_interval / 1000)
         else:
+            logging.debug("13")
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     logging.warn("Window closed: Exiting pikaraoke...")
