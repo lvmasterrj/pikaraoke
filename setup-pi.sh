@@ -17,6 +17,11 @@ sudo apt-get install libjpeg-dev vlc python3-pip python3-pygame ffmpeg libsdl2-t
 if [ $? -ne 0 ]; then echo "ERROR: Binary dependency installation failed with error code: $?"; exit 1; fi
 
 echo
+echo "*** CREATING PYTHON VIRTUAL ENVIRONMENT ***"
+python3 -m venv .venv
+source .venv/bin/activate
+
+echo
 echo "*** PATCHING VLC TO RUN SUDO ***"
 sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
 if [ $? -ne 0 ]; then echo "ERROR: VLC patching failed with error code: $?"; exit 1; fi
@@ -29,8 +34,8 @@ if [ $? -ne 0 ]; then echo "ERROR: YouTube_dl installation failed with error cod
 echo
 echo "*** INSTALLING PYTHON DEPENDENCIES ***"
 echo "Uninstalling old pygame versions..."
-sudo pip3 uninstall -y pygame
-sudo pip3 install -r requirements.txt
+pip3 uninstall -y pygame
+pip3 install -r requirements.txt
 if [ $? -ne 0 ]; then echo "ERROR: Python requirements.txt installation failed with error code: $?"; exit 1; fi
 
 echo
