@@ -1,5 +1,9 @@
 Add Bluetooth in the config options
 
+Fix the "sort" when browsing latin characters ("cho" < "chã")
+
+Add possibility to order by singer
+
 Create categories for the songs
 
 Add possibility of creating score phrases

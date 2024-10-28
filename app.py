@@ -347,10 +347,25 @@ def browse():
                     result.append(song)
         available_songs = result
 
+    # def invertSongSinger(arr):
+    #     result = []
+    #     for s in arr:
+    #         parts = s.split("-")
+    #         inverted = "-".join(reversed(parts))
+    #         result.append(inverted)
+    #     return inverted
+
     if "sort" in request.args and request.args["sort"] == "date":
         songs = sorted(available_songs, key=lambda x: os.path.getctime(x))
         songs.reverse()
         sort_order = "Date"
+    elif "sort" in request.args and request.args["sort"] == "singer":
+        # songs = list(map(lambda s: os.path.basename(s)[:-4], available_songs))
+        # print(songs)
+        # songs = list(map(lambda s: "-".join(reversed(s.split("-"))), songs))
+        # songs = sorted(songs)
+        songs = available_songs
+        sort_order = "Singer"
     else:
         songs = available_songs
         sort_order = "Alphabetical"

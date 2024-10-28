@@ -306,7 +306,7 @@ class Karaoke:
             )
         except CalledProcessError as e:
             output = e.output.decode("utf8")
-        logging.info(output)
+        logging.warning(output)
         if "You installed yt-dlp with pip or using the wheel from PyPi" in output:
             try:
                 logging.info("Attempting youtube-dl upgrade via pip3...")
@@ -837,7 +837,7 @@ class Karaoke:
             base, ext = os.path.splitext(file.as_posix())
             if ext.lower() in types:
                 if os.path.isfile(file.as_posix()):
-                    logging.debug("adding song: " + file.name)
+                    # logging.debug("adding song: " + file.name) ***********************DELETE
                     files_grabbed.append(file.as_posix())
 
         self.available_songs = sorted(
