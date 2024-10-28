@@ -139,6 +139,8 @@ class Karaoke:
             level=int(self.log_level),
         )
 
+        self.youtubedl_version = self.get_youtubedl_version()
+
         logging.debug(
             """
             platform: %s
@@ -153,6 +155,7 @@ class Karaoke:
             download path: %s
             default volume: %s
             youtube-dl path: %s
+            youtube-dl version: %s
             omxplayer path: %s
             logo path: %s
             Use OMXPlayer: %s
@@ -181,6 +184,7 @@ class Karaoke:
                 self.download_path,
                 self.volume_offset,
                 self.youtubedl_path,
+                self.youtubedl_version,
                 self.omxplayer_path,
                 self.logo_path,
                 self.use_omxplayer,
@@ -220,8 +224,6 @@ class Karaoke:
         self.url = "http://%s:%s" % (self.ip, self.port)
 
         self.get_available_songs()
-
-        self.get_youtubedl_version()
 
         self.kill_player()
 
@@ -294,7 +296,7 @@ class Karaoke:
         self.youtubedl_version = (
             check_output(["yt-dlp", "--version"]).strip().decode("utf8")
         )
-        return self.youtubedl_version
+        return
 
     def upgrade_youtubedl(self):
         error = False
