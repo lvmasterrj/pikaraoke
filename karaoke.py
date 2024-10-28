@@ -291,8 +291,8 @@ class Karaoke:
 
 
     def get_youtubedl_version(self):
-        self.youtubedl_version = (
-            check_output([self.youtubedl_path, "--version"]).strip().decode("utf8")
+        self.youtubedl_version1 = (
+            check_output(["yt-dlp", "--version"]).strip().decode("utf8")
         )
         return self.youtubedl_version
 
@@ -783,7 +783,7 @@ class Karaoke:
         logging.info("Searching YouTube for: " + textToSearch)
         num_results = 10
         yt_search = 'ytsearch%d:"%s"' % (num_results, unidecode(textToSearch))
-        cmd = [self.youtubedl_path, "-j", "--no-playlist", "--flat-playlist", yt_search]
+        cmd = ["yt-dlp", "-j", "--no-playlist", "--flat-playlist", yt_search]
         logging.debug("Youtube-dl search command: " + " ".join(cmd))
         try:
             output = subprocess.check_output(cmd).decode("utf-8")
@@ -811,7 +811,7 @@ class Karaoke:
             if self.high_quality
             else "mp4"
         )
-        cmd = [self.youtubedl_path, "-f", file_quality, "-o", dl_path, video_url]
+        cmd = ["yt-dlp", "-f", file_quality, "-o", dl_path, video_url]
         logging.debug("Youtube-dl command: " + " ".join(cmd))
         rc = subprocess.call(cmd)
         if rc != 0:
