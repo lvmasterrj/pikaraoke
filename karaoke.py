@@ -303,7 +303,7 @@ class Karaoke:
         )
         try:
             output = (
-                check_output(["yt-dlp -U"], stderr=subprocess.STDOUT)
+                check_output([self.youtubedl_path, "-U"], stderr=subprocess.STDOUT)
                 .decode("utf8")
                 .strip()
             )
@@ -315,7 +315,7 @@ class Karaoke:
             try:
                 logging.info("Attempting youtube-dl upgrade via pip3...")
                 output = check_output(
-                    ["pip3", "install", "--upgrade", "yt-dlp"]
+                    ["python3", "-m", "pip", "install", "--upgrade", "yt-dlp"]
                 ).decode("utf8")
             except FileNotFoundError:
                 logging.info("Attempting youtube-dl upgrade via pip...")
