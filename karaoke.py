@@ -20,6 +20,7 @@ from collections import *
 from lib import omxclient, vlcclient
 from lib.get_platform import get_platform
 
+
 if get_platform() != "windows":
     from signal import SIGALRM, alarm, signal
 
@@ -293,7 +294,7 @@ class Karaoke:
 
 
     def get_youtubedl_version(self):
-        self.youtubedl_version = (check_output([self.youtubedl_path, "--version"]).strip().decode("utf8"))
+        self.youtubedl_version = (check_output(['python3', '-m', "yt-dlp", "--version"]).strip().decode("utf8"))
         return self.youtubedl_version
 
     def upgrade_youtubedl(self):
