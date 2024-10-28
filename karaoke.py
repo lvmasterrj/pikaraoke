@@ -291,7 +291,7 @@ class Karaoke:
 
 
     def get_youtubedl_version(self):
-        self.youtubedl_version1 = (
+        self.youtubedl_version = (
             check_output(["yt-dlp", "--version"]).strip().decode("utf8")
         )
         return self.youtubedl_version
