@@ -303,7 +303,7 @@ class Karaoke:
         )
         try:
             output = (
-                check_output([self.youtubedl_path, "-U"], stderr=subprocess.STDOUT)
+                check_output(["yt-dlp -U"], stderr=subprocess.STDOUT)
                 .decode("utf8")
                 .strip()
             )
