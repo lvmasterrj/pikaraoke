@@ -297,6 +297,7 @@ class Karaoke:
         return self.youtubedl_version
 
     def upgrade_youtubedl(self):
+        error = False
         logging.info(
             "Upgrading youtube-dl, current version: %s" % self.youtubedl_version
         )
@@ -307,9 +308,10 @@ class Karaoke:
                 .strip()
             )
         except CalledProcessError as e:
+            error = True
             output = e.output.decode("utf8")
-        logging.info(output)
-        if "You installed yt-dlp with pip or using the wheel from PyPi" in output:
+        logging.warning(output)
+        if error or "You installed yt-dlp with pip or using the wheel from PyPi" in output:
             try:
                 logging.info("Attempting youtube-dl upgrade via pip3...")
                 output = check_output(
@@ -322,7 +324,8 @@ class Karaoke:
                 )
             logging.info(output)
         self.get_youtubedl_version()
-        logging.info("Done. New version: %s" % self.youtubedl_version)
+        if not error:
+            logging.info("Done. New version: %s" % self.youtubedl_version)
 
     def force_audio(self, output):
         """For Raspberry Pi only, force audio throught jack or HDMI
