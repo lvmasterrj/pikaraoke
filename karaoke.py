@@ -141,9 +141,10 @@ class Karaoke:
 
         logging.debug(
             """
+            platform: %s
             http port: %s
             hide IP: %s
-            hide RaspiWiFi instructions: %s,
+            hide RaspiWiFi instructions: %s
             hide splash: %s
             splash_delay: %s
             omx audio device: %s
@@ -168,6 +169,7 @@ class Karaoke:
             user pref everyone admin: %s
             Base Path: %s"""
             % (
+                self.platform,
                 self.port,
                 self.hide_ip,
                 self.hide_raspiwifi_instructions,
