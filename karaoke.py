@@ -296,7 +296,7 @@ class Karaoke:
         self.youtubedl_version = (
             check_output(["yt-dlp", "--version"]).strip().decode("utf8")
         )
-        return
+        return self.youtubedl_version
 
     def upgrade_youtubedl(self):
         error = False
