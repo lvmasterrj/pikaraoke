@@ -311,7 +311,7 @@ class Karaoke:
             error = True
             output = e.output.decode("utf8")
         logging.warning(output)
-        if error or "You installed yt-dlp with pip or using the wheel from PyPi" in output:
+        if error or ("You installed yt-dlp with pip or using the wheel from PyPi" in output) or ("Deprecated Feature" in output):
             try:
                 logging.info("Attempting youtube-dl upgrade via pip3...")
                 output = check_output(
