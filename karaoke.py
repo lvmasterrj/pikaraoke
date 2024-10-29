@@ -142,6 +142,42 @@ class Karaoke:
 
         self.youtubedl_version = self.get_youtubedl_version()
 
+        self.show_configs()
+
+        # Generate connection URL and QR code, retry in case pi is still starting up
+        # and doesn't have an IP yet (occurs when launched from /etc/rc.local)
+        end_time = int(time.time()) + 30
+
+        if self.platform == "raspberry_pi":
+            while int(time.time()) < end_time:
+                addresses_str = check_output(["hostname", "-I"]).strip().decode("utf-8")
+                addresses = addresses_str.split(" ")
+                self.ip = addresses[0]
+                if not self.is_network_connected():
+                    logging.debug("Couldn't get IP, retrying....")
+                else:
+                    break
+        else:
+            self.ip = self.get_ip()
+
+        logging.debug("IP address (for QR code and splash screen): " + self.ip)
+
+        self.url = "http://%s:%s" % (self.ip, self.port)
+
+        self.get_available_songs()
+
+        self.kill_player()
+
+        self.generate_qr_code()
+
+        self.set_player_configuration()
+
+        # Initialize the Splash Screen
+        if not self.hide_splash_screen:
+            self.initialize_screen()
+            self.render_splash_screen()
+
+    def show_configs(self):
         logging.debug(
             """
             platform: %s
@@ -203,39 +239,6 @@ class Karaoke:
                 self.base_path,
             )
         )
-
-        # Generate connection URL and QR code, retry in case pi is still starting up
-        # and doesn't have an IP yet (occurs when launched from /etc/rc.local)
-        end_time = int(time.time()) + 30
-
-        if self.platform == "raspberry_pi":
-            while int(time.time()) < end_time:
-                addresses_str = check_output(["hostname", "-I"]).strip().decode("utf-8")
-                addresses = addresses_str.split(" ")
-                self.ip = addresses[0]
-                if not self.is_network_connected():
-                    logging.debug("Couldn't get IP, retrying....")
-                else:
-                    break
-        else:
-            self.ip = self.get_ip()
-
-        logging.debug("IP address (for QR code and splash screen): " + self.ip)
-
-        self.url = "http://%s:%s" % (self.ip, self.port)
-
-        self.get_available_songs()
-
-        self.kill_player()
-
-        self.generate_qr_code()
-
-        self.set_player_configuration()
-
-        # Initialize the Splash Screen
-        if not self.hide_splash_screen:
-            self.initialize_screen()
-            self.render_splash_screen()
 
     # Set the player configuration
     def set_player_configuration(self):
@@ -383,10 +386,11 @@ class Karaoke:
         try:
             userprefs = self.config_obj["USERPREFERENCES"]
             userprefs[pref] = str(val)
-            setattr(self,pref,val)
+            setattr(self,pref,eval(str(val)))
             with open("config.ini", "w") as conf:
                 self.config_obj.write(conf)
                 self.changed_preferences = True
+            self.show_configs()
             return [True, self._("Your preferences were changed successfully")] 
         except Exception as e:
             logging.debug(e)
