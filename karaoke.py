@@ -921,12 +921,16 @@ class Karaoke:
         else:
             connecttext = qrcode = url = ""
 
-        cmd = ['vlcclient.VLCClient', 
-                     '--port', str(self.vlc_port), 
-                     '--path', self.vlc_path, 
-                     '--connecttext', connecttext,
-                     '--qrcode', qrcode,
-                     '--url', url]
+        cmd = f'''
+            import vlcclient
+            vlcclient.VLCClient(
+                port={self.vlc_port},
+                path="{self.vlc_path}",
+                connecttext="{connecttext}",
+                qrcode="{self.qr_code_path}",
+                url="{self.url}"
+            )
+            '''
         
         logging.debug(
             """
@@ -947,7 +951,7 @@ class Karaoke:
             )
         )
         
-        subprocess.run(['sudo', '-u', "pi"] + cmd, check=True)
+        subprocess.run(['sudo', '-u', "pi", "python3", "-c", cmd], check=True)
         
         return vlcclient.VLCClient(
             port=self.vlc_port,
