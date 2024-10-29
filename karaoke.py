@@ -383,10 +383,9 @@ class Karaoke:
         try:
             userprefs = self.config_obj["USERPREFERENCES"]
             userprefs[pref] = str(val)
-            self[pref] = str(val)
+            setattr(self,pref,val)
             with open("config.ini", "w") as conf:
                 self.config_obj.write(conf)
-                setattr(self,pref,eval(str(val)))
                 self.changed_preferences = True
             return [True, self._("Your preferences were changed successfully")] 
         except Exception as e:
