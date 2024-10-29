@@ -230,14 +230,22 @@ class Karaoke:
 
         self.generate_qr_code()
 
-        # Set the player configuration
+        self.set_player_configuration()
+
+        # Initialize the Splash Screen
+        if not self.hide_splash_screen:
+            self.initialize_screen()
+            self.render_splash_screen()
+
+    # Set the player configuration
+    def set_player_configuration(self):
         if self.use_vlc:
             self.vlcclient = vlcclient.VLCClient(
                 port=self.vlc_port,
                 path=self.vlc_path,
-                connecttext=self._("Pikaraoke - Connect at: ") if not self.show_overlay else "",
-                qrcode=self.qr_code_path if not self.show_overlay else "",
-                url=self.url if not self.show_overlay else "",
+                connecttext=self._("Pikaraoke - Connect at: ") if self.show_overlay else "",
+                qrcode=self.qr_code_path if self.show_overlay else "",
+                url=self.url if self.show_overlay else "",
             )
         else:
             self.omxclient = omxclient.OMXClient(
@@ -246,11 +254,6 @@ class Karaoke:
                 dual_screen=self.dual_screen,
                 volume_offset=self.volume_offset,
             )
-
-        # Initialize the Splash Screen
-        if not self.hide_splash_screen:
-            self.initialize_screen()
-            self.render_splash_screen()
 
     
     def get_ip(self):
