@@ -922,15 +922,15 @@ class Karaoke:
             connecttext = qrcode = url = ""
 
         cmd = f'''
-            import vlcclient
-            vlcclient.VLCClient(
-                port={self.vlc_port},
-                path="{self.vlc_path}",
-                connecttext="{connecttext}",
-                qrcode="{self.qr_code_path}",
-                url="{self.url}"
-            )
-            '''
+import vlcclient
+vlcclient.VLCClient(
+    port={self.vlc_port},
+    path="{self.vlc_path}",
+    connecttext="{connecttext}",
+    qrcode="{self.qr_code_path}",
+    url="{self.url}"
+)
+'''
         
         logging.debug(
             """
