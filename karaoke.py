@@ -383,6 +383,7 @@ class Karaoke:
         try:
             userprefs = self.config_obj["USERPREFERENCES"]
             userprefs[pref] = str(val)
+            self[pref] = str(val)
             with open("config.ini", "w") as conf:
                 self.config_obj.write(conf)
                 setattr(self,pref,eval(str(val)))
@@ -1290,7 +1291,6 @@ class Karaoke:
                         if not self.hide_splash_screen:
 
                             self.render_splash_screen()
-                        logging.debug("***")
 
                 elif not pygame.display.get_active() and not self.is_file_playing():
                     logging.debug(
