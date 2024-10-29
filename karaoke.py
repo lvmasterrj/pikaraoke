@@ -914,9 +914,12 @@ class Karaoke:
 
     def get_vlc_user(self):
 
-        connecttext=self._("Pikaraoke - Connect at: ") if self.show_overlay else "",
-        qrcode=self.qr_code_path if self.show_overlay else "",
-        url=self.url if self.show_overlay else "",
+        if self.show_overlay:
+            connecttext=self._("Pikaraoke - Connect at: ")
+            qrcode=self.qr_code_path
+            url=self.url
+        else:
+            connecttext = qrcode = url = ""
 
         cmd = ['vlcclient.VLCClient', 
                      '--port', str(self.vlc_port), 
