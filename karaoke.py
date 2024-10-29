@@ -170,7 +170,7 @@ class Karaoke:
 
         self.generate_qr_code()
 
-        # self.set_player_configuration()
+        self.set_player_configuration()
 
         # Initialize the Splash Screen
         if not self.hide_splash_screen:
@@ -912,16 +912,41 @@ class Karaoke:
             if self.omxclient != None:
                 self.omxclient.kill()
 
+    def get_vlc_user(self):
+
+        connecttext=self._("Pikaraoke - Connect at: ") if self.show_overlay else "",
+        qrcode=self.qr_code_path if self.show_overlay else "",
+        url=self.url if self.show_overlay else "",
+
+        cmd = ['vlcclient.VLCClient', 
+                     '--port', str(self.vlc_port), 
+                     '--path', self.vlc_path, 
+                     '--connecttext', connecttext,
+                     '--qrcode', qrcode,
+                     '--url', url]
+        
+        subprocess.run(['sudo', '-u', "pi"] + cmd, check=True)
+        
+        return vlcclient.VLCClient(
+            port=self.vlc_port,
+            path=self.vlc_path,
+            connecttext=connecttext,
+            qrcode=qrcode,
+            url=url
+        )
+
     def play_file(self, file_path, extra_params=[]):
 
         self.now_playing = self.filename_from_path(file_path)
         self.now_playing_filename = file_path
 
-        self.set_player_configuration()
+        # self.set_player_configuration()
 
         if self.use_vlc:
             
             logging.info("Playing video in VLC: " + self.now_playing)
+
+            self.vlcclient = self.get_vlc_user()
 
             extra_params += [f"--audio-desync={int(self.user_audio_delay) + int(self.now_playing_delay)}"]
 
