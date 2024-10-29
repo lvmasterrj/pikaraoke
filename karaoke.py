@@ -170,7 +170,7 @@ class Karaoke:
 
         self.generate_qr_code()
 
-        self.set_player_configuration()
+        # self.set_player_configuration()
 
         # Initialize the Splash Screen
         if not self.hide_splash_screen:
@@ -916,6 +916,8 @@ class Karaoke:
 
         self.now_playing = self.filename_from_path(file_path)
         self.now_playing_filename = file_path
+
+        self.set_player_configuration()
 
         if self.use_vlc:
             
