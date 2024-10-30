@@ -390,7 +390,6 @@ class Karaoke:
             with open("config.ini", "w") as conf:
                 self.config_obj.write(conf)
                 self.changed_preferences = True
-            self.show_configs()
             return [True, self._("Your preferences were changed successfully")] 
         except Exception as e:
             logging.debug(e)
@@ -912,67 +911,14 @@ class Karaoke:
             if self.omxclient != None:
                 self.omxclient.kill()
 
-    def get_vlc_user(self):
-
-        if self.show_overlay:
-            connecttext=self._("Pikaraoke - Connect at: ")
-            qrcode=self.qr_code_path
-            url=self.url
-        else:
-            connecttext = qrcode = url = ""
-
-        cmd = f'''
-import vlcclient
-vlcclient.VLCClient(
-    port={self.vlc_port},
-    path="{self.vlc_path}",
-    connecttext="{connecttext}",
-    qrcode="{self.qr_code_path}",
-    url="{self.url}"
-)
-'''
-        
-        logging.debug(
-            """
-            ===================================
-            port: %s
-            path: %s
-            connecttext: %s
-            qrcode: %s
-            url: %s
-            ===================================
-            """
-            %(
-                str(self.vlc_port),
-                self.vlc_path,
-                connecttext,
-                qrcode,
-                url
-            )
-        )
-        
-        subprocess.run(['sudo', '-u', "pi", "python3", "-c", cmd], check=True)
-        
-        return vlcclient.VLCClient(
-            port=self.vlc_port,
-            path=self.vlc_path,
-            connecttext=connecttext,
-            qrcode=qrcode,
-            url=url
-        )
-
     def play_file(self, file_path, extra_params=[]):
 
         self.now_playing = self.filename_from_path(file_path)
         self.now_playing_filename = file_path
 
-        # self.set_player_configuration()
-
         if self.use_vlc:
             
             logging.info("Playing video in VLC: " + self.now_playing)
-
-            self.vlcclient = self.get_vlc_user()
 
             extra_params += [f"--audio-desync={int(self.user_audio_delay) + int(self.now_playing_delay)}"]
 
