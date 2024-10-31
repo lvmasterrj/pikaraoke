@@ -341,14 +341,22 @@ class Karaoke:
         logging.debug("Forcing audio output through: " + output)
 
         try:
-            asound = open("/etc/asound.conf", "w+")
+            
+            asound = open("~/.asoundrc", "w+")
             str = (
-                "pcm.!default{type hw card "
+                "defaults.pcm.card "
                 + output
-                + "} ctl.!default {type hw card "
+                + "\n defaults.ctl.card"
                 + output
-                + "}"
             )
+            # asound = open("/etc/asound.conf", "w+")
+            # str = (
+            #     "pcm.!default{type hw card "
+            #     + output
+            #     + "} ctl.!default {type hw card "
+            #     + output
+            #     + "}"
+            # )
             asound.write(str)
             resultado = True
         except Exception as e:

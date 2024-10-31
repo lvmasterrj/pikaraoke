@@ -1,0 +1,11 @@
+CherryPy
+Flask
+qrcode
+pygame
+psutil
+unidecode
+flask-paginate
+jinja2
+Babel
+Flask-Babel
+yt-dlp
