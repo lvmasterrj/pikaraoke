@@ -128,7 +128,7 @@ class Karaoke:
         trans.install()
         self._ = trans.gettext
 
-        # Initiate Pygame
+        # Initiate Pygame mixer
         pygame.mixer.init()
         pygame.mixer.music.load("sound-effects/saloon-piano-music.ogg")
         pygame.mixer.music.set_volume(0.2)
