@@ -78,10 +78,9 @@ def is_admin():
 
 def get_locale():
     """Select the language to display the webpage in based on the Accept-Language header"""
-    return "pt_BR"
     return request.accept_languages.best_match(LANGUAGES.keys())
 
-@babel.init_app(app, locale_selector=get_locale)
+babel.init_app(app, locale_selector=get_locale)
 
 @app.route("/")
 def home():
