@@ -192,7 +192,6 @@ class Karaoke:
             high quality video: %s
             download path: %s
             default volume: %s
-            youtube-dl path: %s
             youtube-dl version: %s
             omxplayer path: %s
             logo path: %s
@@ -222,7 +221,6 @@ class Karaoke:
                 self.high_quality,
                 self.download_path,
                 self.volume_offset,
-                # self.youtubedl_path,
                 self.youtubedl_version,
                 self.omxplayer_path,
                 self.logo_path,
