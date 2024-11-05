@@ -95,6 +95,7 @@ class Karaoke:
         self.config_obj.read("config.ini")
         self.user_lng = self.config_obj.get("USERPREFERENCES", "language")
         self.user_audio_delay = self.config_obj.get("USERPREFERENCES", "audio_delay")
+        self.user_audio_output = self.config_obj.get("USERPREFERENCES", "audio_output")
 
         self.disable_score = eval(str(
             args.disable_score if not args.disable_score is None
@@ -203,6 +204,7 @@ class Karaoke:
             show overlay: %s
             user pref language: %s
             user pref audio delay: %s
+            user pref audio output: %s
             user pref disable score: %s
             user pref disable background music: %s
             user pref limit user: %s
@@ -232,6 +234,7 @@ class Karaoke:
                 self.show_overlay,
                 self.user_lng,
                 self.user_audio_delay,
+                self.user_audio_output,
                 self.disable_score,
                 self.disable_bg_music,
                 self.limit_user,
@@ -258,7 +261,6 @@ class Karaoke:
                 volume_offset=self.volume_offset,
             )
 
-    
     def get_ip(self):
         """Other ip-getting methods are unreliable and sometimes return 127.0.0.1
            https://stackoverflow.com/a/28950776"""
@@ -335,20 +337,21 @@ class Karaoke:
             logging.info("Done. New version: %s" % self.youtubedl_version)
 
     def force_audio(self, output):
-        """For Raspberry Pi only, force audio throught jack or HDMI
-        adding/changing some lines on a rPi file"""
+        """For Raspberry Pi only, force audio throught jack or HDMI"""
 
         logging.debug("Forcing audio output through: " + output)
 
         try:
+            self.change_prefs("audio_output", output)
+            self.user_audio_output = output
             
-            asound = open("~/.asoundrc", "w+")
-            str = (
-                "defaults.pcm.card "
-                + output
-                + "\n defaults.ctl.card"
-                + output
-            )
+            # asound = open("~/.asoundrc", "w+")
+            # str = (
+            #     "defaults.pcm.card "
+            #     + output
+            #     + "\n defaults.ctl.card"
+            #     + output
+            # )
             # asound = open("/etc/asound.conf", "w+")
             # str = (
             #     "pcm.!default{type hw card "
@@ -357,7 +360,7 @@ class Karaoke:
             #     + output
             #     + "}"
             # )
-            asound.write(str)
+            # asound.write(str)
             resultado = True
         except Exception as e:
             resultado = False
@@ -928,7 +931,10 @@ class Karaoke:
             
             logging.info("Playing video in VLC: " + self.now_playing)
 
-            extra_params += [f"--audio-desync={int(self.user_audio_delay) + int(self.now_playing_delay)}"]
+            delay = int(self.user_audio_delay) + int(self.now_playing_delay)
+            audio_output = f"-A alsa --alsa-audio-device sysdefault:CARD={self.user_audio_output}"
+
+            extra_params += [f"{audio_output} --audio-desync={delay} "]
 
             if self.now_playing_transpose == 0:
                 self.vlcclient.play_file(
@@ -1056,13 +1062,13 @@ class Karaoke:
         logging.info("Adding %d random songs to queue" % amount)
         songs = list(self.available_songs)  # make a copy
         if len(songs) == 0:
-            logging.warn("No available songs!")
+            logging.warning("No available songs!")
             return False
         i = 0
         while i < amount:
             r = random.randint(0, len(songs) - 1)
             if self.is_song_in_queue(songs[r]):
-                logging.warn("Song already in queue, trying another... " + songs[r])
+                logging.warning("Song already in queue, trying another... " + songs[r])
             else:
                 self.queue.append(
                     {
@@ -1074,7 +1080,7 @@ class Karaoke:
                 i += 1
             songs.pop(r)
             if len(songs) == 0:
-                logging.warn("Ran out of songs!")
+                logging.warning("Ran out of songs!")
                 return False
         return True
 
@@ -1234,10 +1240,7 @@ class Karaoke:
 
     def change_language(self, language):
         logging.debug("Changing language to: " + str(language))
-        userprefs = self.config_obj["USERPREFERENCES"]
-        userprefs["language"] = language
-        with open("config.ini", "w") as conf:
-            self.config_obj.write(conf)
+        self.change_prefs("language",language)
         trans = gettext.translation(
             "messages", localedir="translations", languages=[language]
         )
@@ -1252,10 +1255,7 @@ class Karaoke:
         
         logging.debug("Updating user preference of audio delay to " + str(delay) + "ms")
         self.user_audio_delay = str(delay)
-        userprefs = self.config_obj["USERPREFERENCES"]
-        userprefs["audio_delay"] = self.user_audio_delay
-        with open("config.ini", "w") as conf:
-            self.config_obj.write(conf)
+        self.change_prefs("audio_delay", delay)
 
         if self.is_file_playing():
             if self.use_vlc:

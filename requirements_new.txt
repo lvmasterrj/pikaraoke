@@ -1,7 +1,6 @@
 CherryPy
 Flask
-qrcode
-pygame
+qrcode[pil]
 psutil
 unidecode
 flask-paginate
