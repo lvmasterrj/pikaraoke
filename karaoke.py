@@ -929,10 +929,10 @@ class Karaoke:
             
             logging.info("Playing video in VLC: " + self.now_playing)
 
-            delay = int(self.user_audio_delay) + int(self.now_playing_delay)
-            audio_output = f"-A alsa --alsa-audio-device sysdefault:CARD={self.user_audio_output}"
+            delay = [f"--audio-desync={int(self.user_audio_delay) + int(self.now_playing_delay)}"]
+            audio_output = ["-A", "alsa", "--alsa-audio-device", f"sysdefault:CARD={self.user_audio_output}"]
 
-            extra_params += [f"{audio_output} --audio-desync={delay} "]
+            extra_params += delay + audio_output
 
             if self.now_playing_transpose == 0:
                 self.vlcclient.play_file(
