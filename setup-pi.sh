@@ -36,7 +36,7 @@ if [ $? -ne 0 ]; then echo "ERROR: Python requirements.txt installation failed w
 echo
 echo "*** BUMPING UP GPU MEMORY ***"
 echo "Getting your current gpu mem..."
-BOOT_CONFIG=/boot/config.txt
+BOOT_CONFIG=/boot/firmware/config.txt
 more $BOOT_CONFIG | grep ^gpu_mem=
 if [ $? -ne 1 ]; then 
   echo "WARN: There's a gpu_mem setting in your ${BOOT_CONFIG}! I don't want to mess with it."; 
