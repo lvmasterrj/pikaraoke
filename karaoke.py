@@ -68,7 +68,7 @@ class Karaoke:
         self.high_quality = args.high_quality
         self.splash_delay = int(args.splash_delay)
         self.volume_offset = self.volume = args.volume
-        self.youtubedl_path = args.youtubedl_path
+        # self.youtubedl_path = args.youtubedl_path
         self.omxplayer_path = args.omxplayer_path
         self.use_omxplayer = args.use_omxplayer
         self.use_vlc = args.use_vlc
@@ -222,7 +222,7 @@ class Karaoke:
                 self.high_quality,
                 self.download_path,
                 self.volume_offset,
-                self.youtubedl_path,
+                # self.youtubedl_path,
                 self.youtubedl_version,
                 self.omxplayer_path,
                 self.logo_path,
@@ -310,28 +310,28 @@ class Karaoke:
         logging.info(
             "Upgrading youtube-dl, current version: %s" % self.youtubedl_version
         )
+        # try:
+        #     output = (
+        #         check_output([self.youtubedl_path, "-U"], stderr=subprocess.STDOUT)
+        #         .decode("utf8")
+        #         .strip()
+        #     )
+        # except CalledProcessError as e:
+        #     error = True
+        #     output = e.output.decode("utf8")
+        # logging.warning(output)
         try:
-            output = (
-                check_output([self.youtubedl_path, "-U"], stderr=subprocess.STDOUT)
-                .decode("utf8")
-                .strip()
+            logging.info("Attempting youtube-dl upgrade via pip3...")
+            output = check_output(
+                ["python3", "-m", "pip", "install", "--upgrade", "yt-dlp"]
+            ).decode("utf8")
+        except FileNotFoundError:
+            logging.info("Attempting youtube-dl upgrade via pip...")
+            output = check_output(["pip", "install", "--upgrade", "yt-dlp"]).decode(
+                "utf8"
             )
-        except CalledProcessError as e:
-            error = True
-            output = e.output.decode("utf8")
-        logging.warning(output)
-        if error or ("You installed yt-dlp with pip or using the wheel from PyPi" in output) or ("Deprecated Feature" in output):
-            try:
-                logging.info("Attempting youtube-dl upgrade via pip3...")
-                output = check_output(
-                    ["python3", "-m", "pip", "install", "--upgrade", "yt-dlp"]
-                ).decode("utf8")
-            except FileNotFoundError:
-                logging.info("Attempting youtube-dl upgrade via pip...")
-                output = check_output(["pip", "install", "--upgrade", "yt-dlp"]).decode(
-                    "utf8"
-                )
-            logging.info(output)
+        logging.info(output)
+        # if error or ("You installed yt-dlp with pip or using the wheel from PyPi" in output) or ("Deprecated Feature" in output):
         self.get_youtubedl_version()
         if not error:
             logging.info("Done. New version: %s" % self.youtubedl_version)
@@ -801,7 +801,7 @@ class Karaoke:
         logging.info("Searching YouTube for: " + textToSearch)
         num_results = 10
         yt_search = 'ytsearch%d:"%s"' % (num_results, unidecode(textToSearch))
-        cmd = [self.youtubedl_path, "-j", "--no-playlist", "--flat-playlist", yt_search]
+        cmd = ["yt-dlp", "-j", "--no-playlist", "--flat-playlist", yt_search]
         logging.debug("Youtube-dl search command: " + " ".join(cmd))
         try:
             output = subprocess.check_output(cmd).decode("utf-8")
@@ -829,7 +829,7 @@ class Karaoke:
             if self.high_quality
             else "mp4"
         )
-        cmd = [self.youtubedl_path, "-f", file_quality, "-o", dl_path, video_url]
+        cmd = ["yt-dlp", "-f", file_quality, "-o", dl_path, video_url]
         logging.debug("Youtube-dl command: " + " ".join(cmd))
         rc = subprocess.call(cmd)
         if rc != 0:

@@ -755,24 +755,24 @@ def expand_fs():
 signal.signal(signal.SIGTERM, lambda signum, stack_frame: k.stop())
 
 
-def get_default_youtube_dl_path(platform):
-    if platform == "windows":
-        choco_ytdl_path = r"C:\ProgramData\chocolatey\bin\yt-dlp.exe"
-        scoop_ytdl_path = os.path.expanduser(r"~\scoop\shims\yt-dlp.exe")
-        if os.path.isfile(choco_ytdl_path):
-            return choco_ytdl_path
-        if os.path.isfile(scoop_ytdl_path):
-            return scoop_ytdl_path
-        return r"C:\Program Files\yt-dlp\yt-dlp.exe"
-    default_ytdl_unix_path = "/home/pi/.local/bin/yt-dlp"
-    if platform == "osx":
-        if os.path.isfile(default_ytdl_unix_path):
-            return default_ytdl_unix_path
-        else:
-            # just a guess based on the default python 3 install in OSX monterey
-            return "/Library/Frameworks/Python.framework/Versions/3.10/bin/yt-dlp"
-    else:
-        return default_ytdl_unix_path
+# def get_default_youtube_dl_path(platform):
+#     if platform == "windows":
+#         choco_ytdl_path = r"C:\ProgramData\chocolatey\bin\yt-dlp.exe"
+#         scoop_ytdl_path = os.path.expanduser(r"~\scoop\shims\yt-dlp.exe")
+#         if os.path.isfile(choco_ytdl_path):
+#             return choco_ytdl_path
+#         if os.path.isfile(scoop_ytdl_path):
+#             return scoop_ytdl_path
+#         return r"C:\Program Files\yt-dlp\yt-dlp.exe"
+#     default_ytdl_unix_path = "/home/pi/.local/bin/yt-dlp"
+#     if platform == "osx":
+#         if os.path.isfile(default_ytdl_unix_path):
+#             return default_ytdl_unix_path
+#         else:
+#             # just a guess based on the default python 3 install in OSX monterey
+#             return "/Library/Frameworks/Python.framework/Versions/3.10/bin/yt-dlp"
+#     else:
+#         return default_ytdl_unix_path
 
 
 def get_default_dl_dir(platform):
@@ -804,7 +804,7 @@ if __name__ == "__main__":
     default_dl_dir = get_default_dl_dir(platform)
     default_omxplayer_path = "/usr/bin/omxplayer"
     default_omxplayer_adev = "both"
-    default_youtubedl_path = get_default_youtube_dl_path(platform)
+    # default_youtubedl_path = get_default_youtube_dl_path(platform)
     default_vlc_path = get_default_vlc_path(platform)
     default_vlc_port = 5002
 
@@ -833,13 +833,13 @@ if __name__ == "__main__":
         default=default_omxplayer_path,
         required=False,
     )
-    parser.add_argument(
-        "-y",
-        "--youtubedl-path",
-        help="Path of youtube-dl. (default: %s)" % default_youtubedl_path,
-        default=default_youtubedl_path,
-        required=False,
-    )
+    # parser.add_argument(
+    #     "-y",
+    #     "--youtubedl-path",
+    #     help="Path of youtube-dl. (default: %s)" % default_youtubedl_path,
+    #     default=default_youtubedl_path,
+    #     required=False,
+    # )
     parser.add_argument(
         "-v",
         "--volume",
