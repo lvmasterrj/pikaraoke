@@ -775,33 +775,33 @@ signal.signal(signal.SIGTERM, lambda signum, stack_frame: k.stop())
 #         return default_ytdl_unix_path
 
 
-def get_default_dl_dir(platform):
-    if raspberry_pi:
-        return "~/pikaraoke-songs"
-    elif platform == "windows":
-        legacy_directory = os.path.expanduser("~\\pikaraoke\\songs")
-        if os.path.exists(legacy_directory):
-            return legacy_directory
-        else:
-            return "~\\pikaraoke-songs"
-    else:
-        legacy_directory = "~/pikaraoke/songs"
-        if os.path.exists(legacy_directory):
-            return legacy_directory
-        else:
-            return "~/pikaraoke-songs"
+# def get_default_dl_dir(platform):
+#     if raspberry_pi:
+#         return "~/pikaraoke-songs"
+#     elif platform == "windows":
+#         legacy_directory = os.path.expanduser("~\\pikaraoke\\songs")
+#         if os.path.exists(legacy_directory):
+#             return legacy_directory
+#         else:
+#             return "~\\pikaraoke-songs"
+#     else:
+#         legacy_directory = "~/pikaraoke/songs"
+#         if os.path.exists(legacy_directory):
+#             return legacy_directory
+#         else:
+#             return "~/pikaraoke-songs"
 
 
 if __name__ == "__main__":
 
     platform = get_platform()
-    download_path = ("/usr/lib/pikaraoke/songs",)
+    # download_path = ("/usr/lib/pikaraoke/songs",)
 
     default_port = 5555
     default_volume = 0
     default_splash_delay = 5
     default_log_level = logging.INFO
-    default_dl_dir = get_default_dl_dir(platform)
+    default_dl_dir = "~/pikaraoke-songs"
     default_omxplayer_path = "/usr/bin/omxplayer"
     default_omxplayer_adev = "both"
     # default_youtubedl_path = get_default_youtube_dl_path(platform)
