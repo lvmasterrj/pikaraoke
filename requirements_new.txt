@@ -8,3 +8,4 @@ jinja2
 Babel
 Flask-Babel
 yt-dlp
+requests

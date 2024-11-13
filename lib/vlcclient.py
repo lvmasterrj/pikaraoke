@@ -26,7 +26,7 @@ def get_default_vlc_path(platform):
         else:
             return r"C:\Program Files\VideoLAN\VLC\vlc.exe"
     else:
-        return "/usr/bin/vlc"
+        return "vlc"
 
 
 class VLCClient:
@@ -163,7 +163,8 @@ class VLCClient:
             #     command = self.cmd_base + [file_path]
             # else:
             command = self.cmd_base + params + [file_path]
-            logging.debug("VLC Command: %s" % command)
+            logging.info("VLC command base: " + " ".join(self.cmd_base))
+            logging.debug("VLC Command: " + " ".join(command))
             self.process = subprocess.Popen(
                 command, shell=(self.platform == "windows"), stdin=subprocess.PIPE
             )

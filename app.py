@@ -75,7 +75,7 @@ def is_admin():
             return True
     return False
 
-
+@babel.localeselector
 def get_locale():
     """Select the language to display the webpage in based on the Accept-Language header"""
     return request.accept_languages.best_match(LANGUAGES.keys())
