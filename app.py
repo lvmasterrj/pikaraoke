@@ -80,7 +80,7 @@ def get_locale():
     """Select the language to display the webpage in based on the Accept-Language header"""
     return request.accept_languages.best_match(LANGUAGES.keys())
 
-babel.init_app(app, locale_selector=get_locale)
+#babel.init_app(app, locale_selector=get_locale)
 
 @app.route("/")
 def home():
@@ -995,9 +995,9 @@ if __name__ == "__main__":
     # if not os.path.isfile(args.youtubedl_path):
     #     print("Youtube-dl path not found! " + args.youtubedl_path)
     #     sys.exit(1)
-    if args.use_vlc and not os.path.isfile(args.vlc_path):
-        print("VLC path not found! " + args.vlc_path)
-        sys.exit(1)
+    # if args.use_vlc and not os.path.isfile(args.vlc_path):
+    #     print("VLC path not found! " + args.vlc_path)
+    #     sys.exit(1)
     if (
         platform == "raspberry_pi"
         and not args.use_vlc
