@@ -427,16 +427,16 @@ class Karaoke:
         img.save(self.qr_code_path)
 
     def get_default_display_mode(self):
-        if self.use_vlc:
-            if self.platform == "raspberry_pi":
+        # if self.use_vlc:
+        #     if self.platform == "raspberry_pi":
                 os.environ[
                     "SDL_VIDEO_CENTERED"
                 ] = "1"  # HACK apparently if display mode is fullscreen the vlc window will be at the bottom of pygame
                 return pygame.NOFRAME
-            else:
-                return pygame.FULLSCREEN
-        else:
-            return pygame.FULLSCREEN
+        #     else:
+        #         return pygame.FULLSCREEN
+        # else:
+        #     return pygame.FULLSCREEN
 
     def initialize_screen(self):
         """Initializes the PyGame screen. It's used to render the Splash Screen and the Score Screen"""
